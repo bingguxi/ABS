@@ -1,4 +1,4 @@
-package kopo.poly.Controller;
+package kopo.poly.controller;
 
 import kopo.poly.service.impl.CctvService;
 import lombok.extern.slf4j.Slf4j;
