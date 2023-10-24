@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>공지사항</title>
+    <link rel="stylesheet" href="/css/table.css"/>
+    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+
+        // HTML로딩이 완료되고, 실행됨
+        $(document).ready(function () {
+
+            // 회원가입
+            $("#btnUserReg").on("click", function () {
+                location.href = "/user/userRegForm";
+            })
+
+            // 아이디 찾기
+            $("#btnSearchUserId").on("click", function () {
+                location.href = "/user/searchUserId";
+            })
+
+            // 비밀번호 찾기
+            $("#btnSearchPassword").on("click", function () {
+                location.href = "/user/searchPassword";
+            })
+
+        })
+
+        function checkInputData() {
+            let f = document.getElementById("f"); // form 태그
+
+            if (f.user_id.value === "") {
+                alert("아이디를 입력하세요.");
+                f.user_id.focus();
+                return false;
+            }
+
+            if (f.password.value === "") {
+                alert("비밀번호를 입력하세요.");
+                f.password.focus();
+                return false;
+            }
+
+        }
+    </script>
+    <link rel="stylesheet" href="/css/table.css"/>
+    <script type="text/javascript">
+
+        //상세보기 이동
+        function doDetail(seq) {
+            location.href = "/notice/noticeInfo?nSeq=" + seq;
+        }
+
+    </script>
+</head>
+<body>
+<h2>공지사항</h2>
+<hr/>
+<br/>
+<div class="divTable minimalistBlack">
+    <div class="divTableHeading">
+        <div class="divTableRow">
+            <div class="divTableHead">순번</div>
+            <div class="divTableHead">제목</div>
+            <div class="divTableHead">조회수</div>
+            <div class="divTableHead">등록자</div>
+            <div class="divTableHead">등록일</div>
+        </div>
+    </div>
+    <div class="divTableRow" th:each="dto : ${rList}">
+        <!-- 공지글이라면, [공지] 표시 -->
+        <div class="divTableCell" th:if="${dto.noticeYn eq 'Y'}">공지</div>
+        <!-- 공지글이 아니라면, 글번호 보여주기 -->
+        <div class="divTableCell" th:unless="${dto.noticeYn eq 'Y'}" th:text="${dto.noticeSeq}"></div>
+        <div class="divTableCell" th:onclick="'doDetail(\'' + ${dto.noticeSeq} + '\')'" th:text="${dto.title}"></div>
+        <div class="divTableCell" th:text="${dto.readCnt}"></div>
+        <div class="divTableCell" th:text="${dto.userId}"></div>
+        <div class="divTableCell" th:text="${dto.regDt}"></div>
+    </div>
+</div>
+<a href="/notice/noticeReg">글쓰기</a>
+</body>
+</html>
