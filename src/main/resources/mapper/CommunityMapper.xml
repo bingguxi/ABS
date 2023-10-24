@@ -7,7 +7,7 @@
     <!-- 커뮤니티 리스트 쿼리 -->
     <select id="getCommunityList" resultType="CommunityDTO">
         SELECT COMMUNITY_SEQ, TITLE, COMMUNITY_YN, READ_CNT, USER_ID,
-               TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
+               DATE_FORMAT(REG_DT, '%Y%M%d%m%i%s') AS REG_DT
         FROM COMMUNITY
         ORDER BY COMMUNITY_YN, REG_DT DESC
     </select>
@@ -15,19 +15,19 @@
     <insert id="insertCommunityInfo" parameterType="CommunityDTO">
         INSERT INTO COMMUNITY
             (
-                COMMUNITY_SEQ, TITLE, COMMUNITY_YN, CONTENS, USER_ID, READ_CNT
+                COMMUNITY_SEQ, TITLE, COMMUNITY_YN, CONTENTS, USER_ID, READ_CNT,
                 REG_ID, REG_DT, CHG_ID, CHG_DT
             )
         VALUES(
-               (SELECT NVL(MAX(A.COMMUNITY_SEQ),0)+1 FROM COMMUNITY A),
-               #{title}, #{communityYn}, #{contents}, #{userId}, 0, #{userId}, SYSDATE(), #{userId}, SYSDATE()
+               (SELECT COALESCE(MAX(A.COMMUNITY_SEQ),0)+1 FROM COMMUNITY A),
+               #{title}, #{communityYn}, #{contents}, #{userId}, 0, #{userId}, NOW(), #{userId}, NOW()
               )
     </insert>
 
     <!-- 게시판 상세보기 쿼리 -->
     <select id="getCommunityInfo" resultType="CommunityDTO">
         SELECT COMMUNITY_SEQ, TITLE, COMMUNITY_YN, READ_CNT, USER_ID,
-               CONTENTS, TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
+               CONTENTS, DATE_FORMAT(REG_DT, '%Y%M%d%m%i%s') AS REG_DT
         FROM COMMUNITY
         WHERE COMMUNITY_SEQ = #{communitySeq}
     </select>
@@ -47,7 +47,7 @@
             COMMUNITY_YN = #{communityYn},
             CONTENTS = #{contents},
             CHG_ID = #{userId},
-            CHG_DT = SYSDATE()
+            CHG_DT = NOW()
         WHERE
             COMMUNITY_SEQ = #{communitySeq}
     </update>
