@@ -141,7 +141,7 @@ public class CommunityController {
     @GetMapping(value = "communityEditInfo")
     public String communityEditInfo(HttpServletRequest request, ModelMap modelMap) throws Exception {
 
-        log.info(this.getClass().getName() + ".communityEditInfo Sart!");
+        log.info(this.getClass().getName() + ".communityEditInfo Start!");
 
         String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 공지글 번호
 

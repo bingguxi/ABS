@@ -47,24 +47,12 @@
                 f.title.focus();
                 return;
             }
-            let communityCheck = false; // 체크 여부 확인 변수
-            for (let i = 0; i < f.communityYn.length; i++) {
-                if (f.communityYn[i].checked) {
-                    communityCheck = true;
-                    break;
-                }
-            }
-            if (communityCheck === false) {
-                alert("공지글 여부를 선택하시기 바랍니다.");
-                f.communityYn[0].focus();
-                return;
-            }
             if (f.contents.value === "") {
                 alert("내용을 입력하시기 바랍니다.");
                 f.contents.focus();
                 return;
             }
-            if (calByte(f.contents.value) > 4000) {
+            if (calBytes(f.contents.value) > 4000) {
                 alert("최대 400Bytes까지 입력 가능합니다.");
                 f.contents.focus();
                 return;
@@ -98,13 +86,13 @@
                     <input type="text" name="title" maxlength="100" th:value="${rDTO.title}" style="width: 95%"/>
                 </div>
             </div>
-            <div class="divTableRow">
-                <div class="divTableCell">공지글 여부</div>
-                <div class="divTableCell">
-                    예<input type="radio" name="communityYn" value="Y" th:checked="${rDTO.communityYn eq 'Y'}"/>
-                    아니오<input type="radio" name="communityYn" value="N" th:checked="${rDTO.communityYn eq 'N'}"/>
-                </div>
-            </div>
+<!--            <div class="divTableRow">-->
+<!--                <div class="divTableCell">공지글 여부</div>-->
+<!--                <div class="divTableCell">-->
+<!--                    예<input type="radio" name="communityYn" value="Y" th:checked="${rDTO.communityYn eq 'Y'}"/>-->
+<!--                    아니오<input type="radio" name="communityYn" value="N" th:checked="${rDTO.communityYn eq 'N'}"/>-->
+<!--                </div>-->
+<!--            </div>-->
             <div class="divTableRow">
                 <div class="divTableCell">조회수</div>
                 <div class="divTableCell" th:text="${rDTO.readCnt}"></div>

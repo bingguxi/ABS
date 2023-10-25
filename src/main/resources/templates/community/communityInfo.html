@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>커뮤니티 글 보기</title>
+    <link rel="stylesheet" href="/css/table.css"/>
+    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+
+        const session_user_id = '[[${session.SESSION_USER_ID}]]'; // Controller에서 받은 세션에 저장된 값
+        const userId = '[[${rDTO.userId}]]'; // 공지사항 게시글 작성자 아이디
+        const nSeq = [[${rDTO.communitySeq}]]; // 현재 글번호, 자바에서 받을 변수들은 자바스크립트 변수로 저장하면 편함
+
+
+        $(document).ready(function () {
+            // 버튼 클릭했을 때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+            $("#btnCmt").on("click", function () {
+                doComment(); // 댓글 작성 실행
+            })
+            $("#btnEdit").on("click", function () {
+                doEdit(); // 커뮤니티 수정하기 실행
+            })
+            $("#btnDelete").on("click", function () {
+                doDelete(); // 커뮤니티 삭제하기 실행
+            })
+            $("#btnList").on("click", function () {
+                location.href = "/community/communityList"; // 커뮤니티 리스트 이동
+            })
+        })
+
+        // 글자 길이 바이트 단위로 체크하기(바이트값 전달)
+        function calBytes(str) {
+            let tcount = 0;
+            let tmpStr = String(str);
+            let strCnt = tmpStr.length;
+            let onechar;
+            for (let i = 0; i < strCnt; i++) {
+                onechar = tmpStr.charAt(i);
+                if (escape(onechar).length > 4) {
+                    tcount += 2;
+                } else {
+                    tcount += 1;
+                }
+            }
+            return tcount;
+        }
+
+        // 수정하기
+        function doEdit() {
+            if (session_user_id === userId) {
+                location.href = "/community/communityEditInfo?nSeq=" + nSeq;
+            } else if (session_user_id === "") {
+                alert("로그인 하시길 바랍니다.");
+            } else {
+                alert("본인이 작성한 글만 수정 가능합니다.");
+            }
+        }
+
+        // 삭제하기
+        function doDelete() {
+            if (session_user_id === userId) {
+                if (confirm("작성한 글을 삭제하시겠습니까?")) {
+
+                    // Ajax 호출해서 글 삭제하기
+                    $.ajax({
+                            url: "/community/communityDelete",
+                            type: "post", // 전송방식은 Post
+                            dataType: "JSON", // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+                            data: {"nSeq": nSeq},
+                            success:
+                                function (json) { // /community/communityDelete 호출이 성공한다면...
+                                    alert(json.msg); // 메시지 띄우기
+                                    location.href = "/community/communityList"; // 커뮤니티 리스트로 이동
+                                }
+                        }
+                    )
+                }
+            } else if (session_user_id === "") {
+                alert("로그인 하시길 바랍니다.");
+            } else {
+                alert("본인이 작성한 글만 수정 가능합니다.");
+            }
+        }
+
+        // 댓글 저장하기
+        function doComment() {
+            let f = document.getElementById("f"); // form 태그
+            if (f.contents.value === "") {
+                alert("내용을 입력하시기 바랍니다.");
+                f.contents.focus();
+                return;
+            }
+            if (calBytes(f.contents.value) > 4000) {
+                alert("최대 4000Bytes까지 입력 가능합니다.");
+                f.contents.focus();
+                return;
+            }
+
+            // Ajax 호출해서 글 등록하기
+            $.ajax({
+                    url: "/comment/commentInsert",
+                    type: "post", // 전송방식은 Post
+                    dataType: "JSON", // 전송 결과는 Json으로 받기
+                    data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+                    success: function (json) { // /comment/commentInsert 호출이 성공했다면..
+                        alert(json.msg); // 메시지 띄우기
+                        location.href = "/community/communityInfo?nSeq=" + nSeq; // 커뮤니티 리스트 이동
+                    }
+                }
+            )
+        }
+
+        /*]]>*/
+    </script>
+</head>
+<body>
+<h2>커뮤니티 상세보기</h2>
+<hr/>
+<br/>
+<form name="f" id="f">
+<div class="divTable minimalistBlack">
+    <div class="divTableBody">
+        <div class="divTableRow">
+            <div class="divTableCell">제목</div>
+            <div class="divTableCell">[[${rDTO.title}]]</div>
+        </div>
+        <div class="divTableRow">
+            <div class="divTableCell">작성일</div>
+            <div class="divTableCell">[[${rDTO.regDt}]]</div>
+        </div>
+        <div class="divTableRow">
+            <div class="divTableCell">조회수</div>
+            <div class="divTableCell">[[${rDTO.readCnt}]]</div>
+        </div>
+        <div class="divTableRow">
+            <div class="divTableCell">내용</div>
+            <div class="divTableCell">[[${rDTO.contents}]]</div>
+        </div>
+    </div>
+</div>
+<br/>
+<div class="divTable minimalistBlack">
+    <div class="divTableBody">댓글</div>
+    <div class="divTableBody">
+        <textarea name="contents" style="width: 90%; height: 25px; margin-left: 1%; margin-top: 10px;"></textarea>
+        <button id="btnCmt" type="button" style="margin-left: 2%; margin-top: 10px">등록</button>
+    </div>
+    <input type="hidden" name="community_seq" th:value="${rDTO.communitySeq}">
+</div>
+<br/>
+<div>
+    <button id="btnEdit" type="button">수정</button>
+    <button id="btnDelete" type="button">삭제</button>
+    <button id="btnList" type="button">목록</button>
+</div>
+</form>
+</body>
+</html>

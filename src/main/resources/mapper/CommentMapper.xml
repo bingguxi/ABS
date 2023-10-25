@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="kopo.poly.persistance.mapper.ICommentMapper">
+
+    <!--댓글 리스트 쿼리-->
+    <select id="getCommentList" resultType="CommentDTO">
+        SELECT COMMENT_SEQ, CONTENTS, USER_ID, REG_DT, COMMUNITY_SEQ
+        FROM COMMENT
+        WHERE COMMUNITY_SEQ = #{communitySeq}
+        ORDER BY REG_DT DESC;
+    </select>
+    <!--댓글 등록 쿼리-->
+    <insert id="insertCommentInfo" parameterType="CommentDTO">
+        INSERT INTO COMMENT (CONTENTS, USER_ID, REG_DT, COMMUNITY_SEQ)
+        VALUES (#{contents}, #{userId}, NOW(), #{communitySeq});
+    </insert>
+</mapper>

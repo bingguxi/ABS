@@ -9,7 +9,7 @@
 
     // 상세보기 이동
     function doDetail(seq) {
-      location.href = "/community/communityInfo?nseq=" + seq;
+      location.href = "/community/communityInfo?nSeq=" + seq;
     }
   </script>
 </head>
@@ -29,14 +29,15 @@
   </div>
   <div class="divTableBody">
     <div class="divTableRow" th:each="dto:${rList}">
-      <div class="divTableCell" th:if="${dto.communityYn=='Y'}">공지</div>
-      <div class="divTableCell" th:unless="${dto.communityYn=='Y'}">[[${dto.communitySeq}]]</div>
-      <div class="divTableCell" th:attr="onclick='doDetail(\'' + ${dto.communityYn} + '\')'">[[${dto.title}]]</div>
+
+      <div class="divTableCell" name="nSeq" id="nSeq">[[${dto.communitySeq}]]</div>
+      <div class="divTableCell"th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'">[[${dto.title}]]</div>
       <div class="divTableCell">[[${dto.readCnt}]]</div>
       <div class="divTableCell">[[${dto.userId}]]</div>
       <div class="divTableCell">[[${dto.regDt}]]</div>
     </div>
   </div>
 </div>
+<a href="/community/communityReg">글쓰기</a>
 </body>
 </html>
