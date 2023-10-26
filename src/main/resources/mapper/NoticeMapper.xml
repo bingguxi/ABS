@@ -16,7 +16,7 @@
     <!-- 게시판 리스트 쿼리 -->
     <select id="getNoticeList" resultType="NoticeDTO">
         SELECT N.NOTICE_SEQ, N.TITLE, N.NOTICE_YN, N.READ_CNT, N.USER_ID,
-               DATE_FORMAT(N.REG_DT, '%Y%m%d%H%i%s') AS REG_DT
+               DATE_FORMAT(N.REG_DT, '%Y/%m/%d %H:%i:%s') AS REG_DT
         FROM NOTICE N
         ORDER BY N.NOTICE_YN, N.REG_DT DESC;
     </select>
@@ -37,7 +37,7 @@
     <!-- 게시판 상세보기 쿼리 -->
     <select id="getNoticeInfo" resultType="NoticeDTO">
         SELECT N.NOTICE_SEQ, N.TITLE, N.NOTICE_YN, N.READ_CNT, U.USER_NAME, N.USER_ID,
-               CONTENTS, TO_CHAR(N.REG_DT, 'YYYY-MM-DD') AS REG_DT
+               CONTENTS, DATE_FORMAT(N.REG_DT, '%Y/%m/%d %H:%i:%s') AS REG_DT
         FROM NOTICE N, USER_INFO U
         WHERE N.USER_ID = U.USER_ID
           AND N.NOTICE_SEQ = #{noticeSeq}
@@ -58,7 +58,7 @@
                           NOTICE_YN = #{noticeYn},
                           CONTENTS = #{contents},
                           CHG_ID = #{userId},
-                          CHG_DT = SYSDATE
+                          CHG_DT = NOW()
         WHERE
             NOTICE_SEQ = #{noticeSeq}
 

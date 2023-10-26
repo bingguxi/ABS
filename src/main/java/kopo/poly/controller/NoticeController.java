@@ -6,6 +6,7 @@ import kopo.poly.service.INoticeService;
 import kopo.poly.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,11 +44,34 @@ public class NoticeController {
      * GetMapping(value = "notice/noticeList") =>  GET방식을 통해 접속되는 URL이 notice/noticeList 경우 아래 함수를 실행함
      */
     @GetMapping(value = "noticeList")
-    public String noticeList(HttpSession session, ModelMap model)
+    public String noticeList(HttpSession session, ModelMap model, HttpServletRequest request)
             throws Exception {
 
         // 로그 찍기(추후 찍은 로그를 통해 이 함수에 접근했는지 파악하기 용이하다.)
         log.info(this.getClass().getName() + ".noticeList Start!");
+
+        String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 공지글번호(PK)
+
+        /*
+         * ####################################################################################
+         * 반드시, 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함 반드시 작성할 것
+         * ####################################################################################
+         */
+        log.info("nSeq : " + nSeq);
+
+        /*
+         * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
+         */
+        NoticeDTO pDTO = new NoticeDTO();
+        pDTO.setNoticeSeq(nSeq);
+
+        // 공지사항 상세정보 가져오기
+        // Java 8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
+        NoticeDTO rDTO = Optional.ofNullable(noticeService.getNoticeInfo(pDTO, true))
+                .orElseGet(NoticeDTO::new);
+
+        // 조회된 리스트 결과값 넣어주기
+        model.addAttribute("rDTO", rDTO);
 
         // 로그인된 사용자 아이디는 Session에 저장함
         // 교육용으로 아직 로그인을 구현하지 않았기 때문에 Session에 데이터를 저장하지 않았음

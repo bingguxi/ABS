@@ -2,85 +2,86 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>공지사항</title>
+    <title>공지 리스트</title>
     <link rel="stylesheet" href="/css/table.css"/>
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
 
-        // HTML로딩이 완료되고, 실행됨
+        const session_user_id = [[${session.SESSION_USER_ID}]]; // Controller에서 받은 세션에 저장된 값
+        const user_id = "USER01";/*[[${rDTO.userId}]];*/ // 공지사항 게시글 작성자 아이디
+        const nSeq = [[${rDTO.noticeSeq}]]; // 현재 글번호, 자바에서 받을 변수들은 자바스크립트 변수로 저장하면 편함
+
         $(document).ready(function () {
 
-            // 회원가입
-            $("#btnUserReg").on("click", function () {
-                location.href = "/user/userRegForm";
-            })
+            // 버튼 숨김
+            $("#btnWrite").hide();
 
-            // 아이디 찾기
-            $("#btnSearchUserId").on("click", function () {
-                location.href = "/user/searchUserId";
-            })
+            // 글 작성 버튼 표시 여부 설정
+            if (session_user_id === user_id) {
+                // 관리자 계정에만 버튼 표시
+                $("#btnWrite").show();
+            }
 
-            // 비밀번호 찾기
-            $("#btnSearchPassword").on("click", function () {
-                location.href = "/user/searchPassword";
+            // 글 작성
+            $("#btnWrite").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+                doWrite();
             })
-
         })
-
-        function checkInputData() {
-            let f = document.getElementById("f"); // form 태그
-
-            if (f.user_id.value === "") {
-                alert("아이디를 입력하세요.");
-                f.user_id.focus();
-                return false;
-            }
-
-            if (f.password.value === "") {
-                alert("비밀번호를 입력하세요.");
-                f.password.focus();
-                return false;
-            }
-
-        }
-    </script>
-    <link rel="stylesheet" href="/css/table.css"/>
-    <script type="text/javascript">
 
         //상세보기 이동
         function doDetail(seq) {
             location.href = "/notice/noticeInfo?nSeq=" + seq;
         }
 
+        //글 작성하기
+        function doWrite() {
+            if (session_user_id === user_id) {
+                location.href = "/notice/noticeReg";
+
+            } else if (session_user_id === "") {
+                alert("관리자만 접근 가능합니다.");
+
+            } else {
+                alert("본인이 작성한 글만 수정 가능합니다.");
+
+            }
+        }
+
+        /*]]>*/
     </script>
 </head>
 <body>
-<h2>공지사항</h2>
-<hr/>
-<br/>
-<div class="divTable minimalistBlack">
-    <div class="divTableHeading">
-        <div class="divTableRow">
-            <div class="divTableHead">순번</div>
-            <div class="divTableHead">제목</div>
-            <div class="divTableHead">조회수</div>
-            <div class="divTableHead">등록자</div>
-            <div class="divTableHead">등록일</div>
+<section class="login first grey">
+    <div class="container">
+        <h2>공지사항</h2>
+        <hr/>
+        <br/>
+        <div class="divTable minimalistBlack">
+            <div class="divTableHeading">
+                <div class="divTableRow">
+                    <div class="divTableHead">순번</div>
+                    <div class="divTableHead">제목</div>
+                    <div class="divTableHead">조회수</div>
+                    <div class="divTableHead">등록자</div>
+                    <div class="divTableHead">등록일</div>
+                </div>
+            </div>
+            <div class="divTableBody">
+                <div class="divTableRow" th:each="dto: ${rList}">
+                    <div class="divTableCell" th:if="${dto.noticeYn=='Y'}" th:text="공지사항"></div>
+                    <div class="divTableCell" th:unless="${dto.noticeYn=='Y'}" th:text="${dto.noticeSeq}"></div>
+                    <div class="divTableCell" th:text="${dto.title}" th:onclick="doDetail([[${dto.noticeSeq}]])"></div>
+                    <div class="divTableCell" th:text="${dto.readCnt}"></div>
+                    <div class="divTableCell" th:text="${dto.userName}"></div>
+                    <div class="divTableCell" th:text="${dto.regDt}"></div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="divTableRow" th:each="dto : ${rList}">
-        <!-- 공지글이라면, [공지] 표시 -->
-        <div class="divTableCell" th:if="${dto.noticeYn eq 'Y'}">공지</div>
-        <!-- 공지글이 아니라면, 글번호 보여주기 -->
-        <div class="divTableCell" th:unless="${dto.noticeYn eq 'Y'}" th:text="${dto.noticeSeq}"></div>
-        <div class="divTableCell" th:onclick="'doDetail(\'' + ${dto.noticeSeq} + '\')'" th:text="${dto.title}"></div>
-        <div class="divTableCell" th:text="${dto.readCnt}"></div>
-        <div class="divTableCell" th:text="${dto.userId}"></div>
-        <div class="divTableCell" th:text="${dto.regDt}"></div>
-    </div>
+</section>
+<div class="pull-right" style="width: 100px; margin: 10px 0;">
+    <button id="btnWrite" type="button">글쓰기</button>
 </div>
-<a href="/notice/noticeReg">글쓰기</a>
 </body>
 </html>
