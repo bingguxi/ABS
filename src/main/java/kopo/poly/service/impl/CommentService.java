@@ -18,16 +18,24 @@ public class CommentService implements ICommentService {
     @Override
     public List<CommentDTO> getCommentList() throws Exception {
 
-        log.info(this.getClass().getName() + "getCommentList");
+        log.info(this.getClass().getName() + "getCommentList Start!!");
 
         return commentMapper.getCommentList();
     }
 
     @Override
     public void insertCommentInfo(CommentDTO pDTO) throws Exception {
-        log.info(this.getClass().getName() + ".insertCommentInfo");
+        log.info(this.getClass().getName() + ".insertCommentInfo Start!!");
 
         commentMapper.insertCommentInfo(pDTO);
+    }
+
+    @Override
+    public void deleteCommentInfo(CommentDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".deleteCommentInfo Start!!");
+
+        commentMapper.deleteCommentInfo(pDTO);
     }
 
 }

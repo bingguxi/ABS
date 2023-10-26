@@ -1,7 +1,6 @@
 package kopo.poly.controller;
 
 import kopo.poly.dto.CommentDTO;
-import kopo.poly.dto.CommunityDTO;
 import kopo.poly.dto.MsgDTO;
 import kopo.poly.service.ICommentService;
 import kopo.poly.util.CmmUtil;
@@ -15,8 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.xml.stream.events.Comment;
+import javax.servlet.http.HttpSession;;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -97,5 +95,44 @@ public class CommentController {
             log.info(this.getClass().getName() + ".commentInsert End!");
         }
         return dto;
+    }
+
+    /**댓글 삭제*/
+    @ResponseBody
+    @PostMapping(value = "commentDelete")
+    public MsgDTO commentDelete(HttpServletRequest request) {
+
+        log.info(this.getClass().getName() + ".commentDelete Start!");
+
+        String msg = ""; // 메시지 내용
+        MsgDTO dto = null; // 결과 메시지 구조
+
+        try {
+            String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 글번호(PK)
+
+            log.info("nSeq : " + nSeq);
+
+            CommentDTO pDTO = new CommentDTO();
+            pDTO.setCommentSeq(nSeq);
+
+            // 게시글 삭제하기 DB
+            commentService.deleteCommentInfo(pDTO);
+
+            msg = "삭제되었습니다.";
+
+        } catch (Exception e) {
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+            //결과 메시지 전달하기
+            dto = new MsgDTO();
+            dto.setMsg(msg);
+
+            log.info(this.getClass().getName() + ".commentDelete End!");
+        }
+        return dto;
+
     }
 }

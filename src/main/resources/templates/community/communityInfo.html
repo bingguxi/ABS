@@ -5,10 +5,11 @@
     <title>커뮤니티 글 보기</title>
     <link rel="stylesheet" href="/css/table.css"/>
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
 
-        const session_user_id = '[[${session.SESSION_USER_ID}]]'; // Controller에서 받은 세션에 저장된 값
-        const userId = '[[${rDTO.userId}]]'; // 공지사항 게시글 작성자 아이디
+        const session_user_id = [[${session.SESSION_USER_ID}]]; // Controller에서 받은 세션에 저장된 값
+        const userId = [[${rDTO.userId}]]; // 공지사항 게시글 작성자 아이디
         const nSeq = [[${rDTO.communitySeq}]]; // 현재 글번호, 자바에서 받을 변수들은 자바스크립트 변수로 저장하면 편함
 
 
@@ -16,6 +17,9 @@
             // 버튼 클릭했을 때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
             $("#btnCmt").on("click", function () {
                 doComment(); // 댓글 작성 실행
+            })
+            $("#btnCmtDelete").on("click", function () {
+                doCmtDelete(); // 댓글 삭제하기 실행
             })
             $("#btnEdit").on("click", function () {
                 doEdit(); // 커뮤니티 수정하기 실행
@@ -78,7 +82,7 @@
             } else if (session_user_id === "") {
                 alert("로그인 하시길 바랍니다.");
             } else {
-                alert("본인이 작성한 글만 수정 가능합니다.");
+                alert("본인이 작성한 글만 삭제 가능합니다.");
             }
         }
 
@@ -105,9 +109,48 @@
                     success: function (json) { // /comment/commentInsert 호출이 성공했다면..
                         alert(json.msg); // 메시지 띄우기
                         location.href = "/community/communityInfo?nSeq=" + nSeq; // 커뮤니티 리스트 이동
+
+                        doOutput();
                     }
                 }
             )
+        }
+        function doOutput() {
+            $.ajax({
+                url: "/comment/commentList",
+                type: "get",
+                dataType: "JSON",
+                data: $("#f").serialize(),
+                success: function (json) {
+                    alert(json.msg);
+                    location.href = "/community/communityInfo?nSeq=" + nSeq; // 커뮤니티 리스트 이동
+                }
+            })
+
+        }
+        function doCmtDelete() {
+            if (session_user_id === userId) {
+                if (confirm("작성한 댓글을 삭제하시겠습니까?")) {
+
+                    // Ajax 호출해서 글 삭제하기
+                    $.ajax({
+                            url: "/commemt/commentDelete",
+                            type: "post", // 전송방식은 Post
+                            dataType: "JSON", // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+                            data: {"nSeq": nSeq},
+                            success:
+                                function (json) { // /comment/commentDelete 호출이 성공한다면...
+                                    alert(json.msg); // 메시지 띄우기
+                                    location.href = "/comment/commentList"; // 커뮤니티 리스트로 이동
+                                }
+                        }
+                    )
+                }
+            } else if (session_user_id === "") {
+                alert("로그인 하시길 바랍니다.");
+            } else {
+                alert("본인이 작성한 글만 삭제 가능합니다.");
+            }
         }
 
         /*]]>*/
@@ -118,41 +161,46 @@
 <hr/>
 <br/>
 <form name="f" id="f">
-<div class="divTable minimalistBlack">
-    <div class="divTableBody">
-        <div class="divTableRow">
-            <div class="divTableCell">제목</div>
-            <div class="divTableCell">[[${rDTO.title}]]</div>
-        </div>
-        <div class="divTableRow">
-            <div class="divTableCell">작성일</div>
-            <div class="divTableCell">[[${rDTO.regDt}]]</div>
-        </div>
-        <div class="divTableRow">
-            <div class="divTableCell">조회수</div>
-            <div class="divTableCell">[[${rDTO.readCnt}]]</div>
-        </div>
-        <div class="divTableRow">
-            <div class="divTableCell">내용</div>
-            <div class="divTableCell">[[${rDTO.contents}]]</div>
+    <div class="divTable minimalistBlack">
+        <div class="divTableBody">
+            <div class="divTableRow">
+                <div class="divTableCell">제목</div>
+                <div class="divTableCell">[[${rDTO.title}]]</div>
+            </div>
+            <div class="divTableRow">
+                <div class="divTableCell">작성일</div>
+                <div class="divTableCell">[[${rDTO.regDt}]]</div>
+            </div>
+            <div class="divTableRow">
+                <div class="divTableCell">조회수</div>
+                <div class="divTableCell">[[${rDTO.readCnt}]]</div>
+            </div>
+            <div class="divTableRow">
+                <div class="divTableCell">내용</div>
+                <div class="divTableCell">[[${rDTO.contents}]]</div>
+            </div>
         </div>
     </div>
-</div>
-<br/>
-<div class="divTable minimalistBlack">
-    <div class="divTableBody">댓글</div>
-    <div class="divTableBody">
-        <textarea name="contents" style="width: 90%; height: 25px; margin-left: 1%; margin-top: 10px;"></textarea>
-        <button id="btnCmt" type="button" style="margin-left: 2%; margin-top: 10px">등록</button>
+    <br/>
+    <div>
+        <button id="btnEdit" type="button">수정</button>
+        <button id="btnDelete" type="button">삭제</button>
+        <button id="btnList" type="button">목록</button>
     </div>
-    <input type="hidden" name="community_seq" th:value="${rDTO.communitySeq}">
-</div>
-<br/>
-<div>
-    <button id="btnEdit" type="button">수정</button>
-    <button id="btnDelete" type="button">삭제</button>
-    <button id="btnList" type="button">목록</button>
-</div>
+    <br/>
+    <div class="divTable minimalistBlack">
+        <div class="divTableBody">댓글</div>
+        <div class="divTableBody">
+            <textarea name="contents" style="width: 90%; height: 25px; margin-left: 1%; margin-top: 10px;"></textarea>
+            <button id="btnCmt" type="button" style="margin-left: 2%; margin-top: 10px">작성</button>
+        </div>
+<!--         댓글 목록을 표시할 부분 -->
+        <input type="hidden" name="community_seq" th:value="${rDTO.communitySeq}">
+        <div class="divTableRow" th:each="dto : ${rList}">
+            <div class="divTableCell" th:text="${dto.contents}"></div>
+        </div>
+    </div>
+
 </form>
 </body>
 </html>

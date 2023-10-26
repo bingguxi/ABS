@@ -16,4 +16,10 @@
         INSERT INTO COMMENT (CONTENTS, USER_ID, REG_DT, COMMUNITY_SEQ)
         VALUES (#{contents}, #{userId}, NOW(), #{communitySeq});
     </insert>
+
+    <!--댓글 삭제 쿼리-->
+    <delete id="deleteCommentInfo" parameterType="CommentDTO">
+        DELETE FROM COMMENT
+        WHERE COMMENT_SEQ = #{commentSeq}
+    </delete>
 </mapper>

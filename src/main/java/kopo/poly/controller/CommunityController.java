@@ -1,7 +1,9 @@
 package kopo.poly.controller;
 
+import kopo.poly.dto.CommentDTO;
 import kopo.poly.dto.CommunityDTO;
 import kopo.poly.dto.MsgDTO;
+import kopo.poly.service.ICommentService;
 import kopo.poly.service.ICommunityService;
 import kopo.poly.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,6 @@ import java.util.Optional;
 public class CommunityController {
 
     private final ICommunityService communityService;
-
 
     /** 커뮤니티 리스트 보여주기 */
     @GetMapping(value = "communityList")
@@ -113,7 +114,7 @@ public class CommunityController {
 
     /** 게시판 상세보기 */
     @GetMapping(value = "communityInfo")
-    public String communityInfo(HttpServletRequest request, ModelMap modelMap) throws Exception {
+    public String communityInfo(HttpSession session, HttpServletRequest request, ModelMap modelMap) throws Exception {
 
         log.info(this.getClass().getName() + ".communityInfo Start!");
 
