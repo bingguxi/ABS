@@ -15,10 +15,10 @@
 
     <!-- 게시판 리스트 쿼리 -->
     <select id="getNoticeList" resultType="NoticeDTO">
-        SELECT N.NOTICE_SEQ, N.TITLE, N.NOTICE_YN, N.READ_CNT, N.USER_ID,
+        SELECT N.NOTICE_SEQ, N.TITLE, N.NOTICE_YN, N.READ_CNT, N.USER_ID, U.USER_NAME,
                DATE_FORMAT(N.REG_DT, '%Y/%m/%d %H:%i:%s') AS REG_DT
-        FROM NOTICE N
-        ORDER BY N.NOTICE_YN, N.REG_DT DESC;
+        FROM NOTICE N, USER_INFO U
+        ORDER BY /*N.NOTICE_YN,*/ N.REG_DT DESC;
     </select>
 
     <!-- 게시판 등록 쿼리 -->
@@ -35,12 +35,20 @@
     </insert>
 
     <!-- 게시판 상세보기 쿼리 -->
+<!--    <select id="getNoticeInfo" resultType="NoticeDTO">-->
+<!--        SELECT N.NOTICE_SEQ, N.TITLE, N.NOTICE_YN, N.READ_CNT, U.USER_NAME, N.USER_ID,-->
+<!--               CONTENTS, DATE_FORMAT(N.REG_DT, '%Y/%m/%d %H:%i:%s') AS REG_DT-->
+<!--        FROM NOTICE N, USER_INFO U-->
+<!--        WHERE N.USER_ID = U.USER_ID-->
+<!--          AND N.NOTICE_SEQ = #{noticeSeq}-->
+<!--    </select>-->
+
+    <!-- 임시 쿼리 -->
     <select id="getNoticeInfo" resultType="NoticeDTO">
-        SELECT N.NOTICE_SEQ, N.TITLE, N.NOTICE_YN, N.READ_CNT, U.USER_NAME, N.USER_ID,
-               CONTENTS, DATE_FORMAT(N.REG_DT, '%Y/%m/%d %H:%i:%s') AS REG_DT
-        FROM NOTICE N, USER_INFO U
-        WHERE N.USER_ID = U.USER_ID
-          AND N.NOTICE_SEQ = #{noticeSeq}
+        SELECT N.NOTICE_SEQ, N.TITLE, N.NOTICE_YN, N.READ_CNT, CONTENTS,
+               DATE_FORMAT(N.REG_DT, '%Y/%m/%d %H:%i:%s') AS REG_DT
+        FROM NOTICE N
+        WHERE N.NOTICE_SEQ = #{noticeSeq}
     </select>
 
     <!-- 조회수 증가 쿼리 -->

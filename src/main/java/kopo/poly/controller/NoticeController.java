@@ -52,12 +52,16 @@ public class NoticeController {
 
         String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 공지글번호(PK)
 
+        // 세션에서 사용자 아이디 가져오기 (세션 키는 세션에서 설정한 것과 동일해야 함)
+        String ssUserId = (String) session.getAttribute("SS_USER_ID");
+
         /*
          * ####################################################################################
          * 반드시, 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함 반드시 작성할 것
          * ####################################################################################
          */
         log.info("nSeq : " + nSeq);
+        log.info("sessionUserId : " + ssUserId);
 
         /*
          * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
@@ -73,10 +77,13 @@ public class NoticeController {
         // 조회된 리스트 결과값 넣어주기
         model.addAttribute("rDTO", rDTO);
 
+        // 사용자 아이디를 JSP로 전달
+        model.addAttribute("sessionUserId", ssUserId);
+
         // 로그인된 사용자 아이디는 Session에 저장함
         // 교육용으로 아직 로그인을 구현하지 않았기 때문에 Session에 데이터를 저장하지 않았음
         // 추후 로그인을 구현할 것으로 가정하고, 공지사항 리스트 출력하는 함수에서 로그인 한 것처럼 Session 값을 생성함
-        session.setAttribute("SESSION_USER_ID", "USER01");
+//        session.setAttribute("SESSION_USER_ID", ssUserId);
 
 
         log.info("테스트");
@@ -197,11 +204,14 @@ public class NoticeController {
      * 게시판 상세보기
      */
     @GetMapping(value = "noticeInfo")
-    public String noticeInfo(HttpServletRequest request, ModelMap model) throws Exception {
+    public String noticeInfo(HttpSession session, HttpServletRequest request, ModelMap model) throws Exception {
 
         log.info(this.getClass().getName() + ".noticeInfo Start!");
 
         String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 공지글번호(PK)
+
+        // 세션에서 사용자 아이디 가져오기 (세션 키는 세션에서 설정한 것과 동일해야 함)
+        String ssUserId = (String) session.getAttribute("SS_USER_ID");
 
         /*
          * ####################################################################################
@@ -209,6 +219,7 @@ public class NoticeController {
          * ####################################################################################
          */
         log.info("nSeq : " + nSeq);
+        log.info("sessionUserId : " + ssUserId);
 
         /*
          * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
@@ -223,6 +234,11 @@ public class NoticeController {
 
         // 조회된 리스트 결과값 넣어주기
         model.addAttribute("rDTO", rDTO);
+
+        // 사용자 아이디를 JSP로 전달
+        model.addAttribute("sessionUserId", ssUserId);
+
+        log.info("rDTO : " + rDTO);
 
         log.info(this.getClass().getName() + ".noticeInfo End!");
 
