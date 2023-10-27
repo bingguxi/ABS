@@ -43,7 +43,7 @@
                 alert("관리자만 접근 가능합니다.");
 
             } else {
-                alert("본인이 작성한 글만 수정 가능합니다.");
+                alert("관리자만 접근 가능합니다.");
 
             }
         }
@@ -60,20 +60,15 @@
         <div class="divTable minimalistBlack">
             <div class="divTableHeading">
                 <div class="divTableRow">
-                    <div class="divTableHead">순번</div>
                     <div class="divTableHead">제목</div>
                     <div class="divTableHead">조회수</div>
-                    <div class="divTableHead">등록자</div>
                     <div class="divTableHead">등록일</div>
                 </div>
             </div>
             <div class="divTableBody">
                 <div class="divTableRow" th:each="dto: ${rList}">
-                    <div class="divTableCell" th:if="${dto.noticeYn=='Y'}" th:text="공지사항"></div>
-                    <div class="divTableCell" th:unless="${dto.noticeYn=='Y'}" th:text="${dto.noticeSeq}"></div>
                     <div class="divTableCell" th:text="${dto.title}" th:onclick="doDetail([[${dto.noticeSeq}]])"></div>
                     <div class="divTableCell" th:text="${dto.readCnt}"></div>
-                    <div class="divTableCell" th:text="${dto.userName}"></div>
                     <div class="divTableCell" th:text="${dto.regDt}"></div>
                 </div>
             </div>

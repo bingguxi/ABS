@@ -2,17 +2,19 @@ package kopo.poly.controller;
 
 import kopo.poly.dto.MsgDTO;
 import kopo.poly.dto.NoticeDTO;
+import kopo.poly.dto.UserInfoDTO;
+import kopo.poly.persistance.mapper.INoticeMapper;
+import kopo.poly.service.ILoginService;
 import kopo.poly.service.INoticeService;
+import kopo.poly.service.ISignupService;
 import kopo.poly.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -51,9 +53,7 @@ public class NoticeController {
         log.info(this.getClass().getName() + ".noticeList Start!");
 
         String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 공지글번호(PK)
-
-        // 세션에서 사용자 아이디 가져오기 (세션 키는 세션에서 설정한 것과 동일해야 함)
-        String ssUserId = (String) session.getAttribute("SS_USER_ID");
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID")); // 세션에서 사용자 아이디 가져오기 (세션 키는 세션에서 설정한 것과 동일해야 함)
 
         /*
          * ####################################################################################
@@ -61,13 +61,14 @@ public class NoticeController {
          * ####################################################################################
          */
         log.info("nSeq : " + nSeq);
-        log.info("sessionUserId : " + ssUserId);
+        log.info("SS_USER_ID : " + userId);
 
         /*
          * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
          */
         NoticeDTO pDTO = new NoticeDTO();
         pDTO.setNoticeSeq(nSeq);
+        pDTO.setUserId(userId);
 
         // 공지사항 상세정보 가져오기
         // Java 8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
@@ -77,31 +78,15 @@ public class NoticeController {
         // 조회된 리스트 결과값 넣어주기
         model.addAttribute("rDTO", rDTO);
 
-        // 사용자 아이디를 JSP로 전달
-        model.addAttribute("sessionUserId", ssUserId);
-
-        // 로그인된 사용자 아이디는 Session에 저장함
-        // 교육용으로 아직 로그인을 구현하지 않았기 때문에 Session에 데이터를 저장하지 않았음
-        // 추후 로그인을 구현할 것으로 가정하고, 공지사항 리스트 출력하는 함수에서 로그인 한 것처럼 Session 값을 생성함
-//        session.setAttribute("SESSION_USER_ID", ssUserId);
-
-
-        log.info("테스트");
-
         // 공지사항 리스트 조회하기
         // Java 8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
         List<NoticeDTO> rList = Optional.ofNullable(noticeService.getNoticeList())
                 .orElseGet(ArrayList::new);
 
-//        List<NoticeDTO> rList = noticeService.getNoticeList();
-//
-//        if (rList == null) {
-//            rList = new ArrayList<>();
-//        }
-
         // 조회된 리스트 결과값 넣어주기
         model.addAttribute("rList", rList);
 
+        // 들어온 값 확인
         log.info("rList : " + rList );
 
         // 로그 찍기(추후 찍은 로그를 통해 이 함수 호출이 끝났는지 파악하기 용이하다.)
@@ -127,10 +112,29 @@ public class NoticeController {
 
         log.info(this.getClass().getName() + ".noticeReg End!");
 
-        // 함수 처리가 끝나고 보여줄 JSP 파일명
-        // webapp/WEB-INF/views/notice/noticeReg.jsp
         return "notice/noticeReg";
     }
+
+/* ★ 해당 로직은 url로 직접 쳐서 들어갔을때 세션값이 "manager"가 아니면 리다이렉트로 내보내는 로직인데 미완성임 ★ */
+//    @GetMapping(value = "noticeReg")
+//    public String NoticeReg(HttpSession session)
+//            throws Exception {
+//
+//        String userId = (String) session.getAttribute("SS_USER_ID");
+//
+//        log.info("SS_USER_ID : " + userId);
+//
+//        if (!"manager".equals(userId)) {
+//            // 필요한 로직 추가
+//            log.info(this.getClass().getName() + ".noticeReg Start!");
+//
+//            log.info(this.getClass().getName() + ".noticeReg End!");
+//            return "notice/noticeReg"; // 로그인 성공 시 noticeReg 페이지 표시
+//        } else {
+//            session.invalidate(); // 세션 무효화
+//            return "redirect:/user/login"; // userId가 'manager'가 아닌 경우 로그인 페이지로 리다이렉트
+//        }
+//    }
 
     /**
      * 게시판 글 등록
@@ -149,12 +153,12 @@ public class NoticeController {
         MsgDTO dto = null; // 결과 메시지 구조
 
         try {
+
             // 로그인된 사용자 아이디를 가져오기
             // 로그인을 아직 구현하지 않았기에 공지사항 리스트에서 로그인 한 것처럼 Session 값을 저장함 // !!! 임시로 세션값 넣기 위해 주석처리 !!!
-//            String userId = CmmUtil.nvl((String) session.getAttribute("SESSION_USER_ID"));
-            session.setAttribute("SESSION_USER_ID", "USER01");
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID")); // 세션값으로 로그인 된 userId 정보 가져오기
             String title = CmmUtil.nvl(request.getParameter("title")); // 제목
-            String noticeYn = CmmUtil.nvl(request.getParameter("noticeYn")); // 공지글 여부
+//            String noticeYn = CmmUtil.nvl(request.getParameter("noticeYn")); // 공지글 여부
             String contents = CmmUtil.nvl(request.getParameter("contents")); // 내용
 
             /*
@@ -162,16 +166,16 @@ public class NoticeController {
              * 반드시, 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함 반드시 작성할 것
              * ####################################################################################
              */
-//            log.info("session user_id : " + userId); // !!! 임시로 세션값 넣기 위해 주석처리 !!!
+            log.info("SS_USER_ID : " + userId);
             log.info("title : " + title);
-            log.info("noticeYn : " + noticeYn);
+//            log.info("noticeYn : " + noticeYn);
             log.info("contents : " + contents);
 
             // 데이터 저장하기 위해 DTO에 저장하기
             NoticeDTO pDTO = new NoticeDTO();
-//            pDTO.setUserId(userId); // !!! 임시로 세션값 넣기 위해 주석처리 !!!
+            pDTO.setUserId(userId);
             pDTO.setTitle(title);
-            pDTO.setNoticeYn(noticeYn);
+//            pDTO.setNoticeYn(noticeYn);
             pDTO.setContents(contents);
 
             /*
@@ -204,14 +208,13 @@ public class NoticeController {
      * 게시판 상세보기
      */
     @GetMapping(value = "noticeInfo")
-    public String noticeInfo(HttpSession session, HttpServletRequest request, ModelMap model) throws Exception {
+    public String noticeInfo(HttpSession session, HttpServletRequest request, ModelMap model)
+            throws Exception {
 
         log.info(this.getClass().getName() + ".noticeInfo Start!");
 
         String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 공지글번호(PK)
-
-        // 세션에서 사용자 아이디 가져오기 (세션 키는 세션에서 설정한 것과 동일해야 함)
-        String ssUserId = (String) session.getAttribute("SS_USER_ID");
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID")); // 세션값으로 로그인 된 userId 정보 가져오기
 
         /*
          * ####################################################################################
@@ -219,13 +222,14 @@ public class NoticeController {
          * ####################################################################################
          */
         log.info("nSeq : " + nSeq);
-        log.info("sessionUserId : " + ssUserId);
+        log.info("SS_USER_ID : " + userId);
 
         /*
          * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
          */
         NoticeDTO pDTO = new NoticeDTO();
         pDTO.setNoticeSeq(nSeq);
+        pDTO.setUserId(userId);
 
         // 공지사항 상세정보 가져오기
         // Java 8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
@@ -234,9 +238,6 @@ public class NoticeController {
 
         // 조회된 리스트 결과값 넣어주기
         model.addAttribute("rDTO", rDTO);
-
-        // 사용자 아이디를 JSP로 전달
-        model.addAttribute("sessionUserId", ssUserId);
 
         log.info("rDTO : " + rDTO);
 
@@ -251,11 +252,13 @@ public class NoticeController {
      * 게시판 수정 보기
      */
     @GetMapping(value = "noticeEditInfo")
-    public String noticeEditInfo(HttpServletRequest request, ModelMap model) throws Exception {
+    public String noticeEditInfo(HttpSession session, HttpServletRequest request, ModelMap model)
+            throws Exception {
 
         log.info(this.getClass().getName() + ".noticeEditInfo Start!");
 
         String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 공지글번호(PK)
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID")); // 세션값으로 로그인 된 userId 정보 가져오기
 
         /*
          * ####################################################################################
@@ -263,12 +266,14 @@ public class NoticeController {
          * ####################################################################################
          */
         log.info("nSeq : " + nSeq);
+        log.info("SS_USER_ID : " + userId);
 
         /*
          * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
          */
         NoticeDTO pDTO = new NoticeDTO();
         pDTO.setNoticeSeq(nSeq);
+        pDTO.setUserId(userId);
 
         // Java 8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
         NoticeDTO rDTO = Optional.ofNullable(noticeService.getNoticeInfo(pDTO, false))
@@ -297,10 +302,11 @@ public class NoticeController {
         MsgDTO dto = null; // 결과 메시지 구조
 
         try {
-            String userId = CmmUtil.nvl((String) session.getAttribute("SESSION_USER_ID")); // 아이디
+
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID")); // 세션값으로 로그인 된 userId 정보 가져오기
             String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 글번호(PK)
             String title = CmmUtil.nvl(request.getParameter("title")); // 제목
-            String noticeYn = CmmUtil.nvl(request.getParameter("noticeYn")); // 공지글 여부
+//            String noticeYn = CmmUtil.nvl(request.getParameter("noticeYn")); // 공지글 여부
             String contents = CmmUtil.nvl(request.getParameter("contents")); // 내용
 
             /*
@@ -311,7 +317,7 @@ public class NoticeController {
             log.info("userId : " + userId);
             log.info("nSeq : " + nSeq);
             log.info("title : " + title);
-            log.info("noticeYn : " + noticeYn);
+//            log.info("noticeYn : " + noticeYn);
             log.info("contents : " + contents);
 
             /*
@@ -321,7 +327,7 @@ public class NoticeController {
             pDTO.setUserId(userId);
             pDTO.setNoticeSeq(nSeq);
             pDTO.setTitle(title);
-            pDTO.setNoticeYn(noticeYn);
+//            pDTO.setNoticeYn(noticeYn);
             pDTO.setContents(contents);
 
             // 게시글 수정하기 DB
@@ -352,7 +358,7 @@ public class NoticeController {
      */
     @ResponseBody
     @PostMapping(value = "noticeDelete")
-    public MsgDTO noticeDelete(HttpServletRequest request) {
+    public MsgDTO noticeDelete(HttpServletRequest request, HttpSession session) {
 
         log.info(this.getClass().getName() + ".noticeDelete Start!");
 
@@ -360,7 +366,9 @@ public class NoticeController {
         MsgDTO dto = null; // 결과 메시지 구조
 
         try {
+
             String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 글번호(PK)
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID")); // 세션값으로 로그인 된 userId 정보 가져오기
 
             /*
              * ####################################################################################
@@ -368,12 +376,14 @@ public class NoticeController {
              * ####################################################################################
              */
             log.info("nSeq : " + nSeq);
+            log.info("SS_USER_ID : " + userId);
 
             /*
              * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
              */
             NoticeDTO pDTO = new NoticeDTO();
             pDTO.setNoticeSeq(nSeq);
+            pDTO.setUserId(userId);
 
             // 게시글 삭제하기 DB
             noticeService.deleteNoticeInfo(pDTO);
