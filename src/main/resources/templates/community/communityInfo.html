@@ -129,24 +129,24 @@
 
         }
         function doCmtDelete() {
-            if (session_user_id === userId) {
+            // if (session_user_id === userId) {
                 if (confirm("작성한 댓글을 삭제하시겠습니까?")) {
 
                     // Ajax 호출해서 글 삭제하기
                     $.ajax({
-                            url: "/commemt/commentDelete",
+                            url: "/comment/commentDelete",
                             type: "post", // 전송방식은 Post
                             dataType: "JSON", // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
                             data: {"nSeq": nSeq},
                             success:
                                 function (json) { // /comment/commentDelete 호출이 성공한다면...
                                     alert(json.msg); // 메시지 띄우기
-                                    location.href = "/comment/commentList"; // 커뮤니티 리스트로 이동
+                                    location.href = "/community/communityInfo?nSeq=" + nSeq; // 커뮤니티 리스트로 이동
                                 }
                         }
                     )
                 }
-            } else if (session_user_id === "") {
+            else if (session_user_id === "") {
                 alert("로그인 하시길 바랍니다.");
             } else {
                 alert("본인이 작성한 글만 삭제 가능합니다.");
@@ -198,6 +198,7 @@
         <input type="hidden" name="community_seq" th:value="${rDTO.communitySeq}">
         <div class="divTableRow" th:each="dto : ${rList}">
             <div class="divTableCell" th:text="${dto.contents}"></div>
+            <button id="btnCmtDelete" type="button" style="margin-left: 2%; margin-top: 10px">삭제</button>
         </div>
     </div>
 

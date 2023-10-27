@@ -9,7 +9,7 @@ import java.util.List;
 public interface ICommentMapper {
 
     // 댓글 리스트
-    List<CommentDTO> getCommentList() throws Exception;
+    List<CommentDTO> getCommentList(CommentDTO pDTO) throws Exception;
 
     // 댓글 등록
     void insertCommentInfo(CommentDTO pDTO) throws Exception;

@@ -28,6 +28,7 @@ import java.util.Optional;
 public class CommunityController {
 
     private final ICommunityService communityService;
+    private final ICommentService commentService;
 
     /** 커뮤니티 리스트 보여주기 */
     @GetMapping(value = "communityList")
@@ -73,21 +74,18 @@ public class CommunityController {
 
         try {
             // 로그인된 사용자 아이디 가져오기
-            String userId = CmmUtil.nvl((String) session.getAttribute("SESSION_USER_ID"));
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
             String title = CmmUtil.nvl(request.getParameter("title")); // 제목
-            String communityYn = CmmUtil.nvl(request.getParameter("communityYn")); // 공지글 여부
             String contents = CmmUtil.nvl(request.getParameter("contents")); // 내용
 
-            log.info("session user_id : " + userId);
+            log.info("ss_user_id : " + userId);
             log.info("title : " + title);
-            log.info("communityYn : " + communityYn);
             log.info("contents : " + contents);
 
             // 데이터 저장하기 위해 DTO에 저장하기
             CommunityDTO pDTO = new CommunityDTO();
             pDTO.setUserId(userId);
             pDTO.setTitle(title);
-            pDTO.setCommunityYn(communityYn);
             pDTO.setContents(contents);
 
             // 게시글 등록하기 위한 비즈니스 로직 호출
@@ -128,6 +126,15 @@ public class CommunityController {
 
         // 공지사항 상세정보 가져오기
         CommunityDTO rDTO = Optional.ofNullable(communityService.getCommunityInfo(pDTO, true)).orElseGet(CommunityDTO::new);
+
+        CommentDTO cDTO = new CommentDTO();
+        cDTO.setCommunitySeq(nSeq);
+
+        // 커뮤니티 리스트 조회하기
+        List<CommentDTO> rList = Optional.ofNullable(commentService.getCommentList(cDTO)).orElseGet(ArrayList::new);
+
+        // 조회된 리스트 결과값 넣어주기
+        modelMap.addAttribute("rList", rList);
 
         // 조회된 리스트 결과값 넣어주기
         modelMap.addAttribute("rDTO", rDTO);

@@ -28,25 +28,25 @@ public class CommentController {
     private final ICommentService commentService;
 
     /** 커뮤니티 리스트 보여주기 */
-    @GetMapping(value = "commentList")
-    public String commentList(HttpSession session, ModelMap modelMap) throws Exception {
-
-        log.info(this.getClass().getName() + ".commentList Start!");
-
-        // TODO: 2023-10-23 session_user_id 변경하기
-        session.setAttribute("SESSION_USER_ID", "USER01");
-
-        // 커뮤니티 리스트 조회하기
-        List<CommentDTO> rList = Optional.ofNullable(commentService.getCommentList()).orElseGet(ArrayList::new);
-
-        // 조회된 리스트 결과값 넣어주기
-        modelMap.addAttribute("rList", rList);
-
-        log.info(this.getClass().getName() + ".commentList End!");
-
-        // 함수 처리가 끝나고 보여줄 html 파일명
-        return "community/communityInfo";
-    }
+//    @GetMapping(value = "commentList")
+//    public String commentList(HttpSession session, ModelMap modelMap) throws Exception {
+//
+//        log.info(this.getClass().getName() + ".commentList Start!");
+//
+//        // TODO: 2023-10-23 session_user_id 변경하기
+//        session.setAttribute("SESSION_USER_ID", "USER01");
+//
+//        // 커뮤니티 리스트 조회하기
+//        List<CommentDTO> rList = Optional.ofNullable(commentService.getCommentList()).orElseGet(ArrayList::new);
+//
+//        // 조회된 리스트 결과값 넣어주기
+//        modelMap.addAttribute("rList", rList);
+//
+//        log.info(this.getClass().getName() + ".commentList End!");
+//
+//        // 함수 처리가 끝나고 보여줄 html 파일명
+//        return "community/communityInfo";
+//    }
 
 
     /** 커뮤니티 글 등록 */
