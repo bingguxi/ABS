@@ -182,6 +182,20 @@
 
                             <p style="text-align: center;">계정이 없으신가요? <a href="/signup"><span>회원가입</span></a></p>
 
+
+                            <!--네이버 로그인-->
+                            <!-- 다른 HTML 파일을 삽입하는 iframe 요소 -->
+                            <iframe src="/login/naverLogin" height="60px" style="width: 150px; margin-left: 15%"></iframe>
+
+
+                            <!--카카오 로그인-->
+                            <a href="https://kauth.kakao.com/oauth/authorize?client_id=6706621d8f90ce8e40e411e21d348bf7&redirect_uri=http://localhost:11000/login/kakaoLogin&response_type=code"
+                            style="width: 150px;">
+                                <img src="/img/kakao_login_medium_narrow.png" alt="카카오계정으로 로그인"
+                                     style="height: 37px; margin-top: 9px;">
+                            </a>
+
+
                             <div class="col-md-12 text-center">
                                 <button type="button" id="btnLogin">로그인</button>
                             </div>
