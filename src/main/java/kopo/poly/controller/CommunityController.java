@@ -1,10 +1,9 @@
 package kopo.poly.controller;
 
-import kopo.poly.dto.CommentDTO;
-import kopo.poly.dto.CommunityDTO;
-import kopo.poly.dto.MsgDTO;
+import kopo.poly.dto.*;
 import kopo.poly.service.ICommentService;
 import kopo.poly.service.ICommunityService;
+import kopo.poly.service.ILoginService;
 import kopo.poly.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,18 +31,27 @@ public class CommunityController {
 
     /** 커뮤니티 리스트 보여주기 */
     @GetMapping(value = "communityList")
-    public String communityList(HttpSession session, ModelMap modelMap) throws Exception {
+    public String communityList(HttpSession session, ModelMap model) throws Exception {
 
         log.info(this.getClass().getName() + ".communityList Start!");
 
-        // TODO: 2023-10-23 session_user_id 변경하기
-        session.setAttribute("SESSION_USER_ID", "USER01");
+        String userId = (String) session.getAttribute("SS_USER_ID"); // 아이디 세션값
+
+        log.info("세션에 저장 되어있는 아이디('SS_USER_ID') : " + userId);
+
+        CommunityDTO pDTO = new CommunityDTO();
+        pDTO.setUserId(userId);
+
+        CommunityDTO rDTO = Optional.ofNullable(communityService.getCommunityInfo(pDTO, true))
+                .orElseGet(CommunityDTO::new);
+
+        model.addAttribute("rDTO", rDTO);
 
         // 커뮤니티 리스트 조회하기
         List<CommunityDTO> rList = Optional.ofNullable(communityService.getCommunityList()).orElseGet(ArrayList::new);
 
         // 조회된 리스트 결과값 넣어주기
-        modelMap.addAttribute("rList", rList);
+        model.addAttribute("rList", rList);
 
         log.info(this.getClass().getName() + ".communityList End!");
 
@@ -184,20 +192,20 @@ public class CommunityController {
             String userId = CmmUtil.nvl((String) session.getAttribute("SESSION_USER_ID")); // 아이디
             String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 글번호(PK)
             String title = CmmUtil.nvl(request.getParameter("title")); // 제목
-            String communityYn = CmmUtil.nvl(request.getParameter("communityYn")); // 공지글 여부
+//            String communityYn = CmmUtil.nvl(request.getParameter("communityYn")); // 공지글 여부
             String contents = CmmUtil.nvl(request.getParameter("contents")); // 내용
 
             log.info("userId : " + userId);
             log.info("nSeq : " + nSeq);
             log.info("title : " + title);
-            log.info("communityYn : " + communityYn);
+//            log.info("communityYn : " + communityYn);
             log.info("contents : " + contents);
 
             CommunityDTO pDTO = new CommunityDTO();
             pDTO.setUserId(userId);
             pDTO.setCommunitySeq(nSeq);
             pDTO.setTitle(title);
-            pDTO.setCommunityYn(communityYn);
+//            pDTO.setCommunityYn(communityYn);
             pDTO.setContents(contents);
 
             // 게시글 수정하기 DB

@@ -57,22 +57,25 @@ public class CommentController {
         log.info(this.getClass().getName() + ".commentInsert Start!");
 
         String msg = ""; // 메시지 내용
-        MsgDTO dto = null; // 결과 메시지 구조
+        MsgDTO dto = null; // 결과 메시지 구조x
+
+        String userId = (String) session.getAttribute("SS_USER_ID"); // 유저 아이디
+//        session.setAttribute("SS_USER_ID", reviewerId);
+        log.info("세션에 저장 되어있는 유저 아이디('SS_USER_ID') : " + session.getAttribute("SS_USER_ID"));
 
         try {
-            // 로그인된 사용자 아이디 가져오기
-            String userId = CmmUtil.nvl((String) session.getAttribute("SESSION_USER_ID"));
-            String communitySeq = CmmUtil.nvl(request.getParameter("community_seq"));
+
+            String communitySeq = CmmUtil.nvl(request.getParameter("community_seq")); // 게시글 순번
             String contents = CmmUtil.nvl(request.getParameter("contents")); // 내용
 
-            log.info("session user_id : " + userId);
+            log.info("userId : " + userId);
             log.info("community_seq : " + communitySeq);
             log.info("contents : " + contents);
 
             // 데이터 저장하기 위해 DTO에 저장하기
             CommentDTO pDTO = new CommentDTO();
-            pDTO.setUserId(userId);
             pDTO.setCommunitySeq(communitySeq);
+            pDTO.setUserId(userId);
             pDTO.setContents(contents);
 
             // 게시글 등록하기 위한 비즈니스 로직 호출
@@ -100,7 +103,7 @@ public class CommentController {
     /**댓글 삭제*/
     @ResponseBody
     @PostMapping(value = "commentDelete")
-    public MsgDTO commentDelete(HttpServletRequest request) {
+    public MsgDTO commentDelete(HttpServletRequest request, HttpSession session) {
 
         log.info(this.getClass().getName() + ".commentDelete Start!");
 
@@ -108,12 +111,16 @@ public class CommentController {
         MsgDTO dto = null; // 결과 메시지 구조
 
         try {
+
             String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 글번호(PK)
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
             log.info("nSeq : " + nSeq);
+            log.info("SS_USER_ID : " + userId);
 
             CommentDTO pDTO = new CommentDTO();
             pDTO.setCommentSeq(nSeq);
+            pDTO.setUserId(userId);
 
             // 게시글 삭제하기 DB
             commentService.deleteCommentInfo(pDTO);
