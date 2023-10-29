@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>재난탈출넘버원 로그인</title>
+    <title>재난탈출넘버원 회원가입</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -40,48 +40,100 @@
     ======================================================== -->
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script type="text/javascript">
 
-        // HTML 로딩이 완료되고, 실행됨
+        // 아이디 중복체크여부 (중복 Y / 중복아님 : N)
+        let userIdCheck = "Y";
+
+        // 이메일 중복체크 인증번호 발송 값
+        let emailAuthNumber = "";
+
+        // 중복 체크한 아이디 값을 저장할 변수
+        let checkedUserId = "";
+
+        // HTML로딩이 완료되고, 실행됨
         $(document).ready(function () {
 
-            // 로그인
-            $("#btnLogin").on("click", function () {
-                let f = document.getElementById("f"); // form 태그
+            let f = document.getElementById("f"); // form 태그
 
-                if (f.userId.value === "") {
-                    alert("아이디를 입력하세요.");
-                    f.userId.focus();
-                    return;
-                }
-
-                if (f.password.value === "") {
-                    alert("비밀번호를 입력하세요.");
-                    f.password.focus();
-                    return;
-                }
-
-                // Ajax 호출해서 로그인하기
-                $.ajax({
-                        url: "/login/loginProc",
-                        type: "post",
-                        dataType: "JSON", // 전송결과는 JSON으로 받기!
-                        data: $("#f").serialize(),
-                        success: function (json) {
-
-                            if (json.result === 1) { // 만약 로그인 성공하면,
-                                alert(json.msg);
-                                location.href = "/index";
-
-                            } else { // 로그인 실패
-                                alert(json.msg); // 메시지 띄우기
-                                $("#userId").focus(); // 아이디 입력 항목에 마우스 커서 이동
-                            }
-                        }
-                    }
-                )
+            // 우편번호 찾기
+            $("#btnAddr").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+                kakaoPost(f);
             })
+
+            // 회원정보 수정하기
+            $("#btnUpdate").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+                updateProfile(f);
+            })
+
         })
+
+
+        // 카카오 우편번호 조회 API 호출
+        function kakaoPost(f) {
+            new daum.Postcode({
+                oncomplete: function (data) {
+
+                    // Kakao에서 제공하는 data는 JSON구조로 주소 조회 결과값을 전달함
+                    // 주요 결과값
+                    // 주소 : data.address
+                    // 우편번호 : data.zonecode
+                    let address = data.address; // 주소
+                    let zonecode = data.zonecode; // 우편번호
+                    f.addr1.value = "(" + zonecode + ")" + address
+                }
+            }).open();
+        }
+
+        //회원가입 정보의 유효성 체크하기
+        function updateProfile(f) {
+
+            if (f.userName.value === "") {
+                alert("이름을 입력하세요.");
+                f.userName.focus();
+                return;
+            }
+
+            if (f.password.value === "") {
+                alert("비밀번호를 입력하세요.");
+                f.password.focus();
+                return;
+            }
+
+            if (f.addr1.value === "") {
+                alert("주소를 입력하세요.");
+                f.addr1.focus();
+                return;
+            }
+
+            if (f.addr2.value === "") {
+                alert("상세주소를 입력하세요.");
+                f.addr2.focus();
+                return;
+            }
+
+            // Ajax 호출해서 회원가입하기
+            $.ajax({
+                    url: "/profile/profileModify/updateProc",
+                    type: "post", // 전송방식은 Post
+                    dataType: "JSON", // 전송 결과는 JSON으로 받기
+                    data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+                    success: function (json) { // /notice/noticeUpdate 호출이 성공했다면..
+
+                        if (json.result === 1) { // 회원가입 성공
+                            alert(json.msg); // 메시지 띄우기
+                            location.href = "/profile"; // 로그인 페이지 이동
+
+                        } else { // 회원가입 실패
+                            alert(json.msg); // 메시지 띄우기
+                        }
+
+                    }
+                }
+            )
+
+        }
     </script>
 
 </head>
@@ -125,39 +177,40 @@
             <div class="row g-0">
 
                 <div class="col-lg-7" style="margin: auto">
-                    <form id="f" method="post" class="php-email-form">
-                        <h2 style="text-align: center; margin-bottom: 5%">로그인</h2>
+                    <form id="f" class="php-email-form">
+                        <h2 style="text-align: center; margin-bottom: 5%">회원가입</h2>
 
                         <div class="row gy-4">
 
-                            <div class="col-md-7" style="margin-left: auto; margin-right: auto;">
-                                <input type="text" name="userId" class="form-control" placeholder="아이디">
+                            <div class="col-md-7" style="margin-left: auto; margin-right: auto;"> <!--아이디-->
+                                <h5>[[${rDTO.userId}]]</h5>
                             </div>
 
-                            <div class="col-md-7" style="margin-left: auto; margin-right: auto;">
-                                <input type="password" name="password" class="form-control" placeholder="비밀번호">
+                            <div class="col-md-7" style="margin-left: auto; margin-right: auto;"> <!--비밀번호-->
+                                <input type="password" name="password" class="form-control">
                             </div>
 
-                            <p style="text-align: center;">계정이 없으신가요? <a href="/signup"><span>회원가입</span></a></p>
-                            <p style="text-align: center;"><a href="/login/findId"><span>아이디 찾기</span></a></p>
-                            <p style="text-align: center;"><a href="/login/findPassword"><span>비밀번호 찾기</span></a></p>
 
+                            <div class="col-md-7" style="margin-left: auto; margin-right: auto;"> <!--이름-->
+                                <input type="text" name="userName" class="form-control" th:value="${rDTO.userName}">
+                            </div>
 
-                            <!--네이버 로그인-->
-                            <!-- 다른 HTML 파일을 삽입하는 iframe 요소 -->
-                            <iframe src="/login/naverLogin" height="60px" style="width: 150px; margin-left: 15%"></iframe>
+                            <div class="col-md-7" style="margin-left: auto; margin-right: auto;"> <!--이메일-->
+                                <h5>[[${rDTO.email}]]</h5>
+                            </div>
 
+                            <div class="col-md-7" style="margin-left: auto; margin-right: auto;"> <!--주소-->
+                                <input type="text" name="addr1" class="form-control" th:value="${rDTO.addr1}">
+                            </div>
 
-                            <!--카카오 로그인-->
-                            <a href="https://kauth.kakao.com/oauth/authorize?client_id=6706621d8f90ce8e40e411e21d348bf7&redirect_uri=http://localhost:11000/login/kakaoLogin&response_type=code"
-                            style="width: 150px;">
-                                <img src="/img/kakao_login_medium_narrow.png" alt="카카오계정으로 로그인"
-                                     style="height: 37px; margin-top: 9px;">
-                            </a>
+                            <button type="button" id="btnAddr">우편번호 찾기</button>
 
+                            <div class="col-md-7" style="margin-left: auto; margin-right: auto;"> <!--상세주소-->
+                                <input type="text" name="addr2" class="form-control" th:value="${rDTO.addr2}">
+                            </div>
 
                             <div class="col-md-12 text-center">
-                                <button type="button" id="btnLogin">로그인</button>
+                                <button type="button" id="btnUpdate">수정하기</button>
                             </div>
 
                         </div>

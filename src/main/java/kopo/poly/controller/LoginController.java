@@ -7,12 +7,14 @@ import kopo.poly.util.EncryptUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -140,6 +142,98 @@ public class LoginController {
 
 
 
+    @GetMapping(value = "/findId")
+    public String findId() {
+
+        log.info(this.getClass().getName() + ".findId Start!");
+        log.info(this.getClass().getName() + ".findId End!");
+
+        return "/user/findId";
+    }
+
+    @PostMapping(value = "/findIdProc")
+    public String findIdProc(HttpServletRequest request, ModelMap model) throws Exception {
+
+        log.info(this.getClass().getName() + ".findIdProc Start!");
+
+        String userName = CmmUtil.nvl(request.getParameter("userName")); // 이름
+        String email = CmmUtil.nvl(request.getParameter("email")); // 이메일
+
+        log.info("userName : " + userName);
+        log.info("email : " + email);
+
+        UserInfoDTO pDTO = new UserInfoDTO();
+        pDTO.setUserName(userName);
+        pDTO.setEmail(EncryptUtil.encAES128CBC(email));
+
+        UserInfoDTO rDTO = Optional.ofNullable(loginService.findIdOrPasswordProc(pDTO)).orElseGet(UserInfoDTO::new);
+
+        model.addAttribute("rDTO", rDTO);
+
+        log.info("rDTO.getUserId() : " + rDTO.getUserId());
+
+        log.info(this.getClass().getName() + ".findIdProc End!");
+
+        return "/user/findIdResult";
+    }
+
+
+    // 비밀번호 찾기
+    @GetMapping(value = "/findPassword")
+    public String findPassword(HttpSession session) {
+        log.info(this.getClass().getName() + ".findPassword Start!");
+
+        // 강제 URL 입력 등 오는 경우가 있어 세션 삭제
+        // 비밀번호 재생성하는 화면은 보안을 위해 생성한 NEW_PASSWORD 세션 삭제
+        session.setAttribute("NEW_PASSWORD", "");
+        session.removeAttribute("NEW_PASSWORD");
+
+        log.info(this.getClass().getName() + ".findPassword End!");
+
+        return "/user/findPassword";
+    }
+
+
+    // 이메일 일치 확인 후에 임시 비밀번호 전송
+    @PostMapping(value = "/newPasswordProc")
+    public String pwCode(HttpServletRequest request, ModelMap model) throws Exception {
+
+        log.info(getClass().getName() + ".newPasswordProc Start!");
+
+        // 입력받은 값을 변수에 저장하기
+        String userId = CmmUtil.nvl(request.getParameter("userId")); // 아이디
+        String userName = CmmUtil.nvl(request.getParameter("userName")); // 이름
+        String email = CmmUtil.nvl(request.getParameter("email")); // 이메일
+
+        log.info("userId : " + userId);
+        log.info("userName : " + userName);
+        log.info("email : " + email);
+
+        UserInfoDTO pDTO = new UserInfoDTO();
+        pDTO.setUserId(userId);
+        pDTO.setUserName(userName);
+        pDTO.setEmail(EncryptUtil.encAES128CBC(email));
+
+        String msg = "";
+        String url = "";
+
+        int res = loginService.pwCode(pDTO);
+
+        if (res == 1) {
+            msg = "가입하신 메일로 임시 비밀번호를 전송하였습니다.";
+        } else {
+            msg = "이메일이 등록되어 있지 않습니다. 다시 한번 확인해주세요.";
+        }
+        url = "/login/findPassword";
+
+        model.addAttribute("msg", msg);
+        model.addAttribute("url", url);
+
+        log.info(getClass().getName() + ".newPasswordProc End!");
+
+        return "/redirect";
+    }
+
 
     @RequestMapping(value="/logout")
     public String logout(HttpSession session) throws Exception {
@@ -163,7 +257,7 @@ public class LoginController {
 
         log.info(this.getClass().getName() + ".logout End!");
 
-        return "/user/login";
+        return "/index";
     }
 
 

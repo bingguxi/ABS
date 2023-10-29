@@ -17,4 +17,9 @@ public interface ILoginService {
     // 카카오 로그아웃
     void kakaoLogout(String access_Token) throws Exception;
 
+    // 아이디, 비밀번호 찾기에 활용
+    UserInfoDTO findIdOrPasswordProc(UserInfoDTO pDTO) throws Exception;
+
+    // 임시 비밀번호 생성 후 메일 전송
+    int pwCode(UserInfoDTO pDTO) throws Exception;
 }

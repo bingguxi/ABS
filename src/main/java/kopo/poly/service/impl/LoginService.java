@@ -3,11 +3,14 @@ package kopo.poly.service.impl;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import kopo.poly.dto.MailDTO;
 import kopo.poly.dto.UserInfoDTO;
 import kopo.poly.persistance.mapper.ILoginMapper;
-import kopo.poly.persistance.mapper.ISignupMapper;
 import kopo.poly.service.ILoginService;
+import kopo.poly.service.IMailService;
 import kopo.poly.util.CmmUtil;
+import kopo.poly.util.EncryptUtil;
+import kopo.poly.util.RandomCodeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +19,6 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -25,6 +27,8 @@ import java.util.Optional;
 public class LoginService implements ILoginService {
 
     private final ILoginMapper loginMapper;
+
+    private final IMailService mailService;
 
 
     // 일반 로그인
@@ -192,12 +196,76 @@ public class LoginService implements ILoginService {
     }
 
 
+    @Override
+    public UserInfoDTO findIdOrPasswordProc(UserInfoDTO pDTO) throws Exception {
 
+        log.info(this.getClass().getName() + ".searchUserIdOrPasswordProc Start!");
 
+        UserInfoDTO rDTO = loginMapper.getUserId(pDTO);
 
+        log.info(this.getClass().getName() + ".searchUserIdOrPasswordProc End!");
 
+        return rDTO;
+    }
 
+    @Override
+    public int pwCode(UserInfoDTO pDTO) throws Exception {
 
+        log.info(getClass().getName() + ".pwCode Start!");
 
+        int res = 0;
 
+        try {
+            // DB 이메일이 존재하는지 SQL 쿼리 실행
+            // SQL 쿼리에 COUNT()를 사용하기 때문에 반드시 조회 결과는 존재함
+            UserInfoDTO rDTO = loginMapper.getUserExists(pDTO);
+            log.info("rDTO.userExists : " + rDTO.getExistsYn());
+
+            if (rDTO.getExistsYn().equals("Y")) {
+                log.info("새 비밀번호 발급 시작!");
+
+                res = 1;
+
+                // 임시 비밀번호 생성하기
+                String newPwd = CmmUtil.nvl(RandomCodeUtil.createKey());
+
+                // 임시 비밀번호 설정 및 업데이트
+                UserInfoDTO nDTO = new UserInfoDTO();
+
+                nDTO.setUserId(pDTO.getUserId());
+                nDTO.setUserName(pDTO.getUserName());
+                nDTO.setEmail(EncryptUtil.decAES128CBC(pDTO.getEmail()));
+                nDTO.setPassword(EncryptUtil.encHashSHA256(newPwd));
+
+                loginMapper.updatePassword(nDTO);
+
+                log.info("임시 비밀번호로 업데이트 성공");
+
+                // 인증번호 발송 로직
+                MailDTO dto = new MailDTO();
+
+                dto.setTitle("임시 비밀번호 발송 메일");
+                dto.setContents("회원님의 임시 비밀번호는 " + newPwd + " 입니다.\n로그인 후 반드시 비밀번호를 변경해주세요!");
+                dto.setToWho(EncryptUtil.decAES128CBC(pDTO.getEmail()));
+
+                mailService.doSendMail(dto); // 이메일 발송 서비스 호출
+
+                dto = null;
+
+            } else {
+                log.info("업데이트 실패");
+            }
+
+        } catch (
+                Exception e) {
+            res = 0;
+            log.info("[ERR0R] " + this.getClass().getName() + " doSendMail : " + e);
+
+        }
+
+        log.info(this.getClass().getName() + ".pwCode End!");
+
+        return res;
+
+    }
 }
