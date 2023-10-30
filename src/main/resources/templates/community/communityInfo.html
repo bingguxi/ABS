@@ -402,6 +402,7 @@
                 <div class="divTableRow" th:each="dto : ${rList}">
                     <input type="hidden" class="commentSeq" th:value="${dto.commentSeq}">
                     <div class="comment-content" th:text="${dto.contents}"></div>
+                    <div class="comment-timestamp" th:text="${dto.userId}"></div>
                     <div class="comment-timestamp" th:text="${dto.regDt}"></div>
                     <button class="btnCmtDelete" id="btnCmtDelete" type="button" style="margin-left: 2%; margin-top: 10px">삭제</button>
                 </div>
