@@ -2,9 +2,11 @@ package kopo.poly.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class CommunityDTO {
 
     private String communitySeq; //기본키, 순번

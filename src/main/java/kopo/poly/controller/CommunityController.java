@@ -151,6 +151,8 @@ public class CommunityController {
         // 조회된 리스트 결과값 넣어주기
         modelMap.addAttribute("rDTO", rDTO);
 
+        log.info("rDTO : " + rDTO.toString());
+
         log.info(this.getClass().getName() + ".communityInfo End!");
 
         // 함수 처리가 끝나고 보여줄 html 파일명

@@ -1,67 +1,288 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>커뮤니티 리스트</title>
-    <link rel="stylesheet" href="/css/table.css"/>
-    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
-    <script th:inline="javascript">
-        /*<![CDATA[*/
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-        const ssUserId = [[${session.SS_USER_ID}]]; // Controller에서 받은 세션에 저장된 값
-        const userId = [[${rDTO.userId}]]; // 공지사항 게시글 작성자 아이디
+  <title>[Template] Sample Inner Page</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
 
-        $(document).ready(function () {
+  <!-- Favicons -->
+  <link href="/img/favicon.png" rel="icon">
+  <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-            // 글 작성
-            $("#btnWrite").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-                doWrite();
-            })
-        })
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/css/table_kea.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 
-        // 상세보기 이동
-        function doDetail(seq) {
-            location.href = "/community/communityInfo?nSeq=" + seq;
-        }
+  <!-- Vendor CSS Files -->
+  <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="/vendor/aos/aos.css" rel="stylesheet">
 
-        // 글 작성하기
-        function doWrite() {
-            if (ssUserId !== null && ssUserId !== undefined) {
-                window.location.href = "/community/communityReg";
-            } else {
-                alert("로그인 후 이용 가능합니다.");
-            }
-        }
+  <!-- Template Main CSS File -->
+  <link href="/css/main.css" rel="stylesheet">
+  <style>
+    .btn {
+      border: none;
+      background: #0e1d34;
+      /*background: linear-gradient(0deg, rgba(6, 14, 131, 1) 0%, rgba(12, 25, 180, 1) 100%);*/
+      color: white;
+      margin-top: 10px;
+    }
+    .btn:hover{
+      background: rgb(0, 3, 255);
+      background: linear-gradient(0deg, rgba(0, 3, 255, 1)0%, rgba(2, 125, 251,1) 100%);
+    }
+    .find-btn{
+      margin-top: 1px;
+      text-align: center;
+    }
+    .contents_box {
+      position: relative;
+      max-width: 1440px;
+      margin: 0 auto;
+      min-height: 500px;
+      padding: 1px 10px 0 10px;
+    }
 
-        /*]]>*/
-    </script>
+  </style>
+
+  <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+
+    const ssUserId = [[${session.SS_USER_ID}]]; // Controller에서 받은 세션에 저장된 값
+    const userId = [[${rDTO.userId}]]; // 공지사항 게시글 작성자 아이디
+
+    $(document).ready(function () {
+
+      // 글 작성
+      $("#btnWrite").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+        doWrite();
+      })
+    })
+
+    // 상세보기 이동
+    function doDetail(seq) {
+      location.href = "/community/communityInfo?nSeq=" + seq;
+    }
+
+    // 글 작성하기
+    function doWrite() {
+      if (ssUserId !== null && ssUserId !== undefined) {
+        window.location.href = "/community/communityReg";
+      } else {
+        alert("로그인 후 이용 가능합니다.");
+      }
+    }
+
+    /*]]>*/
+  </script>
+  <!-- =======================================================
+  * Template Name: Logis
+  * Updated: Sep 18 2023 with Bootstrap v5.3.2
+  * Template URL: https://bootstrapmade.com/logis-bootstrap-logistics-website-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
 </head>
+
 <body>
-<h2>커뮤니티</h2>
-<hr/>
-<br/>
-<div class="divTable minimalistBlack">
-    <div class="divTableHeading">
-        <div class="divTableRow">
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+      <a href="index.html" class="logo d-flex align-items-center">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="assets/img/logo.png" alt=""> -->
+        <h1>Logis</h1>
+      </a>
+
+      <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+      <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+            <ul>
+              <li><a href="#">Drop Down 1</a></li>
+              <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+                <ul>
+                  <li><a href="#">Deep Drop Down 1</a></li>
+                  <li><a href="#">Deep Drop Down 2</a></li>
+                  <li><a href="#">Deep Drop Down 3</a></li>
+                  <li><a href="#">Deep Drop Down 4</a></li>
+                  <li><a href="#">Deep Drop Down 5</a></li>
+                </ul>
+              </li>
+              <li><a href="#">Drop Down 2</a></li>
+              <li><a href="#">Drop Down 3</a></li>
+              <li><a href="#">Drop Down 4</a></li>
+            </ul>
+          </li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a class="get-a-quote" href="get-a-quote.html">Get a Quote</a></li>
+        </ul>
+      </nav><!-- .navbar -->
+
+    </div>
+  </header><!-- End Header -->
+  <!-- End Header -->
+
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs">
+      <div class="page-header d-flex align-items-center" style="background-image: url('img/page-header.jpg');">
+        <div class="container position-relative">
+          <div class="row d-flex justify-content-center">
+            <div class="col-lg-6 text-center">
+              <h2>COMMUNITY</h2>
+              <p>커뮤니티를 통해 서로 소통을 해보세요!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav>
+        <div class="container">
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li>COMMUNITY</li>
+          </ol>
+        </div>
+      </nav>
+    </div><!-- End Breadcrumbs -->
+
+    <section class="COMMUNITY">
+      <div class="contents_box">
+      <div class="divTable minimalistBlack">
+        <div class="divTableHeading">
+          <div class="divTableRow">
             <div class="divTableHead">순번</div>
             <div class="divTableHead">제목</div>
             <div class="divTableHead">조회수</div>
             <div class="divTableHead">등록자</div>
             <div class="divTableHead">등록일</div>
+          </div>
         </div>
-    </div>
-    <div class="divTableBody">
-        <div class="divTableRow" th:each="dto:${rList}">
+        <div class="divTableBody">
+          <div class="divTableRow" th:each="dto:${rList}">
 
-            <div class="divTableCell" name="nSeq" id="nSeq">[[${dto.communitySeq}]]</div>
-            <div class="divTableCell" th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'">[[${dto.title}]]
-            </div>
-            <div class="divTableCell">[[${dto.readCnt}]]</div>
-            <div class="divTableCell">[[${dto.userId}]]</div>
-            <div class="divTableCell">[[${dto.regDt}]]</div>
+            <div class="divTableCell hover" name="nSeq" id="nSeq">[[${dto.communitySeq}]]</div>
+            <div class="divTableCell hover"th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'">[[${dto.title}]]</div>
+            <div class="divTableCell hover">[[${dto.readCnt}]]</div>
+            <div class="divTableCell hover">[[${dto.userId}]]</div>
+            <div class="divTableCell hover">[[${dto.regDt}]]</div>
+          </div>
         </div>
+      </div>
+      <div class="find-btn">
+<!--      <a href="communityReg.html">글쓰기</a>-->
+      <button class="btn" id="btnWrite">글쓰기</button>
+      </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+
+    <div class="container">
+      <div class="row gy-4">
+        <div class="col-lg-5 col-md-12 footer-info">
+          <a href="index.html" class="logo d-flex align-items-center">
+            <span>Logis</span>
+          </a>
+          <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus.</p>
+          <div class="social-links d-flex mt-4">
+            <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-6 footer-links">
+          <h4>Useful Links</h4>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Terms of service</a></li>
+            <li><a href="#">Privacy policy</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-6 footer-links">
+          <h4>Our Services</h4>
+          <ul>
+            <li><a href="#">Web Design</a></li>
+            <li><a href="#">Web Development</a></li>
+            <li><a href="#">Product Management</a></li>
+            <li><a href="#">Marketing</a></li>
+            <li><a href="#">Graphic Design</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+          <h4>Contact Us</h4>
+          <p>
+            A108 Adam Street <br>
+            New York, NY 535022<br>
+            United States <br><br>
+            <strong>Phone:</strong> +1 5589 55488 55<br>
+            <strong>Email:</strong> info@example.com<br>
+          </p>
+
+        </div>
+
+      </div>
     </div>
-</div>
-<button id="btnWrite" type="button">글쓰기</button>
+
+    <div class="container mt-4">
+      <div class="copyright">
+        &copy; Copyright <strong><span>Logis</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/logis-bootstrap-logistics-website-template/ -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+
+  </footer><!-- End Footer -->
+  <!-- End Footer -->
+
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="/vendor/aos/aos.js"></script>
+  <script src="/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="/js/main.js"></script>
+
 </body>
+
 </html>
