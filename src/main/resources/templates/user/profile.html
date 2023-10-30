@@ -51,7 +51,7 @@
 
         })
 
-       // 회원 탈퇴
+        // 회원 탈퇴
         function doDelete() {
 
             if (confirm("정말로 탈퇴하시겠습니까?")) {
@@ -89,10 +89,7 @@
             <div class="container position-relative">
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-6 text-center">
-                        <h2>Get a Quote</h2>
-                        <p>Odio et unde deleniti. Deserunt numquam exercitationem. Officiis quo odio sint voluptas
-                            consequatur ut a odio voluptatem. Sit dolorum debitis veritatis natus dolores. Quasi ratione
-                            sint. Sit quaerat ipsum dolorem.</p>
+                        <h2>MyPage</h2>
                     </div>
                 </div>
             </div>
@@ -100,8 +97,8 @@
         <nav>
             <div class="container">
                 <ol>
-                    <li><a href="../index.html">Home</a></li>
-                    <li>Get a Quote</li>
+                    <li><a href="/index">Home</a></li>
+                    <li>MyPage</li>
                 </ol>
             </div>
         </nav>
@@ -115,40 +112,49 @@
 
                 <div class="col-lg-7" style="margin: auto">
                     <form id="f" class="php-email-form">
-                        <h2 style="text-align: center; margin-bottom: 5%">마이페이지</h2>
+                        <h2 style="text-align: center; margin-bottom: 13%">마이페이지</h2>
 
                         <div class="row gy-4">
 
-                            <div class="col-md-7" style="margin-left: auto; margin-right: auto;"> <!--아이디-->
-                                <h5>아이디 : [[${rDTO.userId}]]</h5>
+                            <div class="col-md-6" style="margin-left: 11%; width: 110px; height: 110px; background-color: lightsteelblue;
+                            border-radius: 10px; margin-right: 14%; background-image: url('/img/cat-2083492_1280.jpg'); background-size: cover;"></div>
+                            <!--프로필 사진-->
+
+                            <div class="col-md-6" style="margin-left: 10%;"> <!--아이디-->
+                                <h5>아이디 | [[${rDTO.userId}]]</h5>
                             </div>
 
-                            <div class="col-md-7" style="margin-left: auto; margin-right: auto;"> <!--이름-->
-                                <h5>이름 : [[${rDTO.userName}]]</h5>
+                            <div class="col-md-6" style="margin-left: 10%;"> <!--이름-->
+                                <h5>이름 | [[${rDTO.userName}]]</h5>
                             </div>
 
-                            <div class="col-md-7" style="margin-left: auto; margin-right: auto;"> <!--이메일-->
-                                <h5>이메일 : [[${rDTO.email}]]</h5>
+                            <div class="col-md-6" style="margin-left: 10%;"> <!--이메일-->
+                                <h5>이메일 | [[${rDTO.email}]]</h5>
                             </div>
 
-                            <div class="col-md-7" style="margin-left: auto; margin-right: auto;"> <!--주소-->
-                                <h5>주소 : [[${rDTO.addr1}]]</h5>
+                            <div class="col-md-8" style="margin-left: 10%;"> <!--주소-->
+                                <h5>주소 | [[${rDTO.addr1}]]</h5>
                             </div>
 
-                            <div class="col-md-7" style="margin-left: auto; margin-right: auto;"> <!--상세주소-->
-                                <h5>상세주소 : [[${rDTO.addr2}]]</h5>
+                            <div class="col-md-6" style="margin-left: 10%;"> <!--상세주소-->
+                                <h5>상세주소 | [[${rDTO.addr2}]]</h5>
                             </div>
 
 
-                            <div class="col-md-12 text-center">
+                            <div class="col-md-12 text-center" style="width: 20%; margin-left: 30%; margin-top: 10%;">
                                 <a href="/profile/profileModify">
-                                    <button type="button" id="btnModify">회원정보수정</button>
+                                    <button type="button" id="btnModify"
+                                            style="width: 100%; height: 40px; border-radius: 5px;">정보 수정
+                                    </button>
                                 </a>
                             </div>
 
-                            <div class="col-md-12 text-center">
-                                <button type="button" id="btnDelete">회원탈퇴</button>
+                            <div class="col-md-12 text-center" style="width: 20%; margin-top: 10%;">
+                                <button type="button" id="btnDelete"
+                                        style="width: 100%; height: 40px; border-radius: 5px;">회원 탈퇴
+                                </button>
                             </div>
+
 
                         </div>
                     </form>
