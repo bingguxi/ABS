@@ -112,14 +112,14 @@ public class CommentController {
 
         try {
 
-            String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 글번호(PK)
+            String commentSeq = CmmUtil.nvl(request.getParameter("commentSeq")); // 글번호(PK)
             String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
-            log.info("nSeq : " + nSeq);
+            log.info("commentSeq : " + commentSeq);
             log.info("SS_USER_ID : " + userId);
 
             CommentDTO pDTO = new CommentDTO();
-            pDTO.setCommentSeq(nSeq);
+            pDTO.setCommentSeq(commentSeq);
             pDTO.setUserId(userId);
 
             // 게시글 삭제하기 DB

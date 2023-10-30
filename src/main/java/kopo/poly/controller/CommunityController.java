@@ -138,11 +138,15 @@ public class CommunityController {
         CommentDTO cDTO = new CommentDTO();
         cDTO.setCommunitySeq(nSeq);
 
-        // 커뮤니티 리스트 조회하기
+        // 댓글 리스트 조회하기
         List<CommentDTO> rList = Optional.ofNullable(commentService.getCommentList(cDTO)).orElseGet(ArrayList::new);
 
         // 조회된 리스트 결과값 넣어주기
         modelMap.addAttribute("rList", rList);
+
+        for (CommentDTO dto : rList) {
+            log.info("commentSeq" + dto.getCommentSeq());
+        }
 
         // 조회된 리스트 결과값 넣어주기
         modelMap.addAttribute("rDTO", rDTO);
