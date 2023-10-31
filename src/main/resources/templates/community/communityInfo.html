@@ -136,10 +136,31 @@
             $("#btnCmt").on("click", function () {
                 doComment(); // 댓글 작성 실행
             })
-            $(".btnCmtDelete").on("click", function () { // 클래스명 css때문에 임시로 바꿈 btnCmtDelete였음
+            $(".btnCmtDelete").on("click", function () {
                 var commentSeq = $(this).prevAll(".commentSeq").val();
-                doCmtDelete(commentSeq); // 댓글 삭제하기 실행
-            })
+                var commentUserId = $(this).prevAll(".commentUserId").val(); // 추가: 댓글의 userId 가져오기
+
+                if (ssUserId === commentUserId) { // 수정: 댓글 userId와 현재 사용자의 userId 비교
+                    if (confirm("작성한 댓글을 삭제하시겠습니까?")) {
+                        // Ajax 호출해서 댓글 삭제하기
+                        $.ajax({
+                            url: "/comment/commentDelete",
+                            type: "post",
+                            dataType: "JSON",
+                            data: {"commentSeq": commentSeq},
+                            success: function (json) {
+                                alert(json.msg);
+                                location.reload();
+                            }
+                        });
+                    }
+                } else if (ssUserId === "") {
+                    alert("로그인 하시길 바랍니다.");
+                } else {
+                    alert("본인이 작성한 댓글만 삭제 가능합니다.");
+                }
+            });
+
             $("#btnEdit").on("click", function () {
                 doEdit(); // 커뮤니티 수정하기 실행
             })
@@ -247,34 +268,34 @@
             })
 
         }
-        function doCmtDelete(commentSeq) {
-            if (ssUserId === userId) {
-                if (confirm("작성한 댓글을 삭제하시겠습니까?")) {
-
-                    // let commentSeq = document.getElementById("commentSeq");
-
-                    console.log(commentSeq)
-
-                    // Ajax 호출해서 글 삭제하기
-                    $.ajax({
-                            url: "/comment/commentDelete",
-                            type: "post", // 전송방식은 Post
-                            dataType: "JSON", // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
-                            data: {"commentSeq": commentSeq},
-                            success:
-                                function (json) { // /comment/commentDelete 호출이 성공한다면...
-                                    alert(json.msg); // 메시지 띄우기
-                                    location.reload();
-                                }
-                        }
-                    )
-                }
-            } else if (ssUserId === "") {
-                alert("로그인 하시길 바랍니다.");
-            } else {
-                alert("본인이 작성한 글만 삭제 가능합니다.");
-            }
-        }
+        // function doCmtDelete(commentSeq) {
+        //     if (ssUserId === userId) {
+        //         if (confirm("작성한 댓글을 삭제하시겠습니까?")) {
+        //
+        //             // let commentSeq = document.getElementById("commentSeq");
+        //
+        //             console.log(commentSeq)
+        //
+        //             // Ajax 호출해서 글 삭제하기
+        //             $.ajax({
+        //                     url: "/comment/commentDelete",
+        //                     type: "post", // 전송방식은 Post
+        //                     dataType: "JSON", // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+        //                     data: {"commentSeq": commentSeq},
+        //                     success:
+        //                         function (json) { // /comment/commentDelete 호출이 성공한다면...
+        //                             alert(json.msg); // 메시지 띄우기
+        //                             location.reload();
+        //                         }
+        //                 }
+        //             )
+        //         }
+        //     } else if (ssUserId === "") {
+        //         alert("로그인 하시길 바랍니다.");
+        //     } else {
+        //         alert("본인이 작성한 글만 삭제 가능합니다.");
+        //     }
+        // }
 
         /*]]>*/
     </script>
@@ -358,13 +379,14 @@
                 </div>
                 <div class="comment-list">
                     <div class="comment-item">
-                <div class="divTableRow" th:each="dto : ${rList}">
-                    <input type="hidden" class="commentSeq" th:value="${dto.commentSeq}">
-                    <div class="comment-content" th:text="${dto.contents}"></div>
-                    <div class="comment-timestamp" th:text="${dto.userId}"></div>
-                    <div class="comment-timestamp" th:text="${dto.regDt}"></div>
-                    <button class="btnCmtDelete" id="btnCmtDelete" type="button" style="margin-left: 2%; margin-top: 10px">삭제</button>
-                </div>
+                        <div class="divTableRow" th:each="dto : ${rList}">
+                            <input type="hidden" class="commentSeq" th:value="${dto.commentSeq}">
+                            <input type="hidden" class="commentUserId" th:value="${dto.userId}"> <!-- 추가: 댓글의 userId 저장 -->
+                            <div class="comment-content" th:text="${dto.contents}"></div>
+                            <div class="comment-timestamp" th:text="${dto.userId}"></div>
+                            <div class="comment-timestamp" th:text="${dto.regDt}"></div>
+                            <button class="btnCmtDelete" type="button" style="margin-left: 2%; margin-top: 10px; margin-bottom: 20px;">삭제</button>
+                        </div>
                     </div>
                 </div>
             </div>
