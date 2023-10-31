@@ -41,11 +41,12 @@ public class MapController {
     @GetMapping(value = "apiPassing")
     @ResponseBody
     public List<MapApiDTO> apiPassing()throws Exception {
-        log.info("api 파싱 시작");
+
+        log.info("api 파싱 시작!");
 
         List<MapApiDTO> resultList = mapService.shelterMap();
-        log.info("api 파싱 끝");
 
+        log.info("api 파싱 끝!");
 
         for (MapApiDTO rDTO : resultList) {
             log.info("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
