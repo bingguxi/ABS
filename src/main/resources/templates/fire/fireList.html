@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>실시간 산불 정보</title>
+  <link rel="stylesheet" href="/css/table.css"/>
+</head>
+<body>
+<h2>실시간 산불 정보</h2>
+<hr/>
+<br/>
+<div class="divTable minimalistBlack">
+  <div class="divTableHeading">
+    <div class="divTableRow">
+      <div class="divTableHead">지역</div>
+      <div class="divTableHead">등급</div>
+      <div class="divTableHead">지수</div>
+    </div>
+  </div>
+
+  <div class="divTableBody">
+    <div th:each="rDTO : ${rList}" class="divTableRow">
+      <div class="divTableCell" th:text="${rDTO.city}"></div>
+      <div class="divTableCell" th:text="${rDTO.grade}"></div>
+      <div class="divTableCell" th:text="${rDTO.score}"></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
