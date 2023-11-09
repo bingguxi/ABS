@@ -27,7 +27,8 @@ public class FireController {
         log.info(this.getClass().getName() + ".getFireInfo 컨트롤러 시작!");
 
         // 산불 정보 수집 후, DB에 저장하는 로직 호출
-        fireService.insertFireInfo();
+        //fireService.insertFireInfo();
+        fireService.crawlWebsite();
 
         // 수집된 산불 정보 조회하기
         List<FireDTO> rList = Optional.ofNullable(fireService.getFireInfo()).orElseGet(ArrayList::new);

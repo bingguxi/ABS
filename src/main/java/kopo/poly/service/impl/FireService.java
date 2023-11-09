@@ -3,28 +3,17 @@ package kopo.poly.service.impl;
 import kopo.poly.dto.FireDTO;
 import kopo.poly.persistance.mapper.IFireMapper;
 import kopo.poly.service.IFireService;
-import kopo.poly.util.CmmUtil;
 import kopo.poly.util.DateUtil;
-import kopo.poly.util.WebDriverUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,7 +22,64 @@ public class FireService implements IFireService {
 
     private final IFireMapper fireMapper;
 
-    @Transactional
+
+    /*private final WebDriver webDriver; // 셀리니움 사용을 위한 webDriver 주입
+    private String url = "http://forestfire.nifos.go.kr/menu.action?menuNum=1"; // 크롤링할 사이트 URL
+
+    private static String WEB_DRIVER_ID = "webdriver.chrome.driver"; // property 키
+    private static String WEB_DRIVER_PATH = "/chromedriver_win64/chromedriver.exe"; // property 값*/
+
+
+    //생성자로 webDriver 초기설정 + 위스키 정보들을 담을 whiskDatas 초기화
+
+
+    private WebDriver webDriver;
+    private final String url = "http://forestfire.nifos.go.kr/menu.action?menuNum=1";
+
+    public void crawlWebsite() throws InterruptedException {
+
+        System.setProperty("webdriver.chrome.driver", "/chromedriver-win32/chromedriver.exe");
+
+        ChromeOptions options = new ChromeOptions();
+
+        options.addArguments("--start-maximized");
+        options.addArguments("--disable-popup-blocking");
+        options.addArguments("headless");
+        options.addArguments("--whitelisted-ips=127.0.0.1"); // GPT 추가
+        options.addArguments("--remote-allow-origins=*"); // 구글링해서 추가
+
+
+        this.webDriver = new ChromeDriver(options);
+
+        webDriver.get("http://forestfire.nifos.go.kr/menu.action?menuNum=1");
+
+        // 웹 페이지가 로딩될 때까지 기다릴 수 있는 코드 추가 (예: WebDriverWait 사용)
+        Thread.sleep(2000);
+
+        // 크롤링할 데이터를 찾는 코드 예시
+        WebElement table = webDriver.findElement(By.cssSelector("ul.table"));
+        for (WebElement row : table.findElements(By.cssSelector("li.tr"))) {
+            WebElement locationElement = row.findElement(By.cssSelector("p.cell.w33"));
+            WebElement gradeElement = row.findElement(By.cssSelector("img"));
+            WebElement indexElement = row.findElement(By.cssSelector("p.cell.w33"));
+
+            String location = locationElement.getText();
+            String grade = gradeElement.getAttribute("alt");
+            String index = indexElement.getText();
+
+            System.out.println("지역: " + location);
+            System.out.println("등급: " + grade);
+            System.out.println("지수: " + index);
+            System.out.println();
+
+            // 웹 드라이버 종료
+            webDriver.quit();
+        }
+    }
+
+
+    // TODO 이거 살리기
+   /* @Transactional
     @Override
     public int insertFireInfo() throws Exception {
 
@@ -52,9 +98,9 @@ public class FireService implements IFireService {
         int res = 0;
 
 
-        WebDriver driver = new ChromeDriver();
-        List<WebElement> webElementList = new ArrayList<>();
-        String url = "http://forestfire.nifos.go.kr/menu.action?menuNum=1";
+        List<FireDTO> fireInfoList;
+
+
         String query = "#id";
 
         if (!ObjectUtils.isEmpty(driver)) {
@@ -76,9 +122,10 @@ public class FireService implements IFireService {
 
             driver.quit();
 
-        }
+        }*/
 
 
+    // TODO 이건 Jsoup이라 나중에 지워도 됨
 /*
         // 산불 정보 가져올 사이트 주소
         String url = "http://forestfire.nifos.go.kr/menu.action?menuNum=1";
@@ -121,12 +168,12 @@ public class FireService implements IFireService {
 
             res += fireMapper.insertFireInfo(pDTO);
 
-        } */
+        }
 
         log.info(this.getClass().getName() + ".insertFireInfo 서비스 끝!");
 
         return res;
-    }
+    }*/
 
     @Override
     public List<FireDTO> getFireInfo() throws Exception {
