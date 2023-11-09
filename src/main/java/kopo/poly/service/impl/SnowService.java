@@ -88,41 +88,42 @@ public class SnowService implements ISnowService {
 
             log.info("line : " + line);
 
-            line = line.replaceAll(",", " ");
-            line = line.replaceAll("=", " ");
+            log.info("cm의 위치 : " + line.indexOf("(cm)"));
+            log.info("#7777END의 위치 : " + line.indexOf("#7777END"));
+            line = line.substring(79, 36001);
+
+            log.info("substring 결과 : " + line);
+
+            String[] lines = line.split("="); // 난 한줄씩
+            String[] snowInfoArray = line.split(",");
 
 
+            log.info("lines : " + lines.length);
 
-            String[] snowInfoArray = line.split("\\s+");
-            log.info("배열 크기 : " + snowInfoArray.length);
 
-            // TODO  i 범위를 500으로 줄였고,  for문 한번 더 나눠서 돌리기!!! 데이터 총 739줄이다~
-            for (int i = 0; i <= 500; i++) {
-                if (snowInfoArray.length > 7) {
+            // 3번째 줄부터 출력하기
+            for (int i = 0; i < lines.length && (6 + 7 * i) < snowInfoArray.length; i++) {
+                pDTO.setDt(CmmUtil.nvl(snowInfoArray[0 + 7 * i]));
+                pDTO.setStnId(CmmUtil.nvl(snowInfoArray[1 + 7 * i]));
+                pDTO.setStnKo(CmmUtil.nvl(snowInfoArray[2 + 7 * i]));
+                pDTO.setLon(CmmUtil.nvl(snowInfoArray[3 + 7 * i]));
+                pDTO.setLat(CmmUtil.nvl(snowInfoArray[4 + 7 * i]));
+                pDTO.setSd(CmmUtil.nvl(snowInfoArray[6 + 7 * i]));
 
-                        pDTO.setDt(snowInfoArray[17 + 7 * i]);
-                        pDTO.setStnId(snowInfoArray[18 + 7 * i]);
-                        pDTO.setStnKo(snowInfoArray[19 + 7 * i]);
-                        pDTO.setLon(snowInfoArray[20 + 7 * i]);
-                        pDTO.setLat(snowInfoArray[21 + 7 * i]);
-                        pDTO.setSd(snowInfoArray[23 + 7 * i]);
+                log.info("-----------------------------------");
+                log.info("DT : " + pDTO.getDt());
+                log.info("stnId : " + pDTO.getStnId());
+                log.info("stnKo : " + pDTO.getStnKo());
+                log.info("Lon : " + pDTO.getLon());
+                log.info("Lat : " + pDTO.getLat());
+                log.info("sd : " + pDTO.getSd());
 
-                        log.info("-----------------------------------");
-                        log.info("DT : " + pDTO.getDt());
-                        log.info("stnId : " + pDTO.getStnId());
-                        log.info("stnKo : " + pDTO.getStnKo());
-                        log.info("Lon : " + pDTO.getLon());
-                        log.info("Lat : " + pDTO.getLat());
-                        log.info("sd : " + pDTO.getSd());
 
-                }
                 snowMapper.insertSnowInfo(pDTO);
 
-                // SnowDTO 객체를 리스트에 추가
                 pList.add(pDTO);
             }
         }
-
         List<SnowDTO> rList = snowMapper.getSnowInfo();
 
         log.info(this.getClass().getName() + ".getSnowInfo End!");
