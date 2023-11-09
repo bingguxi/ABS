@@ -139,16 +139,14 @@
                             <p style="text-align: center; width: 15%; margin-left: 35%; margin-top: 1%;"><a href="/login/findId"><span>아이디 찾기</span></a></p>
                             <p style="text-align: center; width: 15%; margin-top: 1%;"><a href="/login/findPassword"><span>비밀번호 찾기</span></a></p>
 
-
                             <!--네이버 로그인-->
-                            <!-- 다른 HTML 파일을 삽입하는 iframe 요소 -->
-                            <iframe src="/login/naverLogin" height="60px" style="width: 150px; margin-left: 28%"></iframe>
-
+                            <button type="button" id="btnNaver" onclick="location.href='https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=EjjCKVYZ02W5tA0_JBpE&redirect_uri=http://localhost:11000/auth/naver/callback&state=abs'">
+                                <img src="/img/btnW_완성형.png" alt="네이버 로그인" style="height: 37px; width: 150px; margin-top: 9px;"></button>
 
                             <!--카카오 로그인-->
                             <a href="https://kauth.kakao.com/oauth/authorize?client_id=6706621d8f90ce8e40e411e21d348bf7&redirect_uri=http://localhost:11000/login/kakaoLogin&response_type=code"
                             style="width: 150px;">
-                                <img src="/img/kakao_login_medium_narrow.png" alt="카카오계정으로 로그인"
+                                <img src="/img/kakao_login_medium_narrow.png" alt="카카오 로그인"
                                      style="height: 37px; margin-top: 9px;">
                             </a>
 

@@ -11,6 +11,13 @@
           AND PASSWORD = #{password}
     </select>
 
+    <!-- 네이버 로그인 시 아이디만 받아서 DB 조회하기 -->
+    <select id="getUserInfoById" parameterType="UserInfoDTO" resultType="UserInfoDTO">
+        SELECT USER_ID
+        FROM USER_INFO
+        WHERE USER_ID = #{userId}
+    </select>
+
     <!-- 아이디 찾기에 활용 -->
     <select id="getUserId" parameterType="UserInfoDTO" resultType="UserInfoDTO">
         SELECT

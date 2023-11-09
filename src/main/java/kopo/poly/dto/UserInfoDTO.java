@@ -13,8 +13,12 @@ public class UserInfoDTO {
 
     private String userId;
     private String userName;
+    private String nickname;
     private String password;
     private String email;
+    private String tel;
+    private String birth;
+    private String gender;
     private String addr1;
     private String addr2;
     private String regId;

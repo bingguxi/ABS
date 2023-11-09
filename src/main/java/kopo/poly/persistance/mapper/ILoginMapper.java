@@ -9,6 +9,9 @@ public interface ILoginMapper {
     // 로그인 시 아이디, 비밀번호 일치하는지 확인하기
     UserInfoDTO getLogin(UserInfoDTO pDTO) throws Exception;
 
+    // 네이버 로그인 시 아이디만 받아서 DB 조회하기
+    UserInfoDTO getUserInfoById(UserInfoDTO pDTO) throws Exception;
+
     // 아이디 찾기에 활용
     UserInfoDTO getUserId(UserInfoDTO pDTO) throws Exception;
 

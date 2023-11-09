@@ -33,23 +33,6 @@ public class LoginController {
         return "/user/login";
     }
 
-    @GetMapping(value = "/naverLogin")
-    public String naverLogin() {
-
-        log.info(this.getClass().getName() + ".naverLogin Loading Complete!");
-
-        return "/user/naverLogin";
-    }
-
-    @GetMapping(value = "/naverLogin/callBack")
-    public String naverCallBack() {
-
-        log.info(this.getClass().getName() + ".naverCallBack Start!");
-        log.info(this.getClass().getName() + ".naverCallBack End!");
-
-        return "/user/naverLogin_callback";
-    }
-
     @RequestMapping(value = "/kakaoLogin")
     public String kakaoLogin(@RequestParam("code") String code, HttpSession session) throws Exception {
 
