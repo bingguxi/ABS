@@ -103,7 +103,7 @@ public class SnowService implements ISnowService {
 
             // 3번째 줄부터 출력하기
             for (int i = 0; i < lines.length && (6 + 7 * i) < snowInfoArray.length; i++) {
-                pDTO.setDt(CmmUtil.nvl(snowInfoArray[0 + 7 * i]));
+                pDTO.setDt(CmmUtil.nvl(snowInfoArray[0 + 7 * i].replaceAll("= ", "")));
                 pDTO.setStnId(CmmUtil.nvl(snowInfoArray[1 + 7 * i]));
                 pDTO.setStnKo(CmmUtil.nvl(snowInfoArray[2 + 7 * i]));
                 pDTO.setLon(CmmUtil.nvl(snowInfoArray[3 + 7 * i]));
