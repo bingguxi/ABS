@@ -78,6 +78,19 @@
                 <version>1.14.3</version>
             </dependency>
 
+            <!-- XML 형식의 API를 받아오기 위한 라이브러리 -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-xml</artifactId>
+                <version>2.14.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>2.13.5</version>
+            </dependency>
+
             <!-- 동적 웹 크롤링을 위한 셀레니움 라이브러리 -->
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>

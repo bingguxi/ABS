@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>지진 정보 조회하기</title>
+  <link rel="stylesheet" href="/css/table.css"/>
+  <script src="/js/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      let lon, lat;
+
+      navigator.geolocation.getCurrentPosition(function (position) {
+        lat = position.coords.latitude;
+        lon = position.coords.longitude;
+
+        $.ajax({
+          url:"/disaster/getEarthquake",
+          type:"get",
+          dataType:"XML",
+          data : {
+            "lon" : lon,
+            "lat" : lat
+          },
+          success : function (xml) {
+            $("#currentTemp").append(xml.currentTemp);
+
+            const infoList = xml.infoList;
+
+            for (const info of infoList) {
+
+              let frDate = info.frDate;
+              let laDate = info.laDate;
+              let cntDiv = info.cntDiv;
+              let orderTy = info.orderTy;
+              let eqPt = info.eqPt;
+              let scale = info.scale;
+              let lat = info.lat;
+              let lon = info.lon;
+
+              $("#earthquake_info").append("<div class=\"divTableRow\">");
+              $("#earthquake_info").append("<div class=\"divTableCell\">" + frDate + "</div>");
+              $("#earthquake_info").append("<div class=\"divTableCell\">" + laDate + "</div>");
+              $("#earthquake_info").append("<div class=\"divTableCell\">" + cntDiv + "</div>");
+              $("#earthquake_info").append("<div class=\"divTableCell\">" + orderTy + "</div>");
+              $("#earthquake_info").append("<div class=\"divTableCell\">" + eqPt + "</div>");
+              $("#earthquake_info").append("<div class=\"divTableCell\">" + scale + "</div>");
+              $("#earthquake_info").append("<div class=\"divTableCell\">" + lat + "</div>");
+              $("#earthquake_info").append("<div class=\"divTableCell\">" + lon + "</div>");
+              $("#earthquake_info").append("</div>");
+            }
+          }
+        })
+      })
+    })
+  </script>
+</head>
+<body>
+<h2>지진 정보 조회하기</h2>
+<hr/>
+<br/>
+<div class="divTable minimalistBlack">
+  <div class="divTableHeading">
+    <div class="divTableRow">
+      <div class="divTableCell" style="width: 40%">현재 기온</div>
+      <div class="divTableCell" style="width: 40%" id="currentTemp"></div>
+    </div>
+  </div>
+</div>
+<br/><br/>
+<h2>주간 날씨 실시간 조회</h2>
+<hr/>
+<br/>
+<div class="divTable minimalistBlack">
+  <div class="divTableHeading">
+    <div class="divTableRow">
+      <div class="divTableHead">날짜</div>
+      <div class="divTableHead">해뜨는 시간</div>
+      <div class="divTableHead">해지는 시간</div>
+      <div class="divTableHead">달뜨는 시간</div>
+      <div class="divTableHead">달지는 시간</div>
+      <div class="divTableHead">평균 기온</div>
+      <div class="divTableHead">최고 기온</div>
+      <div class="divTableHead">최저 기온</div>
+      <div class="divTableHead">아이콘</div>
+    </div>
+  </div>
+  <div class="divTableBody" id="earthquake_info">
+  </div>
+</div>
+</body>
+</html>
