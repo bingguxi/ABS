@@ -25,5 +25,6 @@
     <delete id="deleteDustInfo" parameterType="DustDTO">
         DELETE
         FROM DUST
+        WHERE STN_ID = #{stnId}
     </delete>
 </mapper>
