@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping(value = "/wildfire")
+@RequestMapping(value = "/fire")
 @Controller
 public class FireController {
 
@@ -27,10 +27,9 @@ public class FireController {
         log.info(this.getClass().getName() + ".getFireInfo 컨트롤러 시작!");
 
         // 산불 정보 수집 후, DB에 저장하는 로직 호출
-        //fireService.insertFireInfo();
-        fireService.crawlWebsite();
+        fireService.insertFireInfo();
 
-        // 수집된 산불 정보 조회하기
+        // 저장된 산불 정보 조회하기
         List<FireDTO> rList = Optional.ofNullable(fireService.getFireInfo()).orElseGet(ArrayList::new);
 
         // 조회 결과 HTML에 전달하기

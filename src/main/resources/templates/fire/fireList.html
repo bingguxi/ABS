@@ -12,6 +12,7 @@
 <div class="divTable minimalistBlack">
   <div class="divTableHeading">
     <div class="divTableRow">
+      <div class="divTableHead">수집시간</div>
       <div class="divTableHead">지역</div>
       <div class="divTableHead">등급</div>
       <div class="divTableHead">지수</div>
@@ -20,6 +21,7 @@
 
   <div class="divTableBody">
     <div th:each="rDTO : ${rList}" class="divTableRow">
+      <div class="divTableCell" th:text="${rDTO.collectTime}"></div>
       <div class="divTableCell" th:text="${rDTO.city}"></div>
       <div class="divTableCell" th:text="${rDTO.grade}"></div>
       <div class="divTableCell" th:text="${rDTO.score}"></div>
