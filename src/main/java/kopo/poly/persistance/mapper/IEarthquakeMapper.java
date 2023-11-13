@@ -13,8 +13,8 @@ public interface IEarthquakeMapper {
     int insertEarthquakeInfo(EarthquakeResultDTO pDTO) throws Exception;
 
     // DB에 저장된 적설 정보 삭제하기
-    int deleteEarthquakeInfo() throws Exception;
+//    int deleteEarthquakeInfo() throws Exception;
 
     // 수집된 적설 정보 조회
-    List<SnowDTO> getEarthquakeList() throws Exception;
+    List<EarthquakeResultDTO> getEarthquakeList() throws Exception;
 }
