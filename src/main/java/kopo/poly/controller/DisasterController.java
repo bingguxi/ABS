@@ -57,7 +57,7 @@ public class DisasterController {
     @GetMapping(value = "getEarthquake")
     public String getEarthquakeApi() throws Exception {
         log.info("test called");
-        earthquakeService.getEarthquakeApi();
+        earthquakeService.setEarthquakeUrl();
 
         return "/erathquakeInfo";
     }

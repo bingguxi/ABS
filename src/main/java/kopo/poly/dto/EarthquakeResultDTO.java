@@ -12,12 +12,8 @@ import java.util.List;
 @ToString
 public class EarthquakeResultDTO {
 
-    // API 호출을 위한 DTO들
-    private String frDate;
-    private String laDate;
-    private String orderTy;
-
     // API 데이터 DTO들
+    private String earthqaukeSeq;
     @JacksonXmlProperty(localName = "msgCode")
     private String msgCode; // 통보문종류명
     @JacksonXmlProperty(localName = "cntDiv")

@@ -3,19 +3,32 @@
 
 <mapper namespace="kopo.poly.persistance.mapper.IEarthquakeMapper">
 
-    <!-- 수집된 산불 정보 DB에 등록하기 -->
+    <!-- 수집된 지진 정보 DB에 등록하기 -->
     <insert id="insertEarthquakeInfo" parameterType="EarthquakeResultDTO">
-
+        INSERT INTO EARTHQUAKE
+            (EARTHQUAKE_SEQ, MSG_CODE, CNT_DIV, AR_DIV, EQ_AR_CD_NM, EQ_PT, NK_DIV, TM_ISSUE, EQ_DATE,
+             MAG_ML, MAG_DIFF, EQ_DT, EQ_LT, EQ_LN, MAJOR_AXIS, MINOR_AXIS, DEPTH_DIFF, JD_LOC, JD_LOC_A,
+             RE_FER)
+        VALUES ((SELECT COALESCE(MAX(E.EARTHQUAKE_SEQ),0)+1 FROM EARTHQUAKE E),
+                #{msgCode}, #{cntDiv}, #{arDiv}, #{eqArCdNm}, #{eqPt}, #{nkDiv}, #{tmIssue}, #{eqDate},
+                #{magMl}, #{magDiff}, #{eqDt}, #{eqLt}, #{eqLn}, #{majorAxis}, #{minorAxis}, #{depthDiff},
+                #{jdLoc}, #{jdLocA}, #{ReFer})
     </insert>
 
-    <!-- DB에 저장된 산불 정보 삭제하기 -->
+    <!-- DB에 저장된 지진 정보 삭제하기 -->
     <delete id="deleteEarthquakeInfo" parameterType="EarthquakeResultDTO">
-
+        DELETE FROM EARTHQUAKE
+        WHERE EARTHQUAKE = #{earthquakeSeq}
     </delete>
 
-    <!-- 수집된 산불 정보 조회하기 -->
-    <select id="getEarthquakeInfo" parameterType="EarthquakeResultDTO" resultType="EarthquakeResultDTO">
-
+    <!-- 수집된 지진 리스트 조회하기 -->
+    <select id="getEarthquakeList" parameterType="EarthquakeResultDTO" resultType="EarthquakeResultDTO">
+        SELECT DISTINCT E.EARTHQUAKE_SEQ, E.MAG_CODE,  E.CNT_DIV, E.AR_DIV, E.EQ_AR_CD_NM, E.EQ_PT,
+                        E.NK_DIV, E.TM_ISSUE, E.EQ_DATE, E.MAG_ML, E.MAG_DIFF, E.EQ_DT, E.EQ_LT, E.EQ_LN, E.MAJOR_AXIS,
+                        E.MINOR_AXIS, E.DEPTH_DIFF, E.JD_LOC, E.JD_LOC_A, E.RE_FER
+--                         DATE_FORMAT(N.REG_DT, '%Y/%m/%d %H:%i:%s') AS REG_DT
+        FROM EARTHQUAKE E
+        ORDER BY E.EARTHQUAKE_SEQ DESC;
     </select>
 
 </mapper>

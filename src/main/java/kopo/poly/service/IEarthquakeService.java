@@ -2,7 +2,9 @@ package kopo.poly.service;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.opentelemetry.sdk.trace.internal.data.ExceptionEventData;
 import kopo.poly.dto.EarthquakeDTO;
+import kopo.poly.dto.EarthquakeResultDTO;
 import kopo.poly.service.impl.EarthquakeService;
 
 import java.util.ArrayList;
@@ -18,5 +20,7 @@ public interface IEarthquakeService {
 
 //    List<EarthquakeDTO> getEarthquakeList(EarthquakeDTO pDTO) throws Exception;
 
-    void getEarthquakeApi() throws Exception;
+    void setEarthquakeUrl() throws Exception;
+
+    void getEarthquakeInfo(String apiParam) throws Exception;
 }
