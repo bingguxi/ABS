@@ -47,31 +47,27 @@ public class DustService implements IDustService {
         String url = "https://apihub.kma.go.kr/api/typ01/url/dst_pm10_hr.php?tm=" + formattedDate + "&help=0&org=%27kma%27&authKey=0a-KCqUxRzuvigqlMbc7rg";
         String URL = "https://apihub.kma.go.kr/api/typ01/url/stn_pm10_inf.php?inf=kma&tm=" + formattedDate + "&help=0&authKey=kKsGKqfhRmurBiqn4ZZrLA";
 
+        log.info("url : " + url);
+        log.info("URL : " + URL);
+
         // Jsoup 라이브러리를 통해 사이트 접속되면, 그 사이트의 전체 HTML소스 저장할 변수
         Document doc = null;
-        Document DOC = null;
 
         // 사이트 접속
         doc = Jsoup.connect(url).get();
-        DOC = Jsoup.connect(URL).get();
 
         log.info("doc : " + doc);
-        log.info("cod : " + DOC);
 
         Elements element = doc.select("body");
-        Elements elem = DOC.select("body");
 
         log.info("element : " + element);
-        log.info("elem : " + elem);
 
         // 적설 정보 가져오기
         Iterator<Element> dust = element.select("body").iterator();
-        Iterator<Element> dustPlace = elem.select("body").iterator();
 
         DustDTO pDTO = null;
 
         log.info("dust : " + dust);
-        log.info("dustPlace : " + dustPlace);
 
         List<DustDTO> pList = new ArrayList<>();
 
@@ -94,44 +90,28 @@ public class DustService implements IDustService {
 
             log.info("ug/m의 위치 : " + line.indexOf("ug/"));
             log.info("#7777END의 위치 : " + line.indexOf("#7777END"));
-            line = line.substring(134, 1161);
+            line = line.substring(134, 1178);
 
             log.info("substring 결과 : " + line);
 
             String[] lines = line.split("\\)"); // 난 한줄씩
-            String[] snowInfoArray = line.split(" ");
+            String[] dustInfoArray = line.split(" ");
 
             log.info("lines 줄 수 : " + lines.length);
 
 
             // 3번째 줄부터 출력하기
-            for (int i = 0; i < lines.length && (4 + 6 * i) < snowInfoArray.length; i++) {
+            for (int i = 0; i <= lines.length && (4 + 6 * i) < dustInfoArray.length; i++) {
 
-                pDTO.setStnId(CmmUtil.nvl(snowInfoArray[3 + 6 * i]));
-                pDTO.setMean(CmmUtil.nvl(snowInfoArray[4 + 6 * i]));
-
+                pDTO.setStnId(CmmUtil.nvl(dustInfoArray[3 + 6 * i]));
+                pDTO.setMean(CmmUtil.nvl(dustInfoArray[4 + 6 * i]));
 
                 log.info("-----------------------------------");
                 log.info("stnId : " + pDTO.getStnId());
                 log.info("avg : " + pDTO.getMean());
 
-                // STN_ID가 이미 데이터베이스에 존재하는지 확인
-                List<DustDTO> idList = dustMapper.getDustInfo();
+                dustMapper.updateDustInfo(pDTO);
 
-                if (idList != null && !idList.isEmpty()) {
-                    for (DustDTO dDTO : idList) {
-                        // 나머지 코드는 그대로 유지
-                        if (dDTO.getStnId().equals(pDTO.getStnId())) {
-                            // STN_ID가 이미 존재한다면, Mean 값을 업데이트
-                            dDTO.setMean(dDTO.getMean());
-                            dustMapper.updateDustInfo(dDTO);
-                            break; // 이미 존재하는 경우에는 반복을 종료합니다.
-                        }
-                    }
-                } else {
-                    // STN_ID가 존재하지 않는다면, 새로운 레코드 삽입
-                    dustMapper.insertDustInfo(pDTO);
-                }
                 pList.add(pDTO);
             }
         }
