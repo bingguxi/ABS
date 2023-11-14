@@ -36,7 +36,7 @@ public class EarthquakeService implements IEarthquakeService {
     // 스케줄러에 의해 주기적으로 실행되는 메서드
     @Override
     public void setEarthquakeUrl() throws Exception {
-        log.info(this.getClass().getName() + ".getEarthquakeApi Start !");
+        log.info(this.getClass().getName() + ".setEarthquakeUrl Start !");
 
         String frDate = "20180101";
         String laDate = "20231113";
@@ -55,7 +55,7 @@ public class EarthquakeService implements IEarthquakeService {
 
             i++;
         }
-        log.info(this.getClass().getName() + ".getEarthquakeApi End !");
+        log.info(this.getClass().getName() + ".setEarthquakeUrl End !");
     }
 
     // API를 호출하고 결과를 처리하는 메서드

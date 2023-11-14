@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kopo.poly.persistance.mapper.ITyphoonMapper">
+
+    <!-- 수집된 지진 정보 DB에 등록하기 -->
+    <insert id="insertTyphoonInfo" parameterType="TyphoonDTO">
+        INSERT INTO TYPHOON
+        (TYP_SEQ, TYP_EN, YEAR, TM_ST, TM_ED, TYP_PS, TYP_WS, TYP_NAME, EFF)
+        VALUES ((SELECT COALESCE(MAX(T.TYP_SEQ),0)+1 FROM TYPHOON T),
+                #{typEn}, #{year}, #{tmSt}, #{tmEd}, #{typPs}, #{typWs}, #{typName}, #{eff})
+    </insert>
+
+    <!-- DB에 저장된 지진 정보 삭제하기 -->
+    <delete id="deleteTyphoonInfo" parameterType="TyphoonDTO">
+        DELETE FROM TYPHOON
+        WHERE TYPHOON = #{typSeq}
+    </delete>
+
+    <!-- 수집된 지진 리스트 조회하기 -->
+    <select id="getTyphoonList" parameterType="TyphoonDTO" resultType="TyphoonDTO">
+        SELECT DISTINCT T.TYP_SEQ, T.TYP_EN, T.YEAR, T.TM_ST, T.TM_ED, T.TYP_PS,
+                        T.TYP_WS, T.TYP_NAME, T.EFF
+--                         DATE_FORMAT(N.REG_DT, '%Y/%m/%d %H:%i:%s') AS REG_DT
+        FROM TYPHOON T
+        ORDER BY T.TYPHOON_SEQ DESC;
+    </select>
+
+</mapper>
