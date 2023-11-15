@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/guide")
 public class GuideController {
 
-    // TODO 재난별 행동요령 html 만들고 GetMapping 하기!!!
     @GetMapping(value = "dust")
     public String dustGuide() {
 
@@ -18,6 +17,33 @@ public class GuideController {
         log.info(this.getClass().getName() + ".dustGuide 끝!");
 
         return "/guide/dustGuide";
+    }
+
+    @GetMapping(value = "storm")
+    public String stormGuide() {
+
+        log.info(this.getClass().getName() + ".dustGuide 시작!");
+        log.info(this.getClass().getName() + ".dustGuide 끝!");
+
+        return "/guide/stormGuide";
+    }
+
+    @GetMapping(value = "snow")
+    public String snowGuide() {
+
+        log.info(this.getClass().getName() + ".dustGuide 시작!");
+        log.info(this.getClass().getName() + ".dustGuide 끝!");
+
+        return "/guide/snowGuide";
+    }
+
+    @GetMapping(value = "earthquake")
+    public String earthquakeGuide() {
+
+        log.info(this.getClass().getName() + ".dustGuide 시작!");
+        log.info(this.getClass().getName() + ".dustGuide 끝!");
+
+        return "/guide/earthquakeGuide";
     }
 
 }
