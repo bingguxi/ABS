@@ -71,6 +71,7 @@
             margin: 0 auto;
             min-height: 500px;
             padding: 10px;
+
         }
 
         .line {
@@ -136,11 +137,26 @@
             $("#btnCmt").on("click", function () {
                 doComment(); // 댓글 작성 실행
             })
+
+            // 본인 계정이 아닌 사용자에게 버튼 숨김
+            $(".btnCmtDelete").each(function() {
+                var commentUserId = $(this).prevAll(".commentUserId").val(); // 추가: 댓글의 userId 가져오기
+
+                // 숨김 처리
+                $(this).hide();
+
+                // 본인 계정과 댓글 userId 비교
+                if (ssUserId === commentUserId) {
+                    // 본인 계정이라면 표시
+                    $(this).show();
+                }
+            });
+
             $(".btnCmtDelete").on("click", function () {
                 var commentSeq = $(this).prevAll(".commentSeq").val();
                 var commentUserId = $(this).prevAll(".commentUserId").val(); // 추가: 댓글의 userId 가져오기
 
-                if (ssUserId === commentUserId) { // 수정: 댓글 userId와 현재 사용자의 userId 비교
+                if (ssUserId === commentUserId) {
                     if (confirm("작성한 댓글을 삭제하시겠습니까?")) {
                         // Ajax 호출해서 댓글 삭제하기
                         $.ajax({
@@ -240,6 +256,12 @@
                 return;
             }
 
+            if (ssUserId === null) {
+                alert("로그인 후에 댓글을 등록할 수 있습니다.");
+                return;
+            }
+
+
             // Ajax 호출해서 글 등록하기
             $.ajax({
                     url: "/comment/commentInsert",
@@ -333,7 +355,7 @@
             <div class="container">
                 <ol>
                     <li><a href="index.html">Home</a></li>
-                    <li>COMMUNITY</li>
+                    <li>커뮤니티</li>
                 </ol>
             </div>
         </nav>
@@ -342,7 +364,7 @@
     <section class="COMMUNITY">
         <form name="f" id="f">
         <div class="contents_box">
-            <div class="divTable minimalistBlack">
+            <div class="divTable minimalistBlack" style="margin-left: 10%;">
                 <div class="divTableBody">
                     <div class="line1"></div>
                     <div class="divTableRow">
@@ -354,7 +376,7 @@
                         </div>
                     </div>
                     <div class="divTableRow line">
-                        <div class="divTableCell"><p>[[${rDTO.contents}]]
+                        <div class="divTableCell"><p style="white-space: pre-line;">[[${rDTO.contents}]]
                         </p>
                         </div>
                     </div>
