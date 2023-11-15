@@ -3,7 +3,7 @@ div.minimalistBlack {
     width: 80%;
     text-align: left;
     border-collapse: collapse;
-    margin-left: 4%;
+    margin-left: 10%;
 }
 .divTable.minimalistBlack .divTableCell, .divTable.minimalistBlack .divTableHead {
     border-bottom: 1px solid #000000;
