@@ -14,6 +14,8 @@ public interface ICctvService {
     // cctv api호출하여 cctv 결과 받아오기
     List<CctvResultDTO> getCctv() throws Exception;
 
+
+
     // CCTV 정보 가져오기
     String getCctvData(double lat, double lng);
 }

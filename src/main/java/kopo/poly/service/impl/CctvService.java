@@ -1,11 +1,9 @@
 package kopo.poly.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kopo.poly.dto.CctvDTO;
 import kopo.poly.dto.CctvResultDTO;
 import kopo.poly.persistance.mapper.ICctvMapper;
 import kopo.poly.service.ICctvService;
-import kopo.poly.util.CmmUtil;
 import kopo.poly.util.NetworkUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,26 +33,26 @@ public class CctvService implements ICctvService {
 
         log.info(this.getClass().getName() + ".getCctv Start!!");
 
-        CctvDTO pDTO = new CctvDTO();
+        log.info("DB 삭제 시작");
+
+        cctvMapper.deleteCctvInfo();
+
+        String type = "ex";
+        String cctvType = "1";
+        String minX = "127.100000";
+        String maxX = "128.890000";
+        String minY = "34.100000";
+        String maxY = "39.100000";
+        String getType = "json";
 
 
-        String type = CmmUtil.nvl(pDTO.getType());
-        String cctvType = CmmUtil.nvl(pDTO.getCctvType());
-        String minX = CmmUtil.nvl(pDTO.getMinX());
-        String maxX = CmmUtil.nvl(pDTO.getMaxX());
-        String minY = CmmUtil.nvl(pDTO.getMinY());
-        String maxY = CmmUtil.nvl(pDTO.getMaxY());
-        String getType = CmmUtil.nvl(pDTO.getGetType());
 
         String apiParam = url + "?apiKey=" + apiKey + "&type=" + type + "&cctvType=" + cctvType + "&minX=" + minX + "&maxX=" + maxX + "&minY=" + minY + "&maxY=" + maxY + "&getType=" + getType;
         log.info("apiParam : " + apiParam);
 
         Map<String, String> headers = new HashMap<>();
-//        headers.put("Content-Type", "json");
 
         String json = NetworkUtil.get(apiParam, headers);
-//        log.info("json" + json);
-
 
         Map<String, Object> rMap = new ObjectMapper().readValue(json, LinkedHashMap.class);
 
@@ -63,7 +61,6 @@ public class CctvService implements ICctvService {
 
         // 일별 날씨 조회(OpenAPI가 현재 날짜 기준으로 최대 7일까지 제공)
         List<Map<String, Object>> dataList = (List<Map<String, Object>>) dMap.get("data");
-//        log.info("dataList.size() : " + dataList.size());
 
         // OpenAPI로부터 필요한 정보만 가져와서, 처리하기 쉬운 JSON 구조로 변경에 활용
         List<CctvResultDTO> pList = new LinkedList<>();
@@ -71,26 +68,16 @@ public class CctvService implements ICctvService {
         for (Map<String, Object> dataMap : dataList) {
             CctvResultDTO rDTO = new CctvResultDTO();
 
-            rDTO.setCoordX(
-                    (Number) dataMap.get("coordx")
-            );
-            rDTO.setCoordY(
-                    (Number) dataMap.get("coordy")
-            );
             // FIXME api json 키 값은 cctvname (카멜 케이스가 아닌데)
             //  dto에서는 카멜식임
-            rDTO.setCctvName(
-                    (String) dataMap.get("cctvname")
-            );
-            rDTO.setCctvUrl(
-                    (String) dataMap.get("cctvurl")
-            );
+            rDTO.setCoordX(String.valueOf(dataMap.get("coordx")));
+            rDTO.setCoordY(String.valueOf(dataMap.get("coordy")));
+            rDTO.setCctvName((String) dataMap.get("cctvname"));
+            rDTO.setCctvUrl((String) dataMap.get("cctvurl"));
 
-//            log.info("rDTO : " + rDTO.toString());
 
             cctvMapper.insertCctvInfo(rDTO);
 
-            // TODO 얘들이 정상적인 dto인지 확인하고 넣으면 좀더 좋은
             pList.add(rDTO);
         }
         List<CctvResultDTO> rList = cctvMapper.getCctv();
