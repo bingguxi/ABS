@@ -12,7 +12,7 @@ import java.util.List;
 @ToString
 public class EarthquakeResultDTO {
 
-    // API 데이터 DTO들
+    /* 지진 과거 API 데이터를 담을 DTO ( XML ) */
     private String earthqaukeSeq;
     @JacksonXmlProperty(localName = "msgCode")
     private String msgCode; // 통보문종류명
