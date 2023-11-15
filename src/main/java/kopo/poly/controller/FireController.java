@@ -21,7 +21,7 @@ public class FireController {
 
     private final IFireService fireService;
 
-    @GetMapping(value = "getFireInfo")
+    @GetMapping(value = "fireInfo")
     public String getFireInfo(ModelMap model) throws Exception {
 
         log.info(this.getClass().getName() + ".getFireInfo 컨트롤러 시작!");
