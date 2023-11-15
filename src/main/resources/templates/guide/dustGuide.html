@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>자연재난행동요령 - 황사</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="/img/favicon.png" rel="icon">
+    <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="/css/table_kea.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+          rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="/vendor/aos/aos.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/font.css" rel="stylesheet"/>
+    <style>
+
+        .contents_box {
+            position: relative;
+            width: 60%;
+            margin: 0 auto;
+            min-height: 500px;
+            padding: 1px 10px 0 10px;
+        }
+
+        .title_01 {
+            position: relative;
+            font-size: 20px;
+            color: #003668;
+            padding-left: 27px;
+            margin: 36px 0 20px 0;
+        }
+
+        .title_01:before {
+            content: "";
+            display: inline-block;
+            clear: both;
+            position: absolute;
+            top: 12px;
+            left: 0;
+            background: url(https://www.safekorea.go.kr/idsiSFK/neo/ext/img/ico_title_01.jpg) no-repeat;
+            width: 16px;
+            height: 16px;
+        }
+
+        .title_02 {
+            position: relative;
+            margin-top: 30px;
+            font-size: 20px;
+            color: #1b1b1b;
+            padding-top: 5px;
+        }
+
+        .box {
+            border: 5px solid #f2f2f2;
+            margin-top: 17px;
+            position: relative;
+            padding: 30px 0;
+        }
+
+        .detail p strong {
+            color: #003668;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .level4_title {
+            margin-top: 15px;
+            color: #000;
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 35px;
+        }
+
+        ul, li {
+            list-style-type: none;
+        }
+
+        ul.tablewrap {
+            overflow: hidden;
+        }
+
+        ul.tablewrap li {
+            float: left;
+            border-left: 1px solid #dddddd;
+            border-top: 1px solid #dddddd;
+            border-bottom: 1px solid #dddddd;
+        }
+
+        ul.tablewrap li p:first-child {
+            height: 57px;
+            background-color: #f7f9fa;
+            line-height: 57px;
+            text-align: center;
+            font-size: 17px;
+            color: #000000;
+            font-weight: 700;
+        }
+
+        h3 {
+            display: block;
+            font-weight: bold;
+        }
+
+    </style>
+
+
+    <!-- =======================================================
+    * Template Name: Logis
+    * Updated: Sep 18 2023 with Bootstrap v5.3.2
+    * Template URL: https://bootstrapmade.com/logis-bootstrap-logistics-website-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body data-aos-easing="ease-in-out" data-aos-duration="1000" data-aos-delay="0">
+
+<!-- ======= Header ======= -->
+<header id="header" class="header d-flex align-items-center fixed-top sticked">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+        <a href="/index" class="logo d-flex align-items-center">
+            <!-- Uncomment the line below if you also wish to use an image logo -->
+
+            <!-- TODO 로고 이미지 넣기 -->
+            <img src="/img/logo2.png" alt="" style="height: 240px !important; width: 300px; max-height: 240px;">
+            <!--<h1>재난탈출넘버원</h1>-->
+        </a>
+
+        <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+        <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+        <nav id="navbar" class="navbar" style="padding-bottom: 7%;">
+            <ul>
+                <li><a href="/index" class="active">Home</a></li>
+                <li><a href="/map">실시간 지도</a></li>
+                <li><a href="/community/communityList">커뮤니티</a></li>
+                <li><a href="/notice/noticeList">공지사항</a></li>
+                <li><a href="/profile">마이페이지</a></li>
+                <!--<li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+                  <ul>
+                    <li><a href="#">Drop Down 1</a></li>
+                    <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+                      <ul>
+                        <li><a href="#">Deep Drop Down 1</a></li>
+                        <li><a href="#">Deep Drop Down 2</a></li>
+                        <li><a href="#">Deep Drop Down 3</a></li>
+                        <li><a href="#">Deep Drop Down 4</a></li>
+                        <li><a href="#">Deep Drop Down 5</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#">Drop Down 2</a></li>
+                    <li><a href="#">Drop Down 3</a></li>
+                    <li><a href="#">Drop Down 4</a></li>
+                  </ul>
+                </li>-->
+
+                <li><a class="get-a-quote" href="/login">로그인</a></li>
+
+                <script type="text/javascript">
+                    document.getElementById("btnLogout").addEventListener("click", function (event) {
+                        if (confirm("로그아웃 하시겠습니까?")) {
+
+                            window.location.href = "/login/logout"; // 로그아웃 페이지로 이동
+
+                        } else {
+
+                            event.preventDefault(); // 기본 동작인 링크 이동을 취소
+                        }
+                    });
+                </script>
+
+            </ul>
+        </nav><!-- .navbar -->
+
+    </div>
+</header>
+<!-- End Header -->
+
+<main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs">
+        <div class="page-header d-flex align-items-center" style="background-image: url('img/page-header.jpg');">
+            <div class="container position-relative">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-6 text-center">
+                        <h2>재난별 행동요령</h2>
+                        <!--<p>커뮤니티를 통해 서로 소통을 해보세요!</p>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <div class="container">
+                <ol>
+                    <li><a href="/index">Home</a></li>
+                    <li>재난별행동요령</li>
+                </ol>
+            </div>
+        </nav>
+    </div><!-- End Breadcrumbs -->
+
+    <section class="COMMUNITY">
+        <div class="contents_box">
+
+
+            <section id="featured-services" class="featured-services" style="padding-top: 0;">
+                <div class="container">
+
+                    <div class="row gy-4">
+
+                        <div class="col-lg-3 col-md-6 service-item d-flex aos-init aos-animate" data-aos="fade-up">
+                            <div class="icon flex-shrink-0"><i class="fa-solid fa-cart-flatbed"></i></div>
+                            <div>
+                                <h4 class="title">Lorem Ipsum</h4>
+                                <!--<p class="description">Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident</p>-->
+                                <a href="service-details.html" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+                            </div>
+                        </div>
+                        <!-- End Service Item -->
+
+                        <div class="col-lg-3 col-md-6 service-item d-flex aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+                            <div class="icon flex-shrink-0"><i class="fa-solid fa-truck"></i></div>
+                            <div>
+                                <h4 class="title">Dolor Sitema</h4>
+                                <!--<p class="description">Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>-->
+                                <a href="service-details.html" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+                            </div>
+                        </div><!-- End Service Item -->
+
+                        <div class="col-lg-3 col-md-6 service-item d-flex aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
+                            <div class="icon flex-shrink-0"><i class="fa-solid fa-truck-ramp-box"></i></div>
+                            <div>
+                                <h4 class="title">Sed ut perspiciatis</h4>
+                                <!--<p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</p>-->
+                                <a href="service-details.html" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+                            </div>
+                        </div><!-- End Service Item -->
+
+                        <div class="col-lg-3 col-md-6 service-item d-flex aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
+                            <div class="icon flex-shrink-0"><i class="fa-solid fa-truck-ramp-box"></i></div>
+                            <div>
+                                <h4 class="title">Sed ut perspiciatis</h4>
+                                <!--<p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</p>-->
+                                <a href="service-details.html" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+                            </div>
+                        </div><!-- End Service Item -->
+                    </div>
+
+                </div>
+            </section>
+
+
+            <iframe width="750" height="450" src="https://www.youtube.com/embed/UGK8JZFAc0w?si=Jw8TbSgnNwKwz80N"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen="" style="margin: 0 16%;"></iframe>
+
+
+            <div class="point">
+                <h3 class="title_02">핵심 행동요령</h3>
+                <div class="box">
+                    <p style="
+    margin-bottom: 0;
+    margin-left: 2%;
+    margin-right: 2%;
+">
+                        TV, 라디오, 인터넷 등에서 황사가 예보된 때에는 최대한 야외활동을 자제하고 주변의 독거노인 등 건강이 염려되는 분들의 지역 주민들과 함께 안부를 살펴봅니다.
+                    </p>
+                </div>
+            </div>
+
+            <div class="detail">
+                <h3 class="title_02">황사 발생 중</h3>
+                <p>
+                    <strong class="level4_title">1. 일반 가정에서는</strong>
+                    ∙ 창문을 닫고 가급적 외출을 삼가되, 외출시 보호안경, 마스크를 착용하고 귀가 후에는 손과 발 등을 깨끗이 씻어 줍니다.
+                    <br>∙ 황사에 노출된 채소, 과일 등 농수산물은 충분히 세척 후 섭취합니다.
+                    <br>∙ 식품가공·조리 시 손을 철저히 씻고 조리도구, 기구 등 위생관리로 오염되지 않도록 관리하여 주변 환경을 청결히 합니다.
+                    <br>∙ 노약자, 호흡기 질환자의 경우 실외활동을 금지합니다.
+                </p>
+                <p>
+                    <strong class="level4_title">2. 학교 등 교육기관에서는 </strong>
+                    ∙ 어린이집과 각급학교의 실외활동 금지하고 수업 단축 또는 휴업을 합니다.
+                    <br>
+                    　 ※ 실외학습, 운동경기 등을 중지하거나 연기합니다.
+                </p>
+                <p>
+                    <strong class="level4_title">3. 축사ㆍ시설원예 등 농가에서는</strong>
+                    ∙ 방목장에 있는 가축은 축사 안으로 신속히 대피시켜 황사에 노출되지 않도록 합니다.
+                    <br>∙ 비닐하우스, 온실 및 축사의 출입문과 창문을 닫고 외부공기와의 접촉을 가능한 적게 합니다.
+                    <br>∙ 노지에 방치·야적된 사료용 건초, 볏짚 등을 비닐이나 천막으로 덮습니다.
+                </p>
+            </div>
+
+            <div class="section02">
+                <h3 class="title_01">주요기관 연락처</h3>
+                <ul class="tablewrap" style="padding-left: 0;font-size: 11pt;">
+                    <li style="height: 200px;">
+                        <p>위기상황, 긴급상황 시 신고전화</p>
+                        <p style="padding-left: 10px;padding-right: 10px;margin-top: 5%;">
+                            ∙ 재난신고 119, 범죄신고 112, 민원 상담 110<br>
+                            ∙ 행정안전부 중앙재난안전상황실 044)205-1541~3
+                        </p>
+                    </li>
+                    <li style="height: 200px;">
+                        <p style="padding-left: 10px; padding-right: 10px;">
+                            행정안전부 국민행동요령, 대처사항 등 안내</p>
+                        <p style="padding-left: 10px;padding-right: 13px;margin-top: 4%;">
+                            ∙ 행정안전부 홈페이지
+                            <a href="http://www.mois.go.kr" target="_blank" title="새창열기" tabindex="0"
+                               style="padding-left: 10px;">http://www.mois.go.kr</a>
+                            <br>
+                            ∙ 행정안전부 국민재난안전포털
+                            <a href="http://www.safekorea.go.kr" target="_blank" title="새창열기" tabindex="0"
+                               style="padding-left: 10px;">http://www.safekorea.go.kr</a>
+                            <br>
+                            ∙ 스마트폰 어플리케이션 ‘안전디딤돌’
+                        </p>
+                    </li>
+                    <li style="height: 200px;border-right: 1px solid #dddddd;">
+                        <p>유관기관 연락처 및 홈페이지</p>
+                        <p style="padding-left: 10px;padding-right: 13px;">
+                            ∙ 기상청 02)2181-0503
+                            <a href="http://www.kma.go.kr" target="_blank" title="새창열기" tabindex="0"
+                               style="padding-left: 10px;">
+                                http://www.kma.go.kr
+                            </a>
+                            <br>
+                            ∙ 국립수의과학검역원
+                            <a href="http://www.qia.go.kr/" target="_blank" title="새창열기" tabindex="0"
+                               style="padding-left: 10px;">
+                                http://www.qia.go.kr/
+                            </a>
+                            <br>
+                            ∙ 농림축산식품부 044)201-1474
+                            <a href="http://www.mafra.go.kr" target="_blank" title="새창열기" tabindex="0"
+                               style="padding-left: 10px;">
+                                http://www.mafra.go.kr
+                            </a>
+                            <br>
+                            ∙ 한국환경공단
+                            <a href="http://www.airkorea.or.kr" target="_blank" title="새창열기" tabindex="0"
+                               style="padding-left: 10px;">
+                                http://www.airkorea.or.kr
+                            </a><br>
+                            ∙ 교육부 044)203-6355
+                            <a href="http://www.moe.go.kr" target="_blank" title="새창열기" tabindex="0"
+                               style="padding-left: 10px;">
+                                http://www.moe.go.kr</a><br>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-5 col-md-12 footer-info">
+                <a href="index.html" class="logo d-flex align-items-center">
+                    <span>Logis</span>
+                </a>
+                <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies
+                    darta donna mare fermentum iaculis eu non diam phasellus.</p>
+                <div class="social-links d-flex mt-4">
+                    <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                    <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-6 footer-links">
+                <h4>Useful Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Terms of service</a></li>
+                    <li><a href="#">Privacy policy</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-2 col-6 footer-links">
+                <h4>Our Services</h4>
+                <ul>
+                    <li><a href="#">Web Design</a></li>
+                    <li><a href="#">Web Development</a></li>
+                    <li><a href="#">Product Management</a></li>
+                    <li><a href="#">Marketing</a></li>
+                    <li><a href="#">Graphic Design</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+                <h4>Contact Us</h4>
+                <p>
+                    A108 Adam Street <br>
+                    New York, NY 535022<br>
+                    United States <br><br>
+                    <strong>Phone:</strong> +1 5589 55488 55<br>
+                    <strong>Email:</strong> info@example.com<br>
+                </p>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="copyright">
+            © Copyright <strong><span>Logis</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/logis-bootstrap-logistics-website-template/ -->
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+    </div>
+
+</footer><!-- End Footer -->
+<!-- End Footer -->
+
+<a href="#" class="scroll-top d-flex align-items-center justify-content-center active"><i
+        class="bi bi-arrow-up-short"></i></a>
+
+
+<!-- Vendor JS Files -->
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/vendor/purecounter/purecounter_vanilla.js"></script>
+<script src="/vendor/glightbox/js/glightbox.min.js"></script>
+<script src="/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="/vendor/aos/aos.js"></script>
+<script src="/vendor/php-email-form/validate.js"></script>
+
+<!-- Template Main JS File -->
+<script src="/js/main.js"></script>
+
+
+</body>
+
+</html>

@@ -1,32 +1,20 @@
 package kopo.poly.controller;
 
-import kopo.poly.dto.EarthquakeDTO;
 import kopo.poly.service.IEarthquakeService;
-import kopo.poly.service.impl.EarthquakeService;
-import kopo.poly.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 @Slf4j
-@RequestMapping(value = "/disaster")
+@RequestMapping(value = "/earthquake")
 @RequiredArgsConstructor
 @RestController
 @Controller
-public class DisasterController {
+public class EarthquakeController {
     @Autowired
     private IEarthquakeService earthquakeService;
 

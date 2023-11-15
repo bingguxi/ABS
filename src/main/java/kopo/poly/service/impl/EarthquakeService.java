@@ -6,9 +6,6 @@ import kopo.poly.dto.EarthquakeDTO;
 import kopo.poly.dto.EarthquakeResultDTO;
 import kopo.poly.persistance.mapper.IEarthquakeMapper;
 import kopo.poly.service.IEarthquakeService;
-import kopo.poly.util.CmmUtil;
-import kopo.poly.util.DateUtil;
-import kopo.poly.util.NetworkUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,12 +13,15 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -33,14 +33,13 @@ public class EarthquakeService implements IEarthquakeService {
     @Value("${bhg.api.key}")
     private String apiKey;
 
-    // 수정된 부분: fixedDelay 값 및 무한루프 수정
-    @Scheduled(fixedDelay = 60000, initialDelay = 500)
+    // 스케줄러에 의해 주기적으로 실행되는 메서드
     @Override
     public void setEarthquakeUrl() throws Exception {
-        log.info(this.getClass().getName() + ".getEarthquakeApi Start !");
+        log.info(this.getClass().getName() + ".setEarthquakeUrl Start !");
 
-        String frDate = "20200101";
-        String laDate = "20201231";
+        String frDate = "20180101";
+        String laDate = "20231113";
         String cntDiv = "Y";
         String orderTy = "xml";
 
@@ -56,10 +55,10 @@ public class EarthquakeService implements IEarthquakeService {
 
             i++;
         }
-        log.info(this.getClass().getName() + ".getEarthquakeApi End !");
+        log.info(this.getClass().getName() + ".setEarthquakeUrl End !");
     }
 
-    // 수정된 부분: API 호출과 결과 처리를 별도의 메서드로 분리
+    // API를 호출하고 결과를 처리하는 메서드
     @Override
     public void getEarthquakeInfo(String apiParam) {
         try {
@@ -79,25 +78,47 @@ public class EarthquakeService implements IEarthquakeService {
                 String line;
                 StringBuilder response = new StringBuilder();
 
-//                // BufferedReader를 닫습니다.
-//                reader.close();
-//                // HttpURLConnection을 닫습니다.
-//                urlConnection.disconnect();
-
                 // 서버로부터 받은 데이터를 줄단위로 읽습니다.
                 while ((line = reader.readLine()) != null) {
                     response.append(line);
                 }
 
+                // API 응답 결과를 문자열로 변환
                 String resultXml = response.toString();
-                log.info("api 호출 결과 ( 시작태그는 <alert> : " + resultXml);
+                log.info("API 호출 결과 (시작태그는 <alert>): " + resultXml);
 
+                // XmlMapper를 사용하여 XML을 Java 객체로 변환
                 XmlMapper xmlMapper = new XmlMapper();
-                TypeReference
-                        <List<LinkedHashMap<String, LinkedHashMap<String, String>>>> typeRef =
-                        new TypeReference<List<LinkedHashMap<String, LinkedHashMap<String, String>>>>() {};
-                List<LinkedHashMap<String, LinkedHashMap<String, String>>> resultData =
-                        xmlMapper.readValue(resultXml, typeRef);
+
+//                List <LinkedHashMap<String, LinkedHashMap<String, String>>> resultData = xmlMapper.readValue(resultXml, typeRef);
+
+                // TypeReference를 사용하여 제네릭 타입 지정
+                TypeReference<List<Object>> typeRef = new TypeReference<List<Object>>() {};
+                List<Object> resultData = xmlMapper.readValue(resultXml, typeRef);
+                log.info("rd : " + resultData);
+
+                List<Map<String, String>> dataList = new ArrayList<>();
+
+                // 결과 데이터를 가공하여 필요한 정보 추출
+                for (Object item : resultData) {
+                    if (item instanceof LinkedHashMap) {
+                        LinkedHashMap<String, Object> itemMap = (LinkedHashMap<String, Object>) item;
+
+                        for (Map.Entry<String, Object> entry : itemMap.entrySet()) {
+                            if ("info".equals(entry.getKey()) && entry.getValue() instanceof ArrayList) {
+                                ArrayList<LinkedHashMap<String, String>> items = (ArrayList<LinkedHashMap<String, String>>) entry.getValue();
+
+                                for (LinkedHashMap<String, String> infoMap : items) {
+                                    // 이제 infoMap에서 필요한 정보를 추출하여 Map에 담을 수 있습니다.
+                                    Map<String, String> dataMap = new HashMap<>(infoMap);
+                                    dataList.add(dataMap);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                log.info("dataList : " + dataList);
 
                 log.info("xmlMapper의 readValue 작업 완료");
 
@@ -106,32 +127,32 @@ public class EarthquakeService implements IEarthquakeService {
 
                 List<EarthquakeResultDTO> erList = new ArrayList<>();
 
-                for (LinkedHashMap<String, LinkedHashMap<String, String>> resultDTO : resultData) {
-
-                    // 다음 라인을 수정
-                    LinkedHashMap<String, String> infoMap = resultDTO.values().iterator().next();
+                // DTO로 변환하여 DB에 저장
+                for (Map<String, String> resultDTO : dataList) {
 
                     EarthquakeResultDTO erDTO = new EarthquakeResultDTO();
 
-                    erDTO.setMsgCode(infoMap.get("msgCode"));
-                    erDTO.setCntDiv(infoMap.get("cntDiv"));
-                    erDTO.setArDiv(infoMap.get("arDiv"));
-                    erDTO.setEqArCdNm(infoMap.get("eqArCdNm"));
-                    erDTO.setEqPt(infoMap.get("eqPt"));
-                    erDTO.setNkDiv(infoMap.get("nkDiv"));
-                    erDTO.setTmIssue(infoMap.get("tmIssue"));
-                    erDTO.setEqDate(infoMap.get("eqDate"));
-                    erDTO.setMagMl(infoMap.get("magMl"));
-                    erDTO.setMagDiff(infoMap.get("magDiff"));
-                    erDTO.setEqDt(infoMap.get("eqDt"));
-                    erDTO.setEqLt(infoMap.get("eqLt"));
-                    erDTO.setEqLn(infoMap.get("eqLn"));
-                    erDTO.setMajorAxis(infoMap.get("majorAxis"));
-                    erDTO.setMinorAxis(infoMap.get("minorAxis"));
-                    erDTO.setDepthDiff(infoMap.get("depthDiff"));
-                    erDTO.setJdLoc(infoMap.get("jdLoc"));
-                    erDTO.setJdLocA(infoMap.get("jdLocA"));
-                    erDTO.setReFer(infoMap.get("ReFer"));
+                    log.info("resultDTO : " + resultDTO);
+
+                    erDTO.setMsgCode(resultDTO.get("msgCode"));
+                    erDTO.setCntDiv(resultDTO.get("cntDiv"));
+                    erDTO.setArDiv(resultDTO.get("arDiv"));
+                    erDTO.setEqArCdNm(resultDTO.get("eqArCdNm"));
+                    erDTO.setEqPt(resultDTO.get("eqPt"));
+                    erDTO.setNkDiv(resultDTO.get("nkDiv"));
+                    erDTO.setTmIssue(resultDTO.get("tmIssue"));
+                    erDTO.setEqDate(resultDTO.get("eqDate"));
+                    erDTO.setMagMl(resultDTO.get("magMl"));
+                    erDTO.setMagDiff(resultDTO.get("magDiff"));
+                    erDTO.setEqDt(resultDTO.get("eqDt"));
+                    erDTO.setEqLt(resultDTO.get("eqLt"));
+                    erDTO.setEqLn(resultDTO.get("eqLn"));
+                    erDTO.setMajorAxis(resultDTO.get("majorAxis"));
+                    erDTO.setMinorAxis(resultDTO.get("minorAxis"));
+                    erDTO.setDepthDiff(resultDTO.get("depthDiff"));
+                    erDTO.setJdLoc(resultDTO.get("jdLoc"));
+                    erDTO.setJdLocA(resultDTO.get("jdLocA"));
+                    erDTO.setReFer(resultDTO.get("ReFer"));
 
                     erList.add(erDTO);
 
@@ -143,34 +164,19 @@ public class EarthquakeService implements IEarthquakeService {
                     erDTO = null;
                 }
 
-                // 나머지 코드 생략
-
-                // 각 EarthquakeResultDTO에 해당하는 EarthquakeDTO의 List를 설정
-                for (int j = 0; j < erList.size(); j++) {
-                    LinkedHashMap<String, String> infoMap = resultData.get(j).values().iterator().next();
-
-                    // infoMap를 EarthquakeDTO 리스트로 변환
-                    List<EarthquakeDTO> earthquakeDTOList = new ArrayList<>();
-                    EarthquakeDTO earthquakeDTO = new EarthquakeDTO();
-                    earthquakeDTO.setFrDate(infoMap.get("frDate"));
-                    earthquakeDTO.setLaDate(infoMap.get("laDate"));
-                    earthquakeDTO.setCntDiv(infoMap.get("cntDiv"));
-                    earthquakeDTO.setOrderTy(infoMap.get("orderTy"));
-
-                    // 기타 필요한 매핑 로직 추가
-
-                    earthquakeDTOList.add(earthquakeDTO);
-
-                    log.info("earthquakeDTOList : " + earthquakeDTOList);
-
-                    erList.get(j).setInfoList(earthquakeDTOList);
-                }
-
                 log.info("매핑된 EarthquakeResultDTO 리스트 : " + erList);
             }
             // 예외 발생시 스택트레이스를 출력합니다.
         } catch (Exception e) {
             log.error("Error in processEarthquakeData: " + e.getMessage(), e);
         }
+    }
+
+    @Override
+    public List<EarthquakeResultDTO> getEarthquakeList() throws Exception {
+
+        log.info(this.getClass().getName() + ".getEarthquakeList start!");
+
+        return earthquakeMapper.getEarthquakeList();
     }
 }
