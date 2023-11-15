@@ -31,16 +31,6 @@ public class NaverController {
     @Value("${naver.redirect_uri}")
     private String naverRedirectUri;
 
-    @GetMapping(value = "/auth/naver")
-    public String naver() throws Exception {
-
-        log.info(this.getClass().getName() + ".naver 시작!");
-        log.info(this.getClass().getName() + ".naver 끝!");
-
-        return "/user/naverLogin";
-
-    }
-
 /* 네이버 로그인 엑세스 토큰 받기 */
 
     @GetMapping(value = "/auth/naver/callback")
@@ -115,9 +105,6 @@ public class NaverController {
                 log.info("회원가입 성공");
 
                 session.setAttribute("SS_USER_ID", userId);
-                session.setAttribute("SS_USER_NAME", userName);
-                // TODO 닉네임 없애도 될 듯
-                session.setAttribute("SS_NICKNAME", nickname);
 
                 msg = "회원가입에 성공했습니다. \\n로그인 성공했습니다 \\n" + userName + "님 환영합니다.";
                 url = "/index";
@@ -131,9 +118,6 @@ public class NaverController {
             log.info("계정 보유로 로그인 실행");
 
             session.setAttribute("SS_USER_ID", userId);
-            session.setAttribute("SS_USER_NAME", userName);
-            // TODO 닉네임 없애도 될 듯
-            session.setAttribute("SS_NICKNAME", nickname);
 
             msg = "로그인 성공했습니다 \\n" + userName + "님 환영합니다.";
             url = "/index";
