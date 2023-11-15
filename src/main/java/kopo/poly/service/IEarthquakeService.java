@@ -4,6 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import io.opentelemetry.sdk.trace.internal.data.ExceptionEventData;
 import kopo.poly.dto.EarthquakeDTO;
+import kopo.poly.dto.EarthquakeLiveDTO;
 import kopo.poly.dto.EarthquakeResultDTO;
 import kopo.poly.service.impl.EarthquakeService;
 
@@ -18,7 +19,7 @@ public interface IEarthquakeService {
     // 지진 API를 호출하여 날씨 결과 받아오기
 //    EarthquakeDTO getEarthquake(EarthquakeDTO pDTO) throws Exception;
 
-    List<EarthquakeResultDTO> getEarthquakeList() throws Exception;
+    List<EarthquakeLiveDTO> getEarthquakeLiveInfo() throws Exception;
 
     void setEarthquakeUrl() throws Exception;
 
