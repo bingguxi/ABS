@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import kopo.poly.dto.SnowDTO;
 import kopo.poly.dto.TyphoonDTO;
+import kopo.poly.dto.TyphoonLiveDTO;
 import kopo.poly.persistance.mapper.ITyphoonMapper;
 import kopo.poly.service.ITyphoonService;
 import kopo.poly.util.CmmUtil;
@@ -36,6 +37,134 @@ public class TyphoonService implements ITyphoonService {
     @Value("${bhg.api.key}")
     private String apiKey;
 
+    /**
+     * 태풍 실시간 API 크롤링해서 정보 가져오기
+     * DB에 담아두었다가 새로운 요청이 오면 비우고 다시 DB에 담아서 서비스
+     */
+    @Override
+    public List<TyphoonLiveDTO> getTyphoonLiveInfo() throws Exception {
+
+        log.info(this.getClass().getName() + ".getTyphoonLiveInfo Start!!");
+
+        log.info("DB 삭제 시작");
+
+        typhoonMapper.deleteTyphoonLiveInfo();
+
+
+        // 현재 시간을 가져옵니다.
+        Date currentDate = new Date();
+
+        // 날짜 및 시간 형식을 설정합니다.
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
+
+        // 현재 시간을 원하는 형식으로 변환합니다.
+        String formattedDate = dateFormat.format(currentDate);
+
+        // 변환된 날짜와 시간을 사용하여 URL을 생성합니다.
+        String url = "https://apihub.kma.go.kr/api/typ01/url/typ_now.php?disp=1&help=0&mode=1&tm=" + formattedDate  + "&authKey=" + apiKey;
+
+        // Jsoup 라이브러리를 통해 사이트 접속되면, 그 사이트의 전체 HTML소스 저장할 변수
+        Document doc = null;
+
+        // 사이트 접속
+        doc = Jsoup.connect(url).get();
+
+        log.info("doc : " + doc);
+
+        Elements element = doc.select("body");
+
+        log.info("element : " + element);
+
+        // 적설 정보 가져오기
+        Iterator<Element> typhoon = element.select("body").iterator();
+
+        TyphoonLiveDTO pDTO = null;
+
+
+        log.info("typhoon : " + typhoon);
+
+        List<TyphoonLiveDTO> pList = new ArrayList<>();
+
+        int idx = 0;
+
+        // pre 태그에서 추출한 텍스트를 처리하고 SnowDTO 객체에 값을 담아 리스트에 추가하는 로직 추가
+        while (typhoon.hasNext()) {
+
+            if (idx++ > 20) {
+                break;
+            }
+            pDTO = new TyphoonLiveDTO();
+
+            log.info("pDTO : " + pDTO);
+
+            // pre 태그에서 추출한 텍스트 한 줄씩 읽어오기
+            String line = CmmUtil.nvl(typhoon.next().text());
+
+            log.info("line : " + line);
+
+            log.info("ER25의 위치 : " + line.indexOf("ER25"));
+            log.info("#7777END의 위치 : " + line.indexOf("#7777END"));
+
+            line = line.replaceAll("#7777END", "");
+            line = line.substring(211);
+
+            log.info("substring 결과 : " + line);
+
+            String[] lines = line.split("="); // 난 한줄씩
+            String[] typhoonInfoArray = line.split(",");
+
+
+            log.info("lines : " + lines.length);
+            log.info("typhoonInfoArray : " + typhoonInfoArray.length);
+
+
+            // 3번째 줄부터 출력하기
+            for (int i = 0; i < lines.length && (19 + 21 * i) < typhoonInfoArray.length; i++) {
+                pDTO.setFt(CmmUtil.nvl(typhoonInfoArray[0 + 21 * i].replaceAll("= ", "")));
+                pDTO.setTyp(CmmUtil.nvl(typhoonInfoArray[2 + 21 * i]));
+                pDTO.setSeq(CmmUtil.nvl(typhoonInfoArray[3 + 21 * i]));
+                pDTO.setTypTm(CmmUtil.nvl(typhoonInfoArray[5 + 21 * i]));
+                pDTO.setLat(CmmUtil.nvl(typhoonInfoArray[7 + 21 * i]));
+                pDTO.setLon(CmmUtil.nvl(typhoonInfoArray[8 + 21 * i]));
+                pDTO.setDir(CmmUtil.nvl(typhoonInfoArray[9 + 21 * i]));
+                pDTO.setSp(CmmUtil.nvl(typhoonInfoArray[10 + 21 * i]));
+                pDTO.setPs(CmmUtil.nvl(typhoonInfoArray[11 + 21 * i]));
+                pDTO.setWs(CmmUtil.nvl(typhoonInfoArray[12 + 21 * i]));
+                pDTO.setRad15(CmmUtil.nvl(typhoonInfoArray[13 + 21 * i]));
+                pDTO.setRad25(CmmUtil.nvl(typhoonInfoArray[14 + 21 * i]));
+                pDTO.setLoc(CmmUtil.nvl(typhoonInfoArray[18 + 21 * i]));
+
+                log.info("-----------------------------------");
+                log.info("FT : " + pDTO.getFt());
+                log.info("TYP : " + pDTO.getTyp());
+                log.info("SEQ : " + pDTO.getSeq());
+                log.info("TYP_TM : " + pDTO.getTypTm());
+                log.info("LAT : " + pDTO.getLat());
+                log.info("LON : " + pDTO.getLon());
+                log.info("DIR : " + pDTO.getDir());
+                log.info("SP : " + pDTO.getSp());
+                log.info("PS : " + pDTO.getPs());
+                log.info("WS : " + pDTO.getWs());
+                log.info("RAD15 : " + pDTO.getRad15());
+                log.info("RAD25 : " + pDTO.getRad25());
+                log.info("LOC : " + pDTO.getLoc());
+
+
+                typhoonMapper.insertTyphoonLiveInfo(pDTO);
+
+                pList.add(pDTO);
+            }
+        }
+        List<TyphoonLiveDTO> rList = typhoonMapper.getTyphoonLiveInfo();
+
+        log.info(this.getClass().getName() + ".getTyphoonLiveInfo End!");
+
+        return rList;
+    }
+
+    /**
+     * 태풍 과거 API 접근을 위한 URL 정보 생성 로직
+     */
     @Override
     public void setTyphoonUrl() throws Exception {
         log.info(this.getClass().getName() + ".setTyphoonUrl Start !");
@@ -61,111 +190,10 @@ public class TyphoonService implements ITyphoonService {
         log.info(this.getClass().getName() + ".setTyphoonUrl End !");
     }
 
-//    @Override
-//    public List<TyphoonDTO> getTyphoonLiveInfo() throws Exception {
-//
-//        log.info(this.getClass().getName() + ".getSnowInfo Start!!");
-//
-//        log.info("DB 삭제 시작");
-//
-//        typhoonMapper.deleteTyphoonLiveInfo();
-//
-//
-//        // 현재 시간을 가져옵니다.
-//        Date currentDate = new Date();
-//
-//        // 날짜 및 시간 형식을 설정합니다.
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
-//
-//        // 현재 시간을 원하는 형식으로 변환합니다.
-//        String formattedDate = dateFormat.format(currentDate);
-//
-//        // 변환된 날짜와 시간을 사용하여 URL을 생성합니다.
-//        String url = "https://apihub.kma.go.kr/api/typ01/url/kma_snow1.php?sd=tot&tm=" + formattedDate + "&help=0&authKey=ELIfl6hfTHeyH5eoXwx3oA";
-//
-//        // Jsoup 라이브러리를 통해 사이트 접속되면, 그 사이트의 전체 HTML소스 저장할 변수
-//        Document doc = null;
-//
-//        // 사이트 접속
-//        doc = Jsoup.connect(url).get();
-//
-//        log.info("doc : " + doc);
-//
-//        Elements element = doc.select("body");
-//
-//        log.info("element : " + element);
-//
-//        // 적설 정보 가져오기
-//        Iterator<Element> snow = element.select("body").iterator();
-//
-//        SnowDTO pDTO = null;
-//
-//
-//        log.info("snow : " + snow);
-//
-//        List<SnowDTO> pList = new ArrayList<>();
-//
-//        int idx = 0;
-//
-//
-//// pre 태그에서 추출한 텍스트를 처리하고 SnowDTO 객체에 값을 담아 리스트에 추가하는 로직 추가
-//        while (snow.hasNext()) {
-//
-//            if (idx++ > 6) {
-//                break;
-//            }
-//            pDTO = new SnowDTO();
-//
-//            log.info("pDTO : " + pDTO);
-//
-//            // pre 태그에서 추출한 텍스트 한 줄씩 읽어오기
-//            String line = CmmUtil.nvl(snow.next().text());
-//
-//            log.info("line : " + line);
-//
-//            log.info("cm의 위치 : " + line.indexOf("(cm)"));
-//            log.info("#7777END의 위치 : " + line.indexOf("#7777END"));
-//            line = line.substring(79, 36001);
-//
-//            log.info("substring 결과 : " + line);
-//
-//            String[] lines = line.split("="); // 난 한줄씩
-//            String[] snowInfoArray = line.split(",");
-//
-//
-//            log.info("lines : " + lines.length);
-//
-//
-//            // 3번째 줄부터 출력하기
-//            for (int i = 0; i < lines.length && (6 + 7 * i) < snowInfoArray.length; i++) {
-//                pDTO.setDt(CmmUtil.nvl(snowInfoArray[0 + 7 * i].replaceAll("= ", "")));
-//                pDTO.setStnId(CmmUtil.nvl(snowInfoArray[1 + 7 * i]));
-//                pDTO.setStnKo(CmmUtil.nvl(snowInfoArray[2 + 7 * i]));
-//                pDTO.setLon(CmmUtil.nvl(snowInfoArray[3 + 7 * i]));
-//                pDTO.setLat(CmmUtil.nvl(snowInfoArray[4 + 7 * i]));
-//                pDTO.setSd(CmmUtil.nvl(snowInfoArray[6 + 7 * i]));
-//
-//                log.info("-----------------------------------");
-//                log.info("DT : " + pDTO.getDt());
-//                log.info("stnId : " + pDTO.getStnId());
-//                log.info("stnKo : " + pDTO.getStnKo());
-//                log.info("Lon : " + pDTO.getLon());
-//                log.info("Lat : " + pDTO.getLat());
-//                log.info("sd : " + pDTO.getSd());
-//
-//
-//                snowMapper.insertSnowInfo(pDTO);
-//
-//                pList.add(pDTO);
-//            }
-//        }
-//        List<SnowDTO> rList = snowMapper.getSnowInfo();
-//
-//        log.info(this.getClass().getName() + ".getSnowInfo End!");
-//
-//        return rList;
-//    }
-
+    /**
+     * 위에서 받은 URL 정보를 가지고 태풍 과거 API 호출 후
+     * XML 파싱 후 DB에 담는 로직
+     */
     @Override
     public void getTyphoonInfo(String apiParam, int year) throws Exception {
 
@@ -211,18 +239,11 @@ public class TyphoonService implements ITyphoonService {
                 // header의 결과 코드 확인
                 String resultCode = (String) header.get("resultCode");
                 if ("00".equals(resultCode)) {
-                    // body에서 items 추출
 //                    Map<String, Object> responseBody = (Map<String, Object>) body.get("body");
-                    Map<String, Object> items = (Map<String, Object>) body.get("items");
-
-                    // items에서 item 추출
-                    Map<String, Object> item = (Map<String, Object>) items.get("item");
-
-                    //  item에서 ann 추출
-                    Map<String, Object> ann = (Map<String, Object>) item.get("ann");
-
-                    // ann에서 info 추출
-                    List<Map<String, Object>> infoList = (List<Map<String, Object>>) ann.get("info");
+                    Map<String, Object> items = (Map<String, Object>) body.get("items"); // body에서 items 추출
+                    Map<String, Object> item = (Map<String, Object>) items.get("item"); // items에서 item 추출
+                    Map<String, Object> ann = (Map<String, Object>) item.get("ann"); //  item에서 ann 추출
+                    List<Map<String, Object>> infoList = (List<Map<String, Object>>) ann.get("info"); // ann에서 info 추출
 
                     // DTO로 변환하여 DB에 저장
                     List<TyphoonDTO> tList = new ArrayList<>();
