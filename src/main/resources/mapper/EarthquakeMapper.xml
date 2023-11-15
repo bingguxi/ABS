@@ -3,7 +3,7 @@
 
 <mapper namespace="kopo.poly.persistance.mapper.IEarthquakeMapper">
 
-    <!-- 수집된 실시간 태풍 정보 DB에 등록하기 -->
+    <!-- 수집된 실시간 지진 정보 DB에 등록하기 -->
     <insert id="insertEarthquakeLiveInfo" parameterType="EarthquakeLiveDTO">
         INSERT INTO EARTHQUAKE_LIVE
         (EARTHQUAKE_LIVE_SEQ, TP, TM_FC, SEQ, TM_EQK_MSC, MT, LAT, LON, LOC, SCALE, REM, COR)
@@ -11,19 +11,19 @@
                 #{tp}, #{tmFc}, #{seq}, #{tmEqkMsc},  #{mt}, #{lat}, #{lon}, #{loc}, #{scale}, #{rem}, #{cor})
     </insert>
 
-    <!-- 수집된 실시간 태풍 정보 DB에서 조회하기 -->
+    <!-- 수집된 실시간 지진 정보 DB에서 조회하기 -->
     <select id="getEarthquakeLiveInfo" parameterType="EarthquakeLiveDTO" resultType="EarthquakeLiveDTO">
         SELECT EARTHQUAKE_LIVE_SEQ, TP, TM_FC, SEQ, TM_EQK_MSC, MT, LAT, LON, LOC, SCALE, REM, COR
         FROM EARTHQUAKE_LIVE
     </select>
 
-    <!-- 수집된 실시간 태풍 정보 DB에서 삭제하기 -->
+    <!-- 수집된 실시간 지진 정보 DB에서 삭제하기 -->
     <delete id="deleteEarthquakeLiveInfo" parameterType="EarthquakeLiveDTO">
         DELETE
         FROM EARTHQUAKE_LIVE
     </delete>
 
-    <!-- 수집된 지진 정보 DB에 등록하기 -->
+    <!-- 수집된 지진 과거 정보 DB에 등록하기 -->
     <insert id="insertEarthquakeInfo" parameterType="EarthquakeResultDTO">
         INSERT INTO EARTHQUAKE
             (EARTHQUAKE_SEQ, MSG_CODE, CNT_DIV, AR_DIV, EQ_AR_CD_NM, EQ_PT, NK_DIV, TM_ISSUE, EQ_DATE,
@@ -35,13 +35,13 @@
                 #{jdLoc}, #{jdLocA}, #{ReFer})
     </insert>
 
-    <!-- DB에 저장된 지진 정보 삭제하기 -->
+    <!-- DB에 저장된 지진 과거 정보 삭제하기 -->
     <delete id="deleteEarthquakeInfo" parameterType="EarthquakeResultDTO">
         DELETE FROM EARTHQUAKE
         WHERE EARTHQUAKE = #{earthquakeSeq}
     </delete>
 
-    <!-- 수집된 지진 리스트 조회하기 -->
+    <!-- 수집된 지진 과거 정보 리스트 조회하기 -->
     <select id="getEarthquakeList" parameterType="EarthquakeResultDTO" resultType="EarthquakeResultDTO">
         SELECT DISTINCT E.EARTHQUAKE_SEQ, E.MAG_CODE,  E.CNT_DIV, E.AR_DIV, E.EQ_AR_CD_NM, E.EQ_PT,
                         E.NK_DIV, E.TM_ISSUE, E.EQ_DATE, E.MAG_ML, E.MAG_DIFF, E.EQ_DT, E.EQ_LT, E.EQ_LN, E.MAJOR_AXIS,

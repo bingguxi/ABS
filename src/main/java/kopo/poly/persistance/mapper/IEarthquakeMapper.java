@@ -27,5 +27,5 @@ public interface IEarthquakeMapper {
 //    int deleteEarthquakeInfo() throws Exception;
 
     // 수집된 지진 과거 정보 조회
-    List<EarthquakeResultDTO> getEarthquakeList() throws Exception;
+//    List<EarthquakeResultDTO> getEarthquakeList() throws Exception;
 }

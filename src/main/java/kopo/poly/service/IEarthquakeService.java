@@ -19,9 +19,12 @@ public interface IEarthquakeService {
     // 지진 API를 호출하여 날씨 결과 받아오기
 //    EarthquakeDTO getEarthquake(EarthquakeDTO pDTO) throws Exception;
 
+    // 지진 실시간 API 호출하기
     List<EarthquakeLiveDTO> getEarthquakeLiveInfo() throws Exception;
 
+    // 지진 과거 API URL 생성하기 ?
     void setEarthquakeUrl() throws Exception;
 
+    // 지진 과거 API 호출하기
     void getEarthquakeInfo(String apiParam) throws Exception;
 }

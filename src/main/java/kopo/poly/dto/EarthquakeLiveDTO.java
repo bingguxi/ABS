@@ -9,6 +9,8 @@ import lombok.ToString;
 @ToString
 public class EarthquakeLiveDTO {
 
+    /* 지진 실시간 API 데이터를 담을 DTO ( php 크롤링 )*/
+
     private String earthquakeLiveSeq; // 시퀀스
     private String tp; // 3(국내지진통보), 2(국외지진정보)
     private String tmFc; // 발표시간

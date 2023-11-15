@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 public class TyphoonDTO {
 
-    /* 태풍 과거 데이터 수집을 위한 DTO ( XML )*/
+    /* 태풍 과거 API 데이터를 담을 DTO ( XML )*/
 
     @JacksonXmlProperty(localName = "typ_seq")
     private String typSeq; // 태풍번호

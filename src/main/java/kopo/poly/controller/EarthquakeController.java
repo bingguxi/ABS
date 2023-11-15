@@ -1,6 +1,7 @@
 package kopo.poly.controller;
 
 import kopo.poly.dto.EarthquakeLiveDTO;
+import kopo.poly.dto.EarthquakeResultDTO;
 import kopo.poly.dto.TyphoonLiveDTO;
 import kopo.poly.service.IEarthquakeService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class EarthquakeController {
     private IEarthquakeService earthquakeService;
 
     /**
-     * 태풍 실시간 데이터 호출 후 파싱을 거쳐서
+     * 지진 실시간 데이터 호출 후 파싱을 거쳐서
      * DB에 있는 기존 데이터 삭제하고 저장하는 로직
      */
     @ResponseBody
@@ -69,4 +70,38 @@ public class EarthquakeController {
 
         return "/erathquakeInfo";
     }
+
+//    log.info(this.getClass().getName() + ".getEarthquakeApi Start!!");
+//
+//    List<EarthquakeResultDTO> rList = earthquakeService.getEarthquakeInfo();
+//
+//
+//        log.info("rList : ", rList);
+//
+//        for (EarthquakeResultDTO rDTO : rList) {
+//        log.info("-------------------------------");
+//        log.info("3(국내지진통보), 2(국외지진정보) : " + rDTO.getMsgCode());
+//        log.info("발표시간 : " + rDTO.getCntDiv());
+//        log.info("발표일련번호 : " + rDTO.getArDiv());
+//        log.info("진앙시(년월일시분초) : " + rDTO.getEqArCdNm());
+//        log.info("규모 : " + rDTO.getEqPt());
+//        log.info("진앙 위도 (deg.) : " + rDTO.getNkDiv());
+//        log.info("진앙 경도 (deg.) : " + rDTO.getTmIssue());
+//        log.info("진앙 위치 : " + rDTO.getEqDate());
+//        log.info("진도 : " + rDTO.getMagMl());
+//        log.info("참고사항 : " + rDTO.getMagDiff());
+//        log.info("수정사항 : " + rDTO.getEqDt());
+//        log.info("수정사항 : " + rDTO.getEqLt());
+//        log.info("수정사항 : " + rDTO.getEqLn());
+//        log.info("수정사항 : " + rDTO.getMajorAxis());
+//        log.info("수정사항 : " + rDTO.getMinorAxis());
+//        log.info("수정사항 : " + rDTO.getDepthDiff());
+//        log.info("수정사항 : " + rDTO.getJdLoc());
+//        log.info("수정사항 : " + rDTO.getJdLocA());
+//        log.info("수정사항 : " + rDTO.getReFer());
+//    }
+//
+//        log.info(this.getClass().getName() + ".earthquakeLiveInfo End!!");
+//
+//        return rList;
 }

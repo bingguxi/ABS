@@ -18,9 +18,9 @@ public interface ITyphoonService {
     // 태풍 실시간 정보 가져오기
     List<TyphoonLiveDTO> getTyphoonLiveInfo() throws Exception;
 
-    // 태풍 URL 정보 호출하기 ?
+    // 태풍 URL 정보 생성하기 ?
     void setTyphoonUrl() throws Exception;
 
-    // 태풍 과거 정보 가져오기
+    // 태풍 API 호출해서 과거 정보 가져오기
     void getTyphoonInfo(String apiParam, int year) throws Exception;
 }

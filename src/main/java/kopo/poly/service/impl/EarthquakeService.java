@@ -60,8 +60,10 @@ public class EarthquakeService implements IEarthquakeService {
         // 현재 시간을 원하는 형식으로 변환합니다.
         String formattedDate = dateFormat.format(currentDate);
 
+        log.info("현재 시각 : " + formattedDate);
+
         // 변환된 날짜와 시간을 사용하여 URL을 생성합니다.
-        String url = "https://apihub.kma.go.kr/api/typ01/url/eqk_now.php?tm=" + /*formattedDate*/ "201311231215" + "&disp=1&help=0&authKey=" + apiKey;
+        String url = "https://apihub.kma.go.kr/api/typ01/url/eqk_now.php?tm=" + formattedDate /*"201307231215"*/ + "&disp=1&help=0&authKey=" + apiKey;
 
         // Jsoup 라이브러리를 통해 사이트 접속되면, 그 사이트의 전체 HTML소스 저장할 변수
         Document doc = null;
@@ -75,7 +77,7 @@ public class EarthquakeService implements IEarthquakeService {
 
         log.info("element : " + element);
 
-        // 적설 정보 가져오기
+        // 지진 정보 가져오기
         Iterator<Element> earthquake = element.select("body").iterator();
 
         EarthquakeLiveDTO pDTO = null;
@@ -87,7 +89,7 @@ public class EarthquakeService implements IEarthquakeService {
 
         int idx = 0;
 
-        // pre 태그에서 추출한 텍스트를 처리하고 SnowDTO 객체에 값을 담아 리스트에 추가하는 로직 추가
+        // pre 태그에서 추출한 텍스트를 처리하고 EarthquakeLiveDTO 객체에 값을 담아 리스트에 추가하는 로직 추가
         while (earthquake.hasNext()) {
 
             if (idx++ > 20) {
@@ -111,26 +113,26 @@ public class EarthquakeService implements IEarthquakeService {
             log.info("substring 결과 : " + line);
 
             String[] lines = line.split("="); // 난 한줄씩
-            String[] typhoonInfoArray = line.split(",");
+            String[] earthquakeInfoArray = line.split(",");
 
 
             log.info("lines : " + lines.length);
-            log.info("typhoonInfoArray : " + typhoonInfoArray.length);
+            log.info("earthquakeInfoArray : " + earthquakeInfoArray.length);
 
 
             // 3번째 줄부터 출력하기
-            for (int i = 0; i < lines.length && (11 + 11 * i) < typhoonInfoArray.length; i++) {
-                pDTO.setTp(CmmUtil.nvl(typhoonInfoArray[0 + 11 * i].replaceAll("= ", "")));
-                pDTO.setTmFc(CmmUtil.nvl(typhoonInfoArray[1 + 11 * i]));
-                pDTO.setSeq(CmmUtil.nvl(typhoonInfoArray[2 + 11 * i]));
-                pDTO.setTmEqkMsc(CmmUtil.nvl(typhoonInfoArray[3 + 11 * i]));
-                pDTO.setMt(CmmUtil.nvl(typhoonInfoArray[4 + 11 * i]));
-                pDTO.setLat(CmmUtil.nvl(typhoonInfoArray[5 + 11 * i]));
-                pDTO.setLon(CmmUtil.nvl(typhoonInfoArray[6 + 11 * i]));
-                pDTO.setLoc(CmmUtil.nvl(typhoonInfoArray[7 + 11 * i]));
-                pDTO.setScale(CmmUtil.nvl(typhoonInfoArray[8 + 11 * i]));
-                pDTO.setRem(CmmUtil.nvl(typhoonInfoArray[9 + 11 * i].replaceAll("\n", "")));
-                pDTO.setCor(CmmUtil.nvl(typhoonInfoArray[10 + 11 * i]));
+            for (int i = 0; i < lines.length && (11 + 11 * i) < earthquakeInfoArray.length; i++) {
+                pDTO.setTp(CmmUtil.nvl(earthquakeInfoArray[0 + 11 * i].replaceAll("= ", "")));
+                pDTO.setTmFc(CmmUtil.nvl(earthquakeInfoArray[1 + 11 * i]));
+                pDTO.setSeq(CmmUtil.nvl(earthquakeInfoArray[2 + 11 * i]));
+                pDTO.setTmEqkMsc(CmmUtil.nvl(earthquakeInfoArray[3 + 11 * i]));
+                pDTO.setMt(CmmUtil.nvl(earthquakeInfoArray[4 + 11 * i]));
+                pDTO.setLat(CmmUtil.nvl(earthquakeInfoArray[5 + 11 * i]));
+                pDTO.setLon(CmmUtil.nvl(earthquakeInfoArray[6 + 11 * i]));
+                pDTO.setLoc(CmmUtil.nvl(earthquakeInfoArray[7 + 11 * i]));
+                pDTO.setScale(CmmUtil.nvl(earthquakeInfoArray[8 + 11 * i]));
+                pDTO.setRem(CmmUtil.nvl(earthquakeInfoArray[9 + 11 * i].replaceAll("\\\\n", "")));
+                pDTO.setCor(CmmUtil.nvl(earthquakeInfoArray[10 + 11 * i]));
 
                 log.info("-----------------------------------");
                 log.info("TP : " + pDTO.getTp());
@@ -158,12 +160,28 @@ public class EarthquakeService implements IEarthquakeService {
         return rList;
     }
 
+    /**
+     * 지진 과거 API 접근을 위한 URL 정보 생성 로직
+     */
     @Override
     public void setEarthquakeUrl() throws Exception {
+
         log.info(this.getClass().getName() + ".setEarthquakeUrl Start !");
 
+        // 현재 시간을 가져옵니다.
+        Date currentDate = new Date();
+
+        // 날짜 및 시간 형식을 설정합니다.
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
+
+        // 현재 시간을 원하는 형식으로 변환합니다.
+        String formattedDate = dateFormat.format(currentDate);
+
+        log.info("현재 시각 : " + formattedDate);
+
+        // 과거 지진데이터가 있는 기준일로부터 현재 시각까지의 데이터를 수집하기 위한 URL 정보 생성
         String frDate = "20180101";
-        String laDate = "20231113";
+        String laDate = formattedDate;
         String cntDiv = "Y";
         String orderTy = "xml";
 
@@ -182,7 +200,10 @@ public class EarthquakeService implements IEarthquakeService {
         log.info(this.getClass().getName() + ".setEarthquakeUrl End !");
     }
 
-    // API를 호출하고 결과를 처리하는 메서드
+    /**
+     * 위에서 받은 URL 정보를 가지고 지진 과거 API 호출 후
+     * XML 파싱 후 DB에 담는 로직
+     */
     @Override
     public void getEarthquakeInfo(String apiParam) {
         try {

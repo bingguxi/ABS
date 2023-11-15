@@ -60,6 +60,8 @@ public class TyphoonService implements ITyphoonService {
         // 현재 시간을 원하는 형식으로 변환합니다.
         String formattedDate = dateFormat.format(currentDate);
 
+        log.info("현재 시각 : " + formattedDate);
+
         // 변환된 날짜와 시간을 사용하여 URL을 생성합니다.
         String url = "https://apihub.kma.go.kr/api/typ01/url/typ_now.php?disp=1&help=0&mode=1&tm=" + formattedDate  + "&authKey=" + apiKey;
 
@@ -75,7 +77,7 @@ public class TyphoonService implements ITyphoonService {
 
         log.info("element : " + element);
 
-        // 적설 정보 가져오기
+        // 태풍 정보 가져오기
         Iterator<Element> typhoon = element.select("body").iterator();
 
         TyphoonLiveDTO pDTO = null;
@@ -87,7 +89,7 @@ public class TyphoonService implements ITyphoonService {
 
         int idx = 0;
 
-        // pre 태그에서 추출한 텍스트를 처리하고 SnowDTO 객체에 값을 담아 리스트에 추가하는 로직 추가
+        // pre 태그에서 추출한 텍스트를 처리하고 TyphoonLiveDTO 객체에 값을 담아 리스트에 추가하는 로직 추가
         while (typhoon.hasNext()) {
 
             if (idx++ > 20) {
@@ -197,6 +199,12 @@ public class TyphoonService implements ITyphoonService {
     @Override
     public void getTyphoonInfo(String apiParam, int year) throws Exception {
 
+//        log.info(this.getClass().getName() + ".getTyphoonInfo Start !");
+//
+//        log.info("DB 삭제 시작");
+//
+//        typhoonMapper.deleteTyphoonInfo();
+
         HttpURLConnection urlConnection = null;
 
         try {
@@ -288,5 +296,7 @@ public class TyphoonService implements ITyphoonService {
                 urlConnection.disconnect();
             }
         }
+
+        log.info(this.getClass().getName() + ".getTyphoonInfo End !");
     }
 }

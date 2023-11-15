@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 public class TyphoonLiveDTO {
 
-    /* 태풍 실시간 데이터 수집을 위한 DTO ( php 크롤링 )*/
+    /* 태풍 실시간 API 데이터를 담을 DTO ( php 크롤링 )*/
 
     private String typhoonLiveSeq; // 수집번호
     private String ft; // 0(분석), 1(예측)

@@ -23,7 +23,7 @@
         FROM TYPHOON_LIVE
     </delete>
 
-    <!-- 수집된 지진 과거 정보 DB에 등록하기 -->
+    <!-- 수집된 태풍 과거 정보 DB에 등록하기 -->
     <insert id="insertTyphoonInfo" parameterType="TyphoonDTO">
         INSERT INTO TYPHOON
         (TYP_SEQ, TYP_EN, YEAR, TM_ST, TM_ED, TYP_PS, TYP_WS, TYP_NAME, EFF)
@@ -31,13 +31,14 @@
                 #{typEn}, #{year}, #{tmSt}, #{tmEd}, #{typPs}, #{typWs}, #{typName}, #{eff})
     </insert>
 
-    <!-- DB에 저장된 지진 과거 정보 삭제하기 -->
+    <!-- DB에 저장된 태풍 과거 정보 삭제하기 -->
     <delete id="deleteTyphoonInfo" parameterType="TyphoonDTO">
-        DELETE FROM TYPHOON
-        WHERE TYPHOON = #{typSeq}
+        DELETE
+        FROM TYPHOON
+--         WHERE TYPHOON = #{typSeq}
     </delete>
 
-    <!-- 수집된 지진 과거 정보 리스트 조회하기 -->
+    <!-- 수집된 태풍 과거 정보 리스트 조회하기 -->
     <select id="getTyphoonList" parameterType="TyphoonDTO" resultType="TyphoonDTO">
         SELECT DISTINCT T.TYP_SEQ, T.TYP_EN, T.YEAR, T.TM_ST, T.TM_ED, T.TYP_PS,
                         T.TYP_WS, T.TYP_NAME, T.EFF
