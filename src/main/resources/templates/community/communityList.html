@@ -17,6 +17,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="/css/table_kea.css"/>
+    <link rel="stylesheet" href="/css/styles.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
           rel="stylesheet">
 
@@ -50,13 +51,13 @@
             text-align: center;
         }
 
-        .contents_box {
-            position: relative;
-            max-width: 1440px;
-            margin: 0 auto;
-            min-height: 500px;
-            padding: 1px 10px 0 10px;
-        }
+        /*.contents_box {*/
+        /*    position: relative;*/
+        /*    max-width: 1440px;*/
+        /*    margin: 0 auto;*/
+        /*    min-height: 500px;*/
+        /*    padding: 1px 10px 0 10px;*/
+        /*}*/
 
     </style>
 
@@ -131,34 +132,54 @@
     </div><!-- End Breadcrumbs -->
 
     <section class="COMMUNITY">
-        <div class="contents_box">
-            <div class="divTable minimalistBlack" style="margin-left: 10%;">
-                <div class="divTableHeading">
-                    <div class="divTableRow">
-                        <div class="divTableHead">순번</div>
-                        <div class="divTableHead">제목</div>
-                        <div class="divTableHead">조회수</div>
-                        <div class="divTableHead">등록자</div>
-                        <div class="divTableHead">등록일</div>
-                    </div>
-                </div>
-                <div class="divTableBody">
-                    <div class="divTableRow" th:each="dto:${rList}">
+        <div class="community-table">
+            <div class="table-header">
+                <div>순번</div>
+                <div>제목</div>
+                <div>조회수</div>
+                <div>등록자</div>
+                <div>등록일</div>
+            </div>
 
-                        <div class="divTableCell hover" name="nSeq" id="nSeq">[[${dto.communitySeq}]]</div>
-                        <div class="divTableCell hover" th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'">
-                            [[${dto.title}]]
-                        </div>
-                        <div class="divTableCell hover">[[${dto.readCnt}]]</div>
-                        <div class="divTableCell hover">[[${dto.userId}]]</div>
-                        <div class="divTableCell hover">[[${dto.regDt}]]</div>
-                    </div>
+            <div class="table-row" th:each="dto:${rList}">
+                <div class="table-row">
+                    <div name="nSeq" id="nSeq">[[${dto.communitySeq}]]</div>
+                    <div th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'">[[${dto.title}]]</div>
+                    <div>[[${dto.readCnt}]]</div>
+                    <div>[[${dto.userId}]]</div>
+                    <div>[[${dto.regDt}]]</div>
                 </div>
             </div>
-            <div class="find-btn">
-                <!--      <a href="communityReg.html">글쓰기</a>-->
-                <button class="btn" id="btnWrite">글쓰기</button>
+        </div>
+        <!-- 페이지네이션 영역-->
+        <div style="display: flex">
+            <div class="mx-auto">
+                <ul class="pagination pagination-primary" id="pagination">
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/community/communityList?page=1}">&laquo;</a>
+                    </li>
+                    <!-- 이전 페이지로 이동하는 링크 -->
+                    <li class="page-item" th:if="${currentPage > 1}">
+                        <a class="page-link" th:href="@{/community/communityList(page=${currentPage - 1})}">&lt;</a>
+                    </li>
+                    <!-- 현재 페이지 주변에 페이지 번호 링크 표시 -->
+                    <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, totalPages)}"
+                        th:class="${pageNumber == currentPage ? 'active' : ''}">
+                        <a class="page-link" th:href="@{/community/communityList(page=${pageNumber})}"
+                           th:text="${pageNumber}"></a>
+                    </li>
+                    <!-- 다음 페이지로 이동하는 링크 -->
+                    <li class="page-item" th:if="${currentPage < totalPages}">
+                        <a class="page-link" th:href="@{/community/communityList(page=${currentPage + 1})}">&gt;</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/community/communityList(page=${totalPages})}">&raquo;</a>
+                    </li>
+                </ul>
             </div>
+        </div>
+        <div class="find-btn">
+            <button class="btn" id="btnWrite">글쓰기</button>
         </div>
     </section>
 
