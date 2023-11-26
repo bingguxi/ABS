@@ -40,13 +40,13 @@
             margin-top: 10px;
         }
 
-        .btnCmtDelete {
-            border: none;
-            background: #0e1d34;
-            /*background: linear-gradient(0deg, rgba(6, 14, 131, 1) 0%, rgba(12, 25, 180, 1) 100%);*/
-            color: white;
-            margin-top: 10px;
-        }
+        /*.btnCmtDelete {*/
+        /*    border: none;*/
+        /*    background: #0e1d34;*/
+        /*    !*background: linear-gradient(0deg, rgba(6, 14, 131, 1) 0%, rgba(12, 25, 180, 1) 100%);*!*/
+        /*    color: white;*/
+        /*    margin-top: 10px;*/
+        /*}*/
 
         .btn:hover {
             background: rgb(0, 3, 255);
@@ -67,7 +67,7 @@
 
         .contents_box {
             position: relative;
-            max-width: 1440px;
+            max-width: 1500px;
             margin: 0 auto;
             min-height: 500px;
             padding: 10px;
@@ -90,36 +90,122 @@
             resize: none;
         }
 
-        .cbtn {
-            position: relative;
-            left: 100%;
-            top: -46px;
-        }
+        /*댓글 css*/
         .comment-list {
-            list-style: none;
-            padding: 0;
+            margin-top: 10px;
         }
 
-        .comment-item {
-            margin-bottom: 20px;
-            padding: 15px;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .comment-header {
-            font-weight: bold;
+        .comment {
+            position: relative;
+            border: 1px solid #ddd;
+            padding: 10px;
             margin-bottom: 10px;
+            margin-left: 10%;
+            margin-right: 10%;
+        }
+
+        .comment-info {
+            font-size: 14px;
+            color: #777;
         }
 
         .comment-content {
-            margin-bottom: 10px;
+            margin-top: 5px;
         }
 
-        .comment-timestamp {
-            font-size: 12px;
-            color: #888888;
+        .dropdown {
+            margin-top: 10px;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .btnCmtEdit,
+        .btnCmtDelete,
+        .dropbtn {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .comment
+        .comment .dropdown {
+            margin-top: 5px;
+        }
+
+        .comment .btnCmtEdit,
+        .comment .btnCmtDelete,
+        .comment .dropbtn {
+            background-color: #0e1d34;
+        }
+
+        .comment-list .btnCmtEdit,
+        .comment-list .btnCmtDelete,
+        .comment-list .dropbtn {
+            margin-top: 10px;
+        }
+
+        .comment-form {
+            margin-right: 10%;
+            margin-left: 10%;
+            max-width: 1300px;
+            /*display: flex;*/
+            /*flex-direction: column;*/
+
+        }
+
+        .comment-form .btnCmtEdit,
+        .comment-form .btnCmtDelete,
+        .comment-form .dropbtn {
+            display: none;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 70px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            border-radius: 4px;
+        }
+
+        .dropdown-content button {
+            color: #f9f9f9;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content button:hover {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown:hover .dropbtn {
+            background-color: #3498db;
+        }
+
+        .btnCmtDelete {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btnCmtDelete:hover {
+            background-color: #c82333;
         }
 
     </style>
@@ -138,23 +224,25 @@
                 doComment(); // 댓글 작성 실행
             })
 
-            // 본인 계정이 아닌 사용자에게 버튼 숨김
-            $(".btnCmtDelete").each(function() {
-                var commentUserId = $(this).prevAll(".commentUserId").val(); // 추가: 댓글의 userId 가져오기
-
-                // 숨김 처리
-                $(this).hide();
-
-                // 본인 계정과 댓글 userId 비교
-                if (ssUserId === commentUserId) {
-                    // 본인 계정이라면 표시
-                    $(this).show();
-                }
-            });
+            // // 본인 계정이 아닌 사용자에게 버튼 숨김
+            // $(".btnCmtDelete").each(function () {
+            //     var commentUserId = $(this).prevAll(".commentUserId").val(); // 추가: 댓글의 userId 가져오기
+            //
+            //     // 숨김 처리
+            //     $(this).hide();
+            //
+            //     // 본인 계정과 댓글 userId 비교
+            //     if (ssUserId === commentUserId) {
+            //         // 본인 계정이라면 표시
+            //         $(this).show();
+            //     }
+            // });
 
             $(".btnCmtDelete").on("click", function () {
-                var commentSeq = $(this).prevAll(".commentSeq").val();
-                var commentUserId = $(this).prevAll(".commentUserId").val(); // 추가: 댓글의 userId 가져오기
+                // 현재 클릭된 버튼의 부모 요소인 .comment에서 commentSeq와 commentUserId를 찾음
+                var commentSeq = $(this).closest('.comment').find(".commentSeq").val();
+                var commentUserId = $(this).closest('.comment').find(".commentUserId").val();
+                console.log(commentSeq, commentUserId);
 
                 if (ssUserId === commentUserId) {
                     if (confirm("작성한 댓글을 삭제하시겠습니까?")) {
@@ -277,6 +365,7 @@
                 }
             )
         }
+
         function doOutput() {
             $.ajax({
                 url: "/comment/commentList",
@@ -290,36 +379,60 @@
             })
 
         }
-        // function doCmtDelete(commentSeq) {
-        //     if (ssUserId === userId) {
-        //         if (confirm("작성한 댓글을 삭제하시겠습니까?")) {
-        //
-        //             // let commentSeq = document.getElementById("commentSeq");
-        //
-        //             console.log(commentSeq)
-        //
-        //             // Ajax 호출해서 글 삭제하기
-        //             $.ajax({
-        //                     url: "/comment/commentDelete",
-        //                     type: "post", // 전송방식은 Post
-        //                     dataType: "JSON", // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
-        //                     data: {"commentSeq": commentSeq},
-        //                     success:
-        //                         function (json) { // /comment/commentDelete 호출이 성공한다면...
-        //                             alert(json.msg); // 메시지 띄우기
-        //                             location.reload();
-        //                         }
-        //                 }
-        //             )
-        //         }
-        //     } else if (ssUserId === "") {
-        //         alert("로그인 하시길 바랍니다.");
-        //     } else {
-        //         alert("본인이 작성한 글만 삭제 가능합니다.");
-        //     }
-        // }
 
-        /*]]>*/
+
+        // 답글 저장하기
+        function doReComment(commentSeq) {
+            let f = document.getElementById("f"); // form 태그
+            console.log(document.getElementById("recommentContent").value);
+            console.log(commentSeq)
+
+            if (f.recommentContent[0].value === "") {
+                alert("내용을 입력하시기 바랍니다.");
+                f.recommentContent.focus();
+                return;
+            }
+            if (calBytes(f.recommentContent[0].value) > 4000) {
+                alert("최대 4000Bytes까지 입력 가능합니다.");
+                f.recommentContent.focus();
+                return;
+            }
+
+            if (ssUserId === null) {
+                alert("로그인 후에 댓글을 등록할 수 있습니다.");
+                return;
+            }
+
+
+            // Ajax 호출해서 글 등록하기
+            $.ajax({
+                    url: "/comment/recommentInsert",
+                    type: "post", // 전송방식은 Post
+                    dataType: "JSON", // 전송 결과는 Json으로 받기
+                    data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+                    success: function (json) { // /comment/commentInsert 호출이 성공했다면..
+                        alert(json.msg); // 메시지 띄우기
+                        location.href = "/community/communityInfo?nSeq=" + nSeq; // 커뮤니티 리스트 이동
+
+                        doReOutput();
+                    }
+                }
+            )
+        }
+
+        function doReOutput() {
+            $.ajax({
+                url: "/comment/commentList",
+                type: "get",
+                dataType: "JSON",
+                data: $("#f").serialize(),
+                success: function (json) {
+                    alert(json.msg);
+                    location.href = "/community/communityInfo?nSeq=" + nSeq; // 커뮤니티 리스트 이동
+                }
+            })
+
+        }
     </script>
 
     <!-- =======================================================
@@ -363,57 +476,60 @@
 
     <section class="COMMUNITY">
         <form name="f" id="f">
-        <div class="contents_box">
-            <div class="divTable minimalistBlack" style="margin-left: 10%;">
-                <div class="divTableBody">
-                    <div class="line1"></div>
-                    <div class="divTableRow">
-                        [[${rDTO.title}]]
-                    </div>
-                    <div class="divTableRow line">
-                        <div class="divTableCell">작성자: [[${rDTO.userId}]] | 작성일: [[${rDTO.regDt}]] | 조회수:
-                            [[${rDTO.readCnt}]]
-                        </div>
-                    </div>
-                    <div class="divTableRow line">
-                        <div class="divTableCell"><p style="white-space: pre-line;">[[${rDTO.contents}]]
-                        </p>
-                        </div>
-                    </div>
-                </div>
-
-        </div>
-        <br/>
-        <div class="find-btn">
-            <button class="btn" id="btnEdit" type="button">수정</button>
-            <button class="btn" id="btnDelete" type="button">삭제</button>
-            <button class="btn" id="btnList" type="button">목록</button>
-        </div>
-
-        <div class="divTable minimalistBlack">
             <div class="contents_box">
-                <div class="divTableBody">댓글</div>
-                <input type="hidden" name="community_seq" th:value="${rDTO.communitySeq}">
-                <!--         댓글 목록을 표시할 부분 -->
-                <textarea name="contents"></textarea>
-                <div class="cbtn">
-                    <button class="btn" id="btnCmt" type="button" style="margin-left: 2%; margin-top: 10px">작성</button>
-                </div>
-                <div class="comment-list">
-                    <div class="comment-item">
-                        <div class="divTableRow" th:each="dto : ${rList}">
-                            <input type="hidden" class="commentSeq" th:value="${dto.commentSeq}">
-                            <input type="hidden" class="commentUserId" th:value="${dto.userId}"> <!-- 추가: 댓글의 userId 저장 -->
-                            <div class="comment-content" th:text="${dto.contents}"></div>
-                            <div class="comment-timestamp" th:text="${dto.userId}"></div>
-                            <div class="comment-timestamp" th:text="${dto.regDt}"></div>
-                            <button class="btnCmtDelete" type="button" style="margin-left: 2%; margin-top: 10px; margin-bottom: 20px;">삭제</button>
+                <div class="divTable minimalistBlack" style="margin-left: 10%;">
+                    <div class="divTableBody">
+                        <div class="line1"></div>
+                        <div class="divTableRow">
+                            [[${rDTO.title}]]
+                        </div>
+                        <div class="divTableRow line">
+                            <div class="divTableCell">작성자: [[${rDTO.userId}]] | 작성일: [[${rDTO.regDt}]] | 조회수:
+                                [[${rDTO.readCnt}]]
+                            </div>
+                        </div>
+                        <div class="divTableRow line">
+                            <div class="divTableCell"><p style="white-space: pre-line;">[[${rDTO.contents}]]
+                            </p>
+                            </div>
                         </div>
                     </div>
+
+                </div>
+                <br/>
+                <div class="find-btn">
+                    <button class="btn" id="btnEdit" type="button">수정</button>
+                    <button class="btn" id="btnDelete" type="button">삭제</button>
+                    <button class="btn" id="btnList" type="button">목록</button>
+                </div>
+
+                <!-- 댓글 목록 -->
+                <div class="comment-list">
+                    <div class="comment" th:each="dto : ${rList}">
+                        <input type="hidden" class="commentSeq" th:value="${dto.commentSeq}">
+                        <input type="hidden" class="commentUserId" th:value="${dto.userId}">
+                        <p class="comment-info">작성자: [[${dto.userId}]] | 작성일: [[${dto.regDt}]]</p>
+                        <p class="comment-content" style="white-space: pre-line">[[${dto.contents}]]</p>
+                        <div class="dropdown">
+                            <button class="dropbtn">⋮</button>
+                            <div class="dropdown-content">
+                                <button class="btnCmtEdit" type="button">수정</button>
+                                <button class="btnCmtDelete" type="button">삭제</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 댓글 작성 폼 -->
+                <div class="comment-form">
+                    <div class="form-group">
+                        <label for="contents">댓글</label>
+                        <input type="hidden" name="community_seq" th:value="${rDTO.communitySeq}">
+                        <textarea id="contents" name="contents" rows="4" placeholder="댓글을 입력하세요"></textarea>
+                    </div>
+                    <button class="btn" id="btnCmt" type="button" style="margin-top: 10px">작성</button>
                 </div>
             </div>
-        </div>
-        </div>
         </form>
     </section>
 
