@@ -23,9 +23,9 @@ public class CctvService implements ICctvService {
     private String apiKey;
 
     @Override
-    public List<CctvResultDTO> getCctv() throws Exception {
+    public void insertCctvInfo(CctvResultDTO pDTO) throws Exception {
 
-        log.info(this.getClass().getName() + ".getCctv Start!!");
+        log.info(this.getClass().getName() + ".insertCctvInfo Start!!");
 
         log.info("DB 삭제 시작");
 
@@ -68,11 +68,17 @@ public class CctvService implements ICctvService {
 
         }
 
-        List<CctvResultDTO> rList = cctvMapper.getCctv();
+        log.info(this.getClass().getName() + ".insertCctvInfo End!!");
 
-        log.info(this.getClass().getName() + ".getCctv End!!");
+    }
 
-        return rList;
+    @Override
+    public List<CctvResultDTO> getCctv() throws Exception {
+
+        log.info(this.getClass().getName() + ".getCctv Start!");
+        log.info(this.getClass().getName() + ".getCctv End!");
+
+        return cctvMapper.getCctv();
     }
 
 }

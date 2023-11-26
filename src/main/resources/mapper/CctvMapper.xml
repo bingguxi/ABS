@@ -11,13 +11,14 @@
             VALUES (#{cctvUrl}, #{coordX}, #{coordY}, #{cctvName})
     </insert>
 
+    <delete id="deleteCctvInfo" parameterType="CctvResultDTO">
+        DELETE
+        FROM CCTV
+    </delete>
+
     <select id="getCctv" parameterType="CctvResultDTO" resultType="CctvResultDTO">
         SELECT CCTV_URL, COORDX, COORDY, CCTV_NAME
         FROM CCTV
     </select>
 
-    <delete id="deleteCctvInfo" parameterType="CctvResultDTO">
-        DELETE
-        FROM CCTV
-    </delete>
 </mapper>

@@ -4,27 +4,9 @@
 <!-- JAVA와 연결할 Mapper 파일 설정 -->
 <mapper namespace="kopo.poly.persistance.mapper.IDustMapper">
 
-    <!--수집된 황사 정보 DB에 등록-->
-    <insert id="insertDustInfo" parameterType="DustDTO">
-        INSERT INTO DUST
-            (STN_ID, STN_KO, LON, LAT, MEAN)
-        VALUES (#{stnId}, #{stnKo}, #{lon}, #{lat}, #{mean})
-    </insert>
-
     <select id="getDustInfo" parameterType="DustDTO" resultType="DustDTO">
         SELECT STN_ID, STN_KO, LON, LAT, MEAN
         FROM DUST
     </select>
 
-    <update id="updateDustInfo" parameterType="DustDTO">
-        UPDATE DUST SET
-        MEAN = #{mean}
-        WHERE STN_ID = #{stnId}
-    </update>
-
-    <delete id="deleteDustInfo" parameterType="DustDTO">
-        DELETE
-        FROM DUST
-        WHERE STN_ID = #{stnId}
-    </delete>
 </mapper>

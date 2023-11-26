@@ -10,9 +10,11 @@ public interface ICctvMapper {
 
 
     // 수집된 cctv 정보 DB에 등록
-    int insertCctvInfo(CctvResultDTO pDTO) throws Exception;
+    void insertCctvInfo(CctvResultDTO pDTO) throws Exception;
 
     // DB에 저장된 cctv 정보 삭제하기
-    int deleteCctvInfo() throws Exception;
+    void deleteCctvInfo() throws Exception;
+
+    // DB에 저장된 cctv 조회하기
     List<CctvResultDTO> getCctv() throws Exception;
 }
