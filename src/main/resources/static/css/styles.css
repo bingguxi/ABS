@@ -1,0 +1,111 @@
+/*body {*/
+/*    font-family: 'Arial', sans-serif;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    background-color: #f4f4f4;*/
+/*}*/
+
+/*header {*/
+/*    background-color: #0e1d34;*/
+/*    color: white;*/
+/*    padding: 10px;*/
+/*    text-align: center;*/
+
+/*}*/
+
+.community-table {
+    max-width: 1400px;
+    margin: 20px auto;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0e1d34;
+    color: white;
+    padding: 10px;
+    text-align: center;
+
+}
+
+.table-header div {
+    flex: 1; /* 자동으로 너비를 나누어 갖게 함 */
+}
+
+.table-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+
+.table-row div {
+    flex: 1; /* 자동으로 너비를 나누어 갖게 함 */
+}
+
+.table-row:hover {
+    background-color: #f9f9f9;
+}
+
+.write-button {
+    display: block;
+    margin: 20px auto;
+    padding: 8px 15px; /* 크기 조절 */
+    background-color: #0e1d34;
+    width: 20vw; /* 가로 크기를 화면 너비의 20%로 설정 */
+    min-width: 100px; /* 최소 가로 크기 지정 */
+    max-width: 200px; /* 최대 가로 크기 지정 */
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    overflow: hidden;
+}
+
+.write-button:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.page-link {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 0 5px;
+    background-color: #0e1d34;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.page-link:hover {
+    background-color: #091621;
+    transform: scale(1.05);
+}
+
+/* 반응형 디자인 */
+@media screen and (max-width: 600px) {
+    .community-table {
+        width: 90%;
+    }
+
+    .write-button {
+        width: 80vw; /* 화면이 작아질 때 크기를 더 줄임 */
+    }
+}

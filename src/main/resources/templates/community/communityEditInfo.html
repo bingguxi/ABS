@@ -49,11 +49,50 @@
             text-align: center;
         }
 
-        textarea {
-            width: 80%;
-            height: 30em;
-            border: solid gray 1px;
-            resize: none;
+        /*작성하기 css*/
+        .write-container {
+            max-width: 1300px;
+            margin: 20px auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .write-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .write-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            width: calc(100% - 22px); /* 조정된 부분 */
+            box-sizing: border-box; /* 너비 계산에 padding과 border 포함 */
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 500px;
+            resize: none; /*textarea 모서리 사이즈 조절 없앰*/
         }
 
         .contents_box {
@@ -179,30 +218,27 @@
         <form name="f" id="f">
             <div class="contents_box">
                 <input type="hidden" name="nSeq" th:value="${rDTO.communitySeq}"/>
-                <div class="divTable minimalistBlack">
-                    <div class="divTableBody">
-                        <div class="divTableRow">
-                            <div class="divTableCell">제목</div>
-                            <div class="divTableCell">
-                                <input type="text" name="title" maxlength="100" th:value="${rDTO.title}"
-                                       style="width: 95%"/>
-                            </div>
-                        </div>
-                        <!--            <div class="divTableRow">-->
-                        <!--                <div class="divTableCell">공지글 여부</div>-->
-                        <!--                <div class="divTableCell">-->
-                        <!--                    예<input type="radio" name="communityYn" value="Y" th:checked="${rDTO.communityYn eq 'Y'}"/>-->
-                        <!--                    아니오<input type="radio" name="communityYn" value="N" th:checked="${rDTO.communityYn eq 'N'}"/>-->
-                        <!--                </div>-->
-                        <!--            </div>-->
-                        <div class="divTableRow">
-                            <div class="divTableCell">조회수</div>
-                            <div class="divTableCell" th:text="${rDTO.readCnt}"></div>
-                        </div>
-                        <div class="divTableCell">내용</div>
-                        <div class="divTableCell">
-                            <textarea name="contents" style="width: 95%" th:text="${rDTO.contents}"></textarea>
-                        </div>
+                <div class="write-container">
+
+                    <div class="form-group">
+                        <div class="title">제목</div>
+                        <input type="text" name="title" maxlength="100" th:value="${rDTO.title}"
+                               style="width: 95%"/>
+                    </div>
+                    <!--            <div class="divTableRow">-->
+                    <!--                <div class="divTableCell">공지글 여부</div>-->
+                    <!--                <div class="divTableCell">-->
+                    <!--                    예<input type="radio" name="communityYn" value="Y" th:checked="${rDTO.communityYn eq 'Y'}"/>-->
+                    <!--                    아니오<input type="radio" name="communityYn" value="N" th:checked="${rDTO.communityYn eq 'N'}"/>-->
+                    <!--                </div>-->
+                    <!--            </div>-->
+                    <div class="form-group">
+                        <div class="title">조회수</div>
+                        <div th:text="${rDTO.readCnt}"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="content">내용</div>
+                        <textarea name="contents" style="width: 95%" th:text="${rDTO.contents}"></textarea>
                     </div>
                 </div>
                 <div class="find-btn">

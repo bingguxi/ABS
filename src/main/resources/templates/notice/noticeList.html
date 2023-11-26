@@ -168,6 +168,32 @@
                     <button class="btn" id="btnWrite" type="button">글쓰기</button>
             </div>
         </div>
+
+        <!-- 페이지네이션 영역-->
+        <div style="display: flex">
+            <div class="mx-auto">
+                <ul class="pagination pagination-primary" id="pagination">
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/notice/noticeList?page=1}">&laquo;</a>
+                    </li>
+                    <!-- 이전 페이지로 이동하는 링크 -->
+                    <li class="page-item" th:if="${currentPage > 1}">
+                        <a class="page-link" th:href="@{/notice/noticeList(page=${currentPage - 1})}">&lt;</a>
+                    </li>
+                    <!-- 현재 페이지 주변에 페이지 번호 링크 표시 -->
+                    <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" th:class="${pageNumber == currentPage ? 'active' : ''}">
+                        <a class="page-link" th:href="@{/notice/noticeList(page=${pageNumber})}" th:text="${pageNumber}"></a>
+                    </li>
+                    <!-- 다음 페이지로 이동하는 링크 -->
+                    <li class="page-item" th:if="${currentPage < totalPages}">
+                        <a class="page-link" th:href="@{/notice/noticeList(page=${currentPage + 1})}">&gt;</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/notice/noticeList(page=${totalPages})}">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </section>
 
 </main><!-- End #main -->

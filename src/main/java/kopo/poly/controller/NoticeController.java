@@ -2,16 +2,10 @@ package kopo.poly.controller;
 
 import kopo.poly.dto.MsgDTO;
 import kopo.poly.dto.NoticeDTO;
-import kopo.poly.dto.UserInfoDTO;
-import kopo.poly.persistance.mapper.INoticeMapper;
-import kopo.poly.service.ILoginService;
 import kopo.poly.service.INoticeService;
-import kopo.poly.service.ISignupService;
 import kopo.poly.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +40,7 @@ public class NoticeController {
      * GetMapping(value = "notice/noticeList") =>  GET방식을 통해 접속되는 URL이 notice/noticeList 경우 아래 함수를 실행함
      */
     @GetMapping(value = "noticeList")
-    public String noticeList(HttpSession session, ModelMap model, HttpServletRequest request)
+    public String noticeList(HttpSession session, ModelMap model, HttpServletRequest request, @RequestParam(defaultValue = "1") int page)
             throws Exception {
 
         // 로그 찍기(추후 찍은 로그를 통해 이 함수에 접근했는지 파악하기 용이하다.)
@@ -82,6 +76,31 @@ public class NoticeController {
         // Java 8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
         List<NoticeDTO> rList = Optional.ofNullable(noticeService.getNoticeList())
                 .orElseGet(ArrayList::new);
+
+        /**페이징 시작 부분*/
+
+        // 페이지당 보여줄 아이템 개수 정의
+        int itemsPerPage = 10;
+
+        // 페이지네이션을 위해 전체 아이템 개수 구하기
+        int totalItems = rList.size();
+
+        // 전체 페이지 개수 계산
+        int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
+
+        // 현재 페이지에 해당하는 아이템들만 선택하여 rList에 할당
+        int fromIndex = (page - 1) * itemsPerPage;
+        int toIndex = Math.min(fromIndex + itemsPerPage, totalItems);
+        rList = rList.subList(fromIndex, toIndex);
+
+
+        model.addAttribute("rList", rList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
+        log.info(this.getClass().getName() + ".페이지 번호 : " + page);
+
+        /**페이징 끝부분*/
 
         // 조회된 리스트 결과값 넣어주기
         model.addAttribute("rList", rList);
