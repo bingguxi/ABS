@@ -17,7 +17,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="/css/table_kea.css"/>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+          rel="stylesheet">
 
     <!-- Vendor CSS Files -->
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -38,19 +39,62 @@
             color: white;
             margin-top: 10px;
         }
-        .btn:hover{
+
+        .btn:hover {
             background: rgb(0, 3, 255);
-            background: linear-gradient(0deg, rgba(0, 3, 255, 1)0%, rgba(2, 125, 251,1) 100%);
+            background: linear-gradient(0deg, rgba(0, 3, 255, 1) 0%, rgba(2, 125, 251, 1) 100%);
         }
-        .find-btn{
+
+        .find-btn {
             text-align: center;
         }
-        textarea {
-            width: 80%;
-            height: 30em;
-            border: solid gray 1px;
-            resize: none;
+
+        /*작성하기 css*/
+        .write-container {
+            max-width: 1300px;
+            margin: 20px auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            padding: 20px;
         }
+
+        .write-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .write-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            width: calc(100% - 22px); /* 조정된 부분 */
+            box-sizing: border-box; /* 너비 계산에 padding과 border 포함 */
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 500px;
+            resize: none; /*textarea 모서리 사이즈 조절 없앰*/
+        }
+
         .contents_box {
             position: relative;
             max-width: 1440px;
@@ -58,7 +102,6 @@
             min-height: 500px;
             padding: 1px 10px 0 10px;
         }
-
     </style>
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
     <script th:inline="javascript">
@@ -164,7 +207,7 @@
             <div class="container">
                 <ol>
                     <li><a href="index.html">Home</a></li>
-                    <li>NOTICE</li>
+                    <li>공지사항</li>
                 </ol>
             </div>
         </nav>
@@ -174,35 +217,22 @@
         <form name="f" id="f">
             <div class="contents_box">
                 <input type="hidden" name="nSeq" th:value="${rDTO.noticeSeq}"/>
-                <div class="divTable minimalistBlack">
-                    <div class="divTableBody">
-                        <div class="divTableRow">
-                            <div class="divTableCell">제목</div>
-                            <div class="divTableCell">
-                                <input type="text" name="title" maxlength="100" th:value="${rDTO.title}" style="width: 95%"/>
-                            </div>
-                        </div>
-                        <!--            <div class="divTableRow">-->
-                        <!--                <div class="divTableCell">공지글 여부</div>-->
-                        <!--                <div class="divTableCell">-->
-                        <!--                    예<input type="radio" name="communityYn" value="Y" th:checked="${rDTO.communityYn eq 'Y'}"/>-->
-                        <!--                    아니오<input type="radio" name="communityYn" value="N" th:checked="${rDTO.communityYn eq 'N'}"/>-->
-                        <!--                </div>-->
-                        <!--            </div>-->
-                        <div class="divTableRow">
-                            <div class="divTableCell">조회수</div>
-                            <div class="divTableCell" th:text="${rDTO.readCnt}"></div>
-                        </div>
-                        <div class="divTableCell">내용</div>
-                        <div class="divTableCell">
-                            <textarea name="contents" style="width: 95%" th:text="${rDTO.contents}"></textarea>
-                        </div>
+                <div class="write-container">
+                    <div class="form-group">
+                        <div class="title">제목</div>
+
+                        <input type="text" name="title" maxlength="100" th:value="${rDTO.title}" style="width: 95%"/>
+                    </div>
+                    <div class="form-group">
+                        <div class="content">내용</div>
+                        <textarea name="contents" style="width: 95%" th:text="${rDTO.contents}"></textarea>
                     </div>
                 </div>
-                <div class="find-btn">
-                    <button class="btn" id="btnSend" type="button">수정</button>
-                    <button class="btn" id="reset" type="reset">다시 작성</button>
-                </div>
+            </div>
+            <div class="find-btn">
+                <button class="btn" id="btnSend" type="button">수정</button>
+                <button class="btn" id="reset" type="reset">다시 작성</button>
+            </div>
             </div>
         </form>
     </section>
@@ -218,7 +248,8 @@
                 <a href="index.html" class="logo d-flex align-items-center">
                     <span>Logis</span>
                 </a>
-                <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus.</p>
+                <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies
+                    darta donna mare fermentum iaculis eu non diam phasellus.</p>
                 <div class="social-links d-flex mt-4">
                     <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
                     <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>

@@ -139,7 +139,7 @@
             $("#btnDelete").hide(); // 삭제버튼 숨기기
 
             // 글 작성 버튼 표시 여부 설정
-            if (ssUserId === userId) {
+            if (ssUserId === "manager") {
                 // 관리자 계정에만 버튼 표시
                 $("#btnEdit").show(); // 수정버튼 표시하기
                 $("#btnDelete").show(); // 삭제버튼 표시하기
@@ -241,7 +241,7 @@
             <div class="container">
                 <ol>
                     <li><a href="index.html">Home</a></li>
-                    <li>NOTICE</li>
+                    <li>공지사항</li>
                 </ol>
             </div>
         </nav>
@@ -260,7 +260,7 @@
                             <div class="divTableCell">작성일: [[${rDTO.regDt}]] | 조회수: [[${rDTO.readCnt}]]</div>
                         </div>
                         <div class="divTableRow line">
-                            <div class="divTableCell"><p>[[${rDTO.contents}]]
+                            <div class="divTableCell"><p style="white-space: pre-line;">[[${rDTO.contents}]]
                             </p>
                             </div>
                         </div>

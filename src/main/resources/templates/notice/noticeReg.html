@@ -31,6 +31,7 @@
     <link href="/css/main.css" rel="stylesheet">
     <link href="/css/font.css" rel="stylesheet">
     <style>
+        /*버튼 css*/
         .btn {
             border: none;
             background: #0e1d34;
@@ -38,25 +39,68 @@
             color: white;
             margin-top: 10px;
         }
-        .btn:hover{
+
+        .btn:hover {
             background: rgb(0, 3, 255);
-            background: linear-gradient(0deg, rgba(0, 3, 255, 1)0%, rgba(2, 125, 251,1) 100%);
+            background: linear-gradient(0deg, rgba(0, 3, 255, 1) 0%, rgba(2, 125, 251, 1) 100%);
         }
-        .find-btn{
+
+        .find-btn {
             text-align: center;
         }
-        textarea {
-            width: 80%;
-            height: 30em;
-            border: solid gray 1px;
-            resize: none;
+
+        /*작성하기 css*/
+        .write-container {
+            max-width: 1300px;
+            margin: 20px auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            padding: 20px;
         }
+
+        .write-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .write-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            width: calc(100% - 22px); /* 조정된 부분 */
+            box-sizing: border-box; /* 너비 계산에 padding과 border 포함 */
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 500px;
+            resize: none; /*textarea 모서리 사이즈 조절 없앰*/
+        }
+
         .contents_box {
             position: relative;
             max-width: 1440px;
             margin: 0 auto;
             min-height: 500px;
-            padding: 58px 10px 0 10px;
+            padding: 5px 10px 0 10px;
         }
 
     </style>
@@ -168,7 +212,7 @@
             <div class="container">
                 <ol>
                     <li><a href="index.html">Home</a></li>
-                    <li>NOTICE</li>
+                    <li>공지사항</li>
                 </ol>
             </div>
         </nav>
@@ -177,31 +221,15 @@
     <section class="COMMUNITY 작성">
         <form name="f" id="f">
             <div class="contents_box">
-                <div class="divTable minimalistBlack">
-                    <div class="divTableBody">
-                        <div class="divTableRow">
-                            <div class="divTableCell">제목</div>
-                            <div class="divTableCell">
-                                <input type="text" name="title" maxlength="100" style="width: 95%"/>
-                            </div>
-                        </div>
-                        <!--            <div class="divTableRow">-->
-                        <!--                <div class="divTableCell">공지글 여부</div>-->
-                        <!--                <div class="divTableCell">-->
-                        <!--                     예<input type="radio" name="communityYn" value="Y"/>-->
-                        <!--                     아니오<input type="radio" name="communityYn" value="N"/>-->
-                        <!--                </div>-->
-                        <!--            </div>-->
-                        <div class="divTableRow">
-                            <div class="divTableCell">조회수</div>
-                            <div class="divTableCell">1</div>
-                        </div>
-                        <div class="divTableRow">
-                            <div class="divTableCell">내용</div>
-                            <div class="divTableCell">
-                                <textarea name="contents" style="width: 95%; height: 400px"></textarea>
-                            </div>
-                        </div>
+                <div class="write-container">
+
+                    <div class="form-group">
+                        <div class="title">제목</div>
+                        <input type="text" name="title" maxlength="100"/>
+                    </div>
+                    <div class="form-group">
+                        <div class="content">내용</div>
+                        <textarea name="contents" id="contents"></textarea>
                     </div>
                 </div>
             </div>

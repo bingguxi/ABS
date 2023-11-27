@@ -34,6 +34,28 @@
         .find-btn {
             text-align: center;
         }
+
+        p {
+            text-align: center;
+        }
+
+        .find-login {
+            max-width: 100%;
+        }
+
+
+        /* 미디어 쿼리: 화면 너비가 600px 이하일 때 */
+        @media screen and (max-width: 600px) {
+            p {
+                width: 100%; /* 전체 너비를 차지하도록 변경 */
+                margin-left: 0; /* 왼쪽 여백 제거 */
+            }
+
+            .find-login .find-btn {
+                max-width: 100%;
+            }
+
+        }
     </style>
     <!-- =======================================================
     * Template Name: Logis
@@ -139,26 +161,33 @@
                                 <input type="password" name="password" class="form-control" placeholder="비밀번호">
                             </div>
 
-                            <p style="text-align: center;">계정이 없으신가요? <a href="/signup"><span>회원가입</span></a></p>
-                            <p style="text-align: center; width: 15%; margin-left: 34%; margin-top: 1%;"><a href="/login/findId"><span>아이디 찾기</span></a></p>
-                            <p style="text-align: center; width: 20%; margin-top: 1%;"><a href="/login/findPassword"><span>비밀번호 찾기</span></a></p>
+                            <p>계정이 없으신가요? <a href="/signup"><span>회원가입</span></a></p>
+                            <div class="find-login">
+                                <p><a href="/login/findId"><span>아이디 찾기</span></a></p>
+                                <p><a href="/login/findPassword"><span>비밀번호 찾기</span></a></p>
+                            </div>
 
                             <!--네이버 로그인-->
                             <div class="find-btn">
-                            <button type="button" id="btnNaver" onclick="location.href='https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=EjjCKVYZ02W5tA0_JBpE&redirect_uri=http://localhost:11000/auth/naver/callback&state=abs'" style="border: none; background: none;">
-                                <img src="/img/btnW_완성형.png" alt="네이버 로그인" style="width: 150px; border-radius: 10px"></button>
+                                <button type="button" id="btnNaver"
+                                        onclick="location.href='https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=EjjCKVYZ02W5tA0_JBpE&redirect_uri=http://localhost:11000/auth/naver/callback&state=abs'"
+                                        style="border: none; background: none;">
+                                    <img src="/img/btnW_완성형.png" alt="네이버 로그인"
+                                         style="width: 150px; border-radius: 10px;"></button>
 
-                            <!--카카오 로그인-->
-                            <a href="https://kauth.kakao.com/oauth/authorize?client_id=6706621d8f90ce8e40e411e21d348bf7&redirect_uri=http://localhost:11000/login/kakaoLogin&response_type=code"
-                            style="width: 150px; margin-left: 25px">
-                                <img src="/img/kakao_login_medium_narrow.png" alt="카카오 로그인"
-                                     style="height: 37px;">
-                            </a>
+                                <!--카카오 로그인-->
+                                <a href="https://kauth.kakao.com/oauth/authorize?client_id=6706621d8f90ce8e40e411e21d348bf7&redirect_uri=http://localhost:11000/login/kakaoLogin&response_type=code">
+                                    <img src="/img/kakao_login_medium_narrow.png" alt="카카오 로그인"
+                                         style="height: 37px;">
+                                </a>
                             </div>
 
 
                             <div class="col-md-12 text-center">
-                                <button type="button" id="btnLogin" style="width: 30%; height: 40px; border-radius: 10px; border: none; background-color: lightsteelblue;">로그인</button>
+                                <button type="button" id="btnLogin"
+                                        style="width: 30%; height: 40px; border-radius: 10px; border: none; background-color: lightsteelblue;">
+                                    로그인
+                                </button>
                             </div>
 
                         </div>

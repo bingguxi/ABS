@@ -31,6 +31,93 @@
     <link href="/css/main.css" rel="stylesheet">
     <link href="/css/font.css" rel="stylesheet">
     <style>
+
+        /*커뮤니티 리스트 css*/
+        .community-table {
+            max-width: 1300px;
+            margin: 20px auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0e1d34;
+            color: white;
+            padding: 10px;
+            text-align: center;
+
+        }
+
+        .table-header div {
+            flex: 1; /* 자동으로 너비를 나누어 갖게 함 */
+        }
+
+        .table-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        .table-row div {
+            flex: 1; /* 자동으로 너비를 나누어 갖게 함 */
+        }
+
+        .table-row:hover {
+            background-color: #f9f9f9;
+        }
+
+        .write-button {
+            display: block;
+            margin: 20px auto;
+            padding: 8px 15px; /* 크기 조절 */
+            background-color: #0e1d34;
+            width: 20vw; /* 가로 크기를 화면 너비의 20%로 설정 */
+            min-width: 100px; /* 최소 가로 크기 지정 */
+            max-width: 200px; /* 최대 가로 크기 지정 */
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .write-button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .page-link {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 0 5px;
+            background-color: #0e1d34;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .page-link:hover {
+            background-color: #091621;
+            transform: scale(1.05);
+        }
         .btn {
             border: none;
             background: #0e1d34;
@@ -38,14 +125,17 @@
             color: white;
             margin-top: 10px;
         }
-        .btn:hover{
+
+        .btn:hover {
             background: rgb(0, 3, 255);
-            background: linear-gradient(0deg, rgba(0, 3, 255, 1)0%, rgba(2, 125, 251,1) 100%);
+            background: linear-gradient(0deg, rgba(0, 3, 255, 1) 0%, rgba(2, 125, 251, 1) 100%);
         }
-        .find-btn{
+
+        .find-btn {
             margin-top: 1px;
             text-align: center;
         }
+
         .contents_box {
             position: relative;
             max-width: 1440px;
@@ -136,38 +226,34 @@
             <div class="container">
                 <ol>
                     <li><a href="index.html">Home</a></li>
-                    <li>NOTICE</li>
+                    <li>공지사항</li>
                 </ol>
             </div>
         </nav>
     </div><!-- End Breadcrumbs -->
 
     <section class="COMMUNITY">
-        <div class="contents_box">
-            <div class="divTable minimalistBlack" style="margin-left: 10%;">
-                <div class="divTableHeading">
-                    <div class="divTableRow">
-                        <div class="divTableHead">제목</div>
-                        <div class="divTableHead"></div> <!-- 공백을 주기 위한 div -->
-                        <div class="divTableHead">조회수</div>
-                        <div class="divTableHead"></div> <!-- 공백을 주기 위한 div -->
-                        <div class="divTableHead">등록일</div>
-                    </div>
-                </div>
-                <div class="divTableBody">
-                    <div class="divTableRow" th:each="dto:${rList}">
-                        <div class="divTableCell hover"th:attr="onclick='doDetail(\'' + ${dto.noticeSeq} + '\')'">[[${dto.title}]]</div>
-                        <div class="divTableCell hover"></div> <!-- 공백을 주기 위한 div -->
-                        <div class="divTableCell hover">[[${dto.readCnt}]]</div>
-                        <div class="divTableCell hover"></div> <!-- 공백을 주기 위한 div -->
-                        <div class="divTableCell hover">[[${dto.regDt}]]</div>
-                    </div>
-                </div>
+        <!--        <div class="contents_box">-->
+        <div class="community-table">
+            <div class="table-header">
+                <div>제목</div>
+                <div></div> <!-- 공백을 주기 위한 div -->
+                <div>조회수</div>
+                <div></div> <!-- 공백을 주기 위한 div -->
+                <div>등록일</div>
             </div>
-            <div class="find-btn">
-                    <button class="btn" id="btnWrite" type="button">글쓰기</button>
+
+            <div class="table-row" th:each="dto:${rList}">
+                <div class="table-row">
+                    <div th:attr="onclick='doDetail(\'' + ${dto.noticeSeq} + '\')'">[[${dto.title}]]</div>
+                    <div></div> <!-- 공백을 주기 위한 div -->
+                    <div>[[${dto.readCnt}]]</div>
+                    <div></div> <!-- 공백을 주기 위한 div -->
+                    <div>[[${dto.regDt}]]</div>
+                </div>
             </div>
         </div>
+        <!--        </div>-->
 
         <!-- 페이지네이션 영역-->
         <div style="display: flex">
@@ -181,8 +267,10 @@
                         <a class="page-link" th:href="@{/notice/noticeList(page=${currentPage - 1})}">&lt;</a>
                     </li>
                     <!-- 현재 페이지 주변에 페이지 번호 링크 표시 -->
-                    <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" th:class="${pageNumber == currentPage ? 'active' : ''}">
-                        <a class="page-link" th:href="@{/notice/noticeList(page=${pageNumber})}" th:text="${pageNumber}"></a>
+                    <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, totalPages)}"
+                        th:class="${pageNumber == currentPage ? 'active' : ''}">
+                        <a class="page-link" th:href="@{/notice/noticeList(page=${pageNumber})}"
+                           th:text="${pageNumber}"></a>
                     </li>
                     <!-- 다음 페이지로 이동하는 링크 -->
                     <li class="page-item" th:if="${currentPage < totalPages}">
@@ -193,6 +281,9 @@
                     </li>
                 </ul>
             </div>
+        </div>
+        <div class="find-btn">
+            <button class="btn" id="btnWrite" type="button">글쓰기</button>
         </div>
     </section>
 
