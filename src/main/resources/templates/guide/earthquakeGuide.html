@@ -120,6 +120,21 @@
             font-weight: bold;
         }
 
+        .youtube {
+            position: relative;
+            max-width: 100%;
+            padding-bottom: 56.25%;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        .youtube iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
     </style>
 
 
@@ -166,13 +181,15 @@
 
         <th:block th:replace="guideNavbar"></th:block>
 
+        <div class="youtube">
         <iframe width="750" height="450" src="https://www.youtube.com/embed/pp5dZguIVj8?si=yQm5P-6tr7y8qIRO"
                 title="YouTube video player" frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen style="margin: 0 16%;"></iframe>
+                allowfullscreen=""></iframe>
+        </div>
 
         <div class="detail">
-            <h3 class="title_02">지진이 발생하면 이렇게 대피합니다.</h3>
+            <h3 class="title_01 title_02">지진이 발생하면 이렇게 대피합니다.</h3>
             <p>
                 <strong class="level4_title">1. 지진으로 흔들릴 때는?</strong>
                 ∙ 지진으로 흔들리는 동안은 탁자 아래로 들어가 몸을 보호하고, 탁자 다리를 꼭 잡습니다.
@@ -200,7 +217,7 @@
                 ∙ 라디오나 공공기관의 안내 방송 등 올바른 정보에 따라 행동합니다.
             </p>
 
-            <h3 class="title_02">장소에 따라 이렇게 행동합니다.</h3>
+            <h3 class="title_01 title_02">장소에 따라 이렇게 행동합니다.</h3>
             <p>
                 <strong class="level4_title">1. 집안에 있을 경우</strong>
                 ∙ 탁자 아래로 들어가 몸을 보호합니다.
@@ -250,7 +267,7 @@
                 ∙ 해안에서 지진해일 특보가 발령되면 높은 곳으로 이동합니다.
             </p>
 
-            <h3 class="title_02">몸이 불편하신 분은 이렇게 행동합니다.</h3>
+            <h3 class="title_01 title_02">몸이 불편하신 분은 이렇게 행동합니다.</h3>
             <p>
                 <strong class="level4_title">1. 시력이 좋지 않거나 시각장애가 있는 경우</strong>
                 ∙ 우선은 라디오나 텔레비전 등으로 상황 파악을 합니다.
@@ -278,7 +295,7 @@
                 <br/>∙ 혼란스러워 스스로 결정하지 못할 때에는 주위사람에게 도움을 요청합니다.
             </p>
 
-            <h3 class="title_02">어린이와 함께 있을 때에는 이렇게 행동합니다.</h3>
+            <h3 class="title_01 title_02">어린이와 함께 있을 때에는 이렇게 행동합니다.</h3>
             <p>
                 <strong class="level4_title">1. 유모차 보다는 아기띠를 사용합니다.</strong>
                 ∙ 영유아의 경우 대피 시 유모차 사용이 어렵기 때문에 평소에 업는 띠를 준비해 둡니다. 대피 시 아기는 띠를 이용해 안고 손을 자유롭게 해 아기와 자신의 신체를 보호합니다.

@@ -90,35 +90,68 @@
             line-height: 35px;
         }
 
-        ul, li {
-            list-style-type: none;
-        }
-
-        ul.tablewrap {
-            overflow: hidden;
-        }
-
-        ul.tablewrap li {
-            float: left;
+        .table {
+            height: auto;
+            width: 100%;
+            flex-wrap: wrap;
             border-left: 1px solid #dddddd;
+            border-right: 1px solid #dddddd;
             border-top: 1px solid #dddddd;
             border-bottom: 1px solid #dddddd;
+            box-sizing: border-box;
+            text-align: center;
+            float: none;
+            margin: 0;
+            padding: 3px;
         }
 
-        ul.tablewrap li p:first-child {
-            height: 57px;
-            background-color: #f7f9fa;
-            line-height: 57px;
-            text-align: center;
-            font-size: 17px;
-            color: #000000;
-            font-weight: 700;
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 0;
+        }
+
+
+        ul, li {
+            list-style-type: none;
         }
 
         h3 {
             display: block;
             font-weight: bold;
         }
+
+        .youtube {
+            position: relative;
+            max-width: 100%;
+            padding-bottom: 56.25%;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        .youtube iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        @media screen and (min-width: 1200px) {
+            .table {
+                height: auto;
+                width: 40%;
+                float: left;
+            }
+        }
+        @media screen and (min-width: 1200px) {
+            .table {
+                width: 31%; /* Adjust the width based on your preference */
+                /*margin-right: 2%; !* Add some margin between the boxes *!*/
+            }
+        }
+
+
 
     </style>
 
@@ -166,10 +199,12 @@
 
         <th:block th:replace="guideNavbar"></th:block>
 
+        <div class="youtube">
         <iframe width="750" height="450" src="https://www.youtube.com/embed/XS6DvHI7ZYU?si=Vustb__78Dm_GP8_"
                 title="YouTube video player" frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen style="margin: 0 16%;"></iframe>
+                allowfullscreen></iframe>
+        </div>
 
         <div class="point">
             <h3 class="title_02">핵심 행동요령</h3>
@@ -211,77 +246,67 @@
 
         <div class="section02">
             <h3 class="title_01">주요기관 연락처</h3>
-            <ul class="tablewrap" style="padding-left: 0;font-size: 11pt;">
-                <li style="height: 270px;">
-                    <p>위기상황, 긴급상황 시 신고전화</p>
-                    <p style="padding-left: 10px;padding-right: 10px;margin-top: 5%;">
+            <ul class="tablewrap">
+                <li class="table">
+                    <p style="height: auto; background: #f7f9fa; line-height: 57px; font-size: 17px; font-weight: 700; margin: 0">위기상황, 긴급상황 시 신고전화</p>
+                    <p>
                         ∙ 재난신고 119, 범죄신고 112, 민원 상담 110<br>
                         ∙ 행정안전부 중앙재난안전상황실 044)205-1541~3
                     </p>
                 </li>
-                <li style="height: 270px;">
-                    <p style="padding-left: 10px; padding-right: 10px;">
+                <li class="table">
+                    <p  style="height: auto; background: #f7f9fa; line-height: 57px; font-size: 17px; font-weight: 700; margin: 0">
                         행정안전부 국민행동요령, 임시주거실 등 안내</p>
-                    <p style="padding-left: 10px;padding-right: 13px;margin-top: 4%;">
+                    <p>
                         ∙ 행정안전부 홈페이지
-                        <a href="http://www.mois.go.kr" target="_blank" title="새창열기" tabindex="0"
-                           style="padding-left: 10px; color: black;">http://www.mois.go.kr</a>
+                        <a href="http://www.mois.go.kr" target="_blank" title="새창열기" tabindex="0">http://www.mois.go.kr</a>
                         <br>
                         ∙ 행정안전부 국민재난안전포털
-                        <a href="http://www.safekorea.go.kr" target="_blank" title="새창열기" tabindex="0"
-                           style="padding-left: 10px; color: black;">http://www.safekorea.go.kr</a>
+                        <a href="http://www.safekorea.go.kr" target="_blank" title="새창열기" tabindex="0">http://www.safekorea.go.kr</a>
                         <br>
                         ∙ 스마트폰 어플리케이션 ‘안전디딤돌’
                     </p>
                 </li>
-                <li style="height: 270px;border-right: 1px solid #dddddd;">
-                    <p>유관기관 연락처 및 홈페이지</p>
-                    <p style="padding-left: 10px;padding-right: 13px;">
+                <li class="table">
+                    <p style="margin-top: 10px; height: auto; background: #f7f9fa; line-height: 57px; font-size: 17px; font-weight: 700; margin: 0">유관기관 연락처 및 홈페이지</p>
+                    <p>
                         ∙ 행정안전부 044)205-6366
-                        <a href="http://www.mois.go.kr" target="_blank" title="새창열기" tabindex="0"
-                           style="padding-left: 10px; color: black;">
+                        <a href="http://www.mois.go.kr" target="_blank" title="새창열기" tabindex="0">
                             http://www.mois.go.kr
                         </a>
                         <br>
                         ∙ 기상청 02)2181-0503
-                        <a href="http://www.kma.go.kr" target="_blank" title="새창열기" tabindex="0"
-                           style="padding-left: 10px; color: black;">
+                        <a href="http://www.kma.go.kr" target="_blank" title="새창열기" tabindex="0">
                             http://www.kma.go.kr
                         </a>
                         <br>
                         ∙ 고용노동부 044)202-8972
-                        <a href="http://www.moel.go.kr" target="_blank" title="새창열기" tabindex="0"
-                           style="padding-left: 10px; color: black;">
+                        <a href="http://www.moel.go.kr" target="_blank" title="새창열기" tabindex="0">
                             http://www.moel.go.kr
                         </a>
                         <br>
                         ∙ 보건복지부 044)202-2652
-                        <a href="http://www.mohw.go.kr" target="_blank" title="새창열기" tabindex="0"
-                           style="padding-left: 10px; color: black;">
+                        <a href="http://www.mohw.go.kr" target="_blank" title="새창열기" tabindex="0">
                             http://www.mohw.go.kr
                         </a>
                         <br>
                         ∙ 농림축산식품부 044)201-1474
-                        <a href="http://www.mafra.go.kr" target="_blank" title="새창열기" tabindex="0"
-                           style="padding-left: 10px; color: black;">
+                        <a href="http://www.mafra.go.kr" target="_blank" title="새창열기" tabindex="0">
                             http://www.mafra.go.kr
                         </a>
                         <br>
                         ∙ 농촌진흥청 1544-8572
-                        <a href="http://www.rda.go.kr" target="_blank" title="새창열기" tabindex="0"
-                           style="padding-left: 10px; color: black;">
+                        <a href="http://www.rda.go.kr" target="_blank" title="새창열기" tabindex="0">
                             http://www.rda.go.kr
                         </a>
                         <br>
                         ∙ 해양수산부 044)200-5617
-                        <a href="http://www.mof.go.kr" target="_blank" title="새창열기" tabindex="0"
-                           style="padding-left: 10px; color: black;">
+                        <a href="http://www.mof.go.kr" target="_blank" title="새창열기" tabindex="0">
                             http://www.mof.go.kr
                         </a>
                         <br>
                         ∙ 교육부 044)203-6355
-                        <a href="http://www.moe.go.kr" target="_blank" title="새창열기" tabindex="0"
-                           style="padding-left: 10px; color: black;">
+                        <a href="http://www.moe.go.kr" target="_blank" title="새창열기" tabindex="0">
                             http://www.moe.go.kr</a><br>
                     </p>
                 </li>
