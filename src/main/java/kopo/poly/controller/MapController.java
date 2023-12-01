@@ -1,17 +1,20 @@
 package kopo.poly.controller;
 
 import com.google.gson.Gson;
-import kopo.poly.dto.MapApiDTO;
-import kopo.poly.service.IMapService;
+import kopo.poly.dto.ShelterDTO;
+import kopo.poly.service.IShelterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,7 +22,7 @@ import java.util.List;
 @RequestMapping(value = "map")
 public class MapController {
 
-    private final IMapService mapService;
+    private final IShelterService shelterService;
 
     @GetMapping(value = "/getCurrentPosition")
     public String getCurrentPosition() {
@@ -39,53 +42,33 @@ public class MapController {
         return "watchPosition";
     }
 
+    @GetMapping(value = "insertShelter")
+    @ResponseBody
+    public String insertShelter() throws Exception {
 
-    @GetMapping(value = "shelterMap")
-    // @ResponseBody
-    public String shelterMap(ModelMap model)throws Exception {
+        log.info(this.getClass().getName() + ".insertShelter 시작!");
+        log.info(this.getClass().getName() + ".insertShelter 끝!");
 
-        log.info("api 파싱 시작!");
+       shelterService.insertShelter();
 
-        List<MapApiDTO> resultList = mapService.shelterMap();
-
-        log.info("api 파싱 끝!");
-
-        // 대피소 정보를 JavaScript 객체로 변환하여 리스트에 추가
-        List<String> positions = new ArrayList<>();
-
-        for (MapApiDTO rDTO : resultList) {
-
-            String position = "{title: " + rDTO.getShel_nm() + ", lat: " + rDTO.getLat() + ", lon: " + rDTO.getLon() + "}";
-            positions.add(position);
-
-            log.info("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
-            log.info("대피소 장소명 : " + rDTO.getShel_nm());
-            log.info("위도 : " + rDTO.getLat());
-            log.info("경도 : " + rDTO.getLon());
-        }
-
-        log.info("positions : " + positions);
-
-        // positions 리스트를 JSON 형태로 변환하여 모델에 추가
-        Gson gson = new Gson();
-        String jsonPositions = gson.toJson(positions);
-
-        log.info("jsonPositions : " + jsonPositions);
-
-        model.addAttribute("positions", jsonPositions);
-
-        // return resultList;
-         return "/map/shelterMap";
-        // return "/map/shelterMap_test";
+       return "끝났당";
     }
 
-    @GetMapping(value = "")
-    public String map() {
+    @GetMapping(value = "shelter")
+    public String shelter(ModelMap model, HttpServletRequest request) throws Exception {
 
-        log.info(this.getClass().getName() + ".map Start!");
-        log.info(this.getClass().getName() + ".map End!");
+        log.info(this.getClass().getName() + ".shelter 시작!");
 
-        return "/map/map";
+        //ShelterDTO rDTO = shelterService.getShelter();
+
+        List<ShelterDTO> rList = Optional.ofNullable(shelterService.getShelterList()).orElseGet(ArrayList::new);
+
+        //model.addAttribute("rDTO", rDTO);
+        model.addAttribute("rList", rList);
+
+        log.info(this.getClass().getName() + ".shelter 끝!");
+
+        return "/map/shelterMap";
     }
 
 }
