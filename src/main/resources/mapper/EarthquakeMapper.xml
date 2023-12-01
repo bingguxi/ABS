@@ -3,26 +3,6 @@
 
 <mapper namespace="kopo.poly.persistance.mapper.IEarthquakeMapper">
 
-    <!-- 수집된 실시간 지진 정보 DB에 등록하기 -->
-    <insert id="insertEarthquakeLiveInfo" parameterType="EarthquakeLiveDTO">
-        INSERT INTO EARTHQUAKE_LIVE
-        (EARTHQUAKE_LIVE_SEQ, TP, TM_FC, SEQ, TM_EQK_MSC, MT, LAT, LON, LOC, SCALE, REM, COR)
-        VALUES ((SELECT COALESCE(MAX(E.EARTHQUAKE_LIVE_SEQ),0)+1 FROM EARTHQUAKE_LIVE E),
-                #{tp}, #{tmFc}, #{seq}, #{tmEqkMsc},  #{mt}, #{lat}, #{lon}, #{loc}, #{scale}, #{rem}, #{cor})
-    </insert>
-
-    <!-- 수집된 실시간 지진 정보 DB에서 조회하기 -->
-    <select id="getEarthquakeLiveInfo" parameterType="EarthquakeLiveDTO" resultType="EarthquakeLiveDTO">
-        SELECT EARTHQUAKE_LIVE_SEQ, TP, TM_FC, SEQ, TM_EQK_MSC, MT, LAT, LON, LOC, SCALE, REM, COR
-        FROM EARTHQUAKE_LIVE
-    </select>
-
-    <!-- 수집된 실시간 지진 정보 DB에서 삭제하기 -->
-    <delete id="deleteEarthquakeLiveInfo" parameterType="EarthquakeLiveDTO">
-        DELETE
-        FROM EARTHQUAKE_LIVE
-    </delete>
-
     <!-- 수집된 지진 과거 정보 DB에 등록하기 -->
     <insert id="insertEarthquakeInfo" parameterType="EarthquakeResultDTO">
         INSERT INTO EARTHQUAKE
@@ -49,6 +29,13 @@
 --                         DATE_FORMAT(N.REG_DT, '%Y/%m/%d %H:%i:%s') AS REG_DT
         FROM EARTHQUAKE E
         ORDER BY E.EARTHQUAKE_SEQ DESC;
+    </select>
+
+    <!-- 수집된 실시간 지진 정보 DB에서 조회하기 -->
+    <select id="getEarthquakeLiveInfo" parameterType="EarthquakeLiveDTO" resultType="EarthquakeLiveDTO">
+        SELECT EARTHQUAKE_LIVE_SEQ, CNT, FC_TP, IMG, IN_T, LAT, LOC, LON, MT, REM, STN_ID, TM_EQK,TM_FC,
+               TM_SEQ, DEP
+        FROM EARTHQUAKE_LIVE
     </select>
 
 </mapper>

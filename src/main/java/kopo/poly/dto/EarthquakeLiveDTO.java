@@ -23,4 +23,5 @@ public class EarthquakeLiveDTO {
     private String scale; // 진도
     private String rem; // 참고사항
     private String cor; // 수정사항
+
 }

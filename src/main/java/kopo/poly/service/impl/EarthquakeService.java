@@ -2,21 +2,13 @@ package kopo.poly.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import kopo.poly.dto.EarthquakeDTO;
 import kopo.poly.dto.EarthquakeLiveDTO;
 import kopo.poly.dto.EarthquakeResultDTO;
-import kopo.poly.dto.TyphoonLiveDTO;
 import kopo.poly.persistance.mapper.IEarthquakeMapper;
 import kopo.poly.service.IEarthquakeService;
-import kopo.poly.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -36,129 +28,6 @@ public class EarthquakeService implements IEarthquakeService {
 
     @Value("${bhg.api.key}")
     private String apiKey;
-
-    /**
-     * 지진 실시간 API 크롤링해서 정보 가져오기
-     * DB에 담아두었다가 새로운 요청이 오면 비우고 다시 DB에 담아서 서비스
-     */
-    @Override
-    public List<EarthquakeLiveDTO> getEarthquakeLiveInfo() throws Exception {
-
-        log.info(this.getClass().getName() + ".getEarthquakeLiveInfo Start!!");
-
-        log.info("DB 삭제 시작");
-
-        earthquakeMapper.deleteEarthquakeLiveInfo();
-
-
-        // 현재 시간을 가져옵니다.
-        Date currentDate = new Date();
-
-        // 날짜 및 시간 형식을 설정합니다.
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
-
-        // 현재 시간을 원하는 형식으로 변환합니다.
-        String formattedDate = dateFormat.format(currentDate);
-
-        log.info("현재 시각 : " + formattedDate);
-
-        // 변환된 날짜와 시간을 사용하여 URL을 생성합니다.
-        String url = "https://apihub.kma.go.kr/api/typ01/url/eqk_now.php?tm=" + formattedDate /*"201307231215"*/ + "&disp=1&help=0&authKey=" + apiKey;
-
-        // Jsoup 라이브러리를 통해 사이트 접속되면, 그 사이트의 전체 HTML소스 저장할 변수
-        Document doc = null;
-
-        // 사이트 접속
-        doc = Jsoup.connect(url).get();
-
-        log.info("doc : " + doc);
-
-        Elements element = doc.select("body");
-
-        log.info("element : " + element);
-
-        // 지진 정보 가져오기
-        Iterator<Element> earthquake = element.select("body").iterator();
-
-        EarthquakeLiveDTO pDTO = null;
-
-
-        log.info("earthquake : " + earthquake);
-
-        List<EarthquakeLiveDTO> pList = new ArrayList<>();
-
-        int idx = 0;
-
-        // pre 태그에서 추출한 텍스트를 처리하고 EarthquakeLiveDTO 객체에 값을 담아 리스트에 추가하는 로직 추가
-        while (earthquake.hasNext()) {
-
-            if (idx++ > 20) {
-                break;
-            }
-            pDTO = new EarthquakeLiveDTO();
-
-            log.info("pDTO : " + pDTO);
-
-            // pre 태그에서 추출한 텍스트 한 줄씩 읽어오기
-            String line = CmmUtil.nvl(earthquake.next().text());
-
-            log.info("line : " + line);
-
-            log.info("=의 위치 : " + line.indexOf("="));
-            log.info("\n의 위치 : " + line.indexOf("\\\n,"));
-
-//            line = line.replaceAll("#7777END", "");
-            line = line.substring(63);
-
-            log.info("substring 결과 : " + line);
-
-            String[] lines = line.split("="); // 난 한줄씩
-            String[] earthquakeInfoArray = line.split(",");
-
-
-            log.info("lines : " + lines.length);
-            log.info("earthquakeInfoArray : " + earthquakeInfoArray.length);
-
-
-            // 3번째 줄부터 출력하기
-            for (int i = 0; i < lines.length && (11 + 11 * i) < earthquakeInfoArray.length; i++) {
-                pDTO.setTp(CmmUtil.nvl(earthquakeInfoArray[0 + 11 * i].replaceAll("= ", "")));
-                pDTO.setTmFc(CmmUtil.nvl(earthquakeInfoArray[1 + 11 * i]));
-                pDTO.setSeq(CmmUtil.nvl(earthquakeInfoArray[2 + 11 * i]));
-                pDTO.setTmEqkMsc(CmmUtil.nvl(earthquakeInfoArray[3 + 11 * i]));
-                pDTO.setMt(CmmUtil.nvl(earthquakeInfoArray[4 + 11 * i]));
-                pDTO.setLat(CmmUtil.nvl(earthquakeInfoArray[5 + 11 * i]));
-                pDTO.setLon(CmmUtil.nvl(earthquakeInfoArray[6 + 11 * i]));
-                pDTO.setLoc(CmmUtil.nvl(earthquakeInfoArray[7 + 11 * i]));
-                pDTO.setScale(CmmUtil.nvl(earthquakeInfoArray[8 + 11 * i]));
-                pDTO.setRem(CmmUtil.nvl(earthquakeInfoArray[9 + 11 * i].replaceAll("\\\\n", "")));
-                pDTO.setCor(CmmUtil.nvl(earthquakeInfoArray[10 + 11 * i]));
-
-                log.info("-----------------------------------");
-                log.info("TP : " + pDTO.getTp());
-                log.info("TM_FC : " + pDTO.getTmFc());
-                log.info("SEQ : " + pDTO.getSeq());
-                log.info("TmEqkMsk : " + pDTO.getTmEqkMsc());
-                log.info("MT : " + pDTO.getMt());
-                log.info("LAT : " + pDTO.getLat());
-                log.info("LON : " + pDTO.getLon());
-                log.info("LOC : " + pDTO.getLoc());
-                log.info("SCALE : " + pDTO.getScale());
-                log.info("REM : " + pDTO.getRem());
-                log.info("COR : " + pDTO.getCor());
-
-
-                earthquakeMapper.insertEarthquakeLiveInfo(pDTO);
-
-                pList.add(pDTO);
-            }
-        }
-        List<EarthquakeLiveDTO> rList = earthquakeMapper.getEarthquakeLiveInfo();
-
-        log.info(this.getClass().getName() + ".getEarthquakeLiveInfo End!");
-
-        return rList;
-    }
 
     /**
      * 지진 과거 API 접근을 위한 URL 정보 생성 로직
@@ -315,5 +184,25 @@ public class EarthquakeService implements IEarthquakeService {
         } catch (Exception e) {
             log.error("Error in processEarthquakeData: " + e.getMessage(), e);
         }
+    }
+
+    // 과거 지진 정보 조회하기
+    @Override
+    public List<EarthquakeResultDTO> getEarthquakeList() throws Exception {
+
+        log.info(this.getClass().getName() + ".getEarthquakeList Start!");
+        log.info(this.getClass().getName() + ".getEarthquakeList End!");
+
+        return earthquakeMapper.getEarthquakeList();
+    }
+
+    // 실시간 지진 정보 조회하기
+    @Override
+    public List<EarthquakeLiveDTO> getEarthquakeLiveInfo() throws Exception {
+
+        log.info(this.getClass().getName() + ".getEarthquakeLiveInfo Start!");
+        log.info(this.getClass().getName() + ".getEarthquakeLiveInfo End!");
+
+        return earthquakeMapper.getEarthquakeLiveInfo();
     }
 }

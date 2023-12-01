@@ -1,6 +1,5 @@
 package kopo.poly.service;
 
-import kopo.poly.dto.MapApiDTO;
 import kopo.poly.dto.SnowDTO;
 
 import java.util.List;
