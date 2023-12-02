@@ -11,9 +11,21 @@
         VALUES (#{createDate}, #{locationId}, #{locationName}, #{md101Sn}, #{msg}, #{sendPlatform})
     </insert>
 
-    <select id="getDisasterMsg" parameterType="DisasterMsgDTO" resultType="DisasterMsgResultDTO">
+    <select id="getDisasterMsg" parameterType="DisasterMsgResultDTO" resultType="DisasterMsgResultDTO">
         SELECT CREATE_DATE, LOCATION_ID, LOCATION_NAME, MD101_SN, MSG, SEND_PLATFORM
         FROM DISASTER_MSG
+    </select>
+
+    <select id="getDisasterMsgList" parameterType="DisasterMsgResultDTO" resultType="DisasterMsgResultDTO">
+        SELECT CREATE_DATE, LOCATION_ID, LOCATION_NAME, MD101_SN, MSG, SEND_PLATFORM
+        FROM DISASTER_MSG
+    </select>
+
+    <!-- 게시판 상세보기 임시 쿼리 -->
+    <select id="getDisasterMsgInfo" resultType="DisasterMsgResultDTO">
+        SELECT N.MD101_SN, CREATE_DATE, N.LOCATION_ID, N.LOCATION_NAME, MSG, SEND_PLATFORM
+        FROM DISASTER_MSG N
+        WHERE N.MD101_SN = #{md101Sn}
     </select>
 
     <delete id="deleteDisasterMsgInfo" parameterType="DisasterMsgResultDTO">

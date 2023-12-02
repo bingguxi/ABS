@@ -1,8 +1,10 @@
 package kopo.poly.service.impl;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kopo.poly.dto.CctvResultDTO;
 import kopo.poly.dto.DisasterMsgResultDTO;
+import kopo.poly.dto.NoticeDTO;
 import kopo.poly.persistance.mapper.ICctvMapper;
 import kopo.poly.persistance.mapper.IDisasterMsgMapper;
 import kopo.poly.service.IDisasterMsgService;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -28,7 +31,6 @@ public class DisasterMsgService implements IDisasterMsgService {
 
     @Override
     public List<DisasterMsgResultDTO> getDisasterMsg() throws Exception {
-
         log.info(this.getClass().getName() + ".getDisasterMsg Start!!");
 
         log.info("DB 삭제 시작");
@@ -48,33 +50,36 @@ public class DisasterMsgService implements IDisasterMsgService {
 
         log.info("json : " + json);
 
-        Map<String, Object> rMap = new ObjectMapper().readValue(json, LinkedHashMap.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = objectMapper.readTree(json);
 
         // OpenAPI로부터 필요한 정보만 가져와서, 처리하기 쉬운 JSON 구조로 변경에 활용
         List<DisasterMsgResultDTO> pList = new LinkedList<>();
 
-// 수정: "DisasterMsg" 내의 "row"에 접근
-        List<Map<String, Object>> dataList = (List<Map<String, Object>>) rMap.get("DisasterMsg");
-        if (dataList != null && !dataList.isEmpty()) {
-            for (Map<String, Object> dataMap : dataList) {
+        // 수정: "DisasterMsg" 내의 "row"에 접근
+        JsonNode dataList = rootNode.path("DisasterMsg");
+        if (dataList.isArray()) {
+            for (JsonNode dataNode : dataList) {
                 // 수정: "row"에 접근
-                List<Map<String, Object>> rowList = (List<Map<String, Object>>) dataMap.get("row");
-                if (rowList != null && !rowList.isEmpty()) {
-                    for (Map<String, Object> rowMap : rowList) {
+                JsonNode rowList = dataNode.path("row");
+                if (rowList.isArray()) {
+                    for (JsonNode rowNode : rowList) {
                         DisasterMsgResultDTO rDTO = new DisasterMsgResultDTO();
 
                         // FIXME api json 키 값은 cctvname (카멜 케이스가 아닌데)
                         //  dto에서는 카멜식임
-                        rDTO.setCreateDate(String.valueOf(rowMap.get("create_date")));
-                        rDTO.setLocationId(String.valueOf(rowMap.get("location_id")));
-                        rDTO.setLocationName((String) rowMap.get("location_name"));
-                        rDTO.setMd101Sn((String) rowMap.get("md101_sn"));
-                        rDTO.setMsg((String) rowMap.get("msg"));
-                        rDTO.setSendPlatform((String) rowMap.get("send_platform"));
+                        rDTO.setCreateDate(rowNode.path("create_date").asText());
+                        rDTO.setLocationId(rowNode.path("location_id").asText());
+                        rDTO.setLocationName(rowNode.path("location_name").asText());
+                        rDTO.setMd101Sn(rowNode.path("md101_sn").asText());
+                        rDTO.setMsg(rowNode.path("msg").asText());
+                        rDTO.setSendPlatform(rowNode.path("send_platform").asText());
 
-                        disasterMsgMapper.insertDisasterMsgInfo(rDTO);
-
-                        pList.add(rDTO);
+                        // '실종', '배회', '파업' 단어가 포함된 경우 데이터를 제외
+                        if (!containsExcludedWords(rDTO.getMsg())) {
+                            disasterMsgMapper.insertDisasterMsgInfo(rDTO);
+                            pList.add(rDTO);
+                        }
                     }
                 }
             }
@@ -86,7 +91,29 @@ public class DisasterMsgService implements IDisasterMsgService {
         return rList;
     }
 
-    // CCTV 정보 가져오기
+    // '실종', '배회', '파업' 단어가 포함되어 있는지 확인하는 메서드
+    private boolean containsExcludedWords(String msg) {
+        // 대소문자를 구분하지 않고 비교
+        String lowerCaseMsg = msg.toLowerCase();
+        return lowerCaseMsg.contains("실종") || lowerCaseMsg.contains("배회") || lowerCaseMsg.contains("파업") || lowerCaseMsg.contains("목격된");
+    }
+
+    @Override
+    public List<DisasterMsgResultDTO> getDisasterMsgList() throws Exception {
+
+        log.info(this.getClass().getName() + ".getDisasterMsgList start!");
+
+        return disasterMsgMapper.getDisasterMsgList();
+    }
+
+    @Transactional
+    @Override
+    public DisasterMsgResultDTO getDisasterMsgInfo(DisasterMsgResultDTO pDTO, boolean type) throws Exception {
+
+        log.info(this.getClass().getName() + ".getDisasterMsgInfo start!");
+
+        return disasterMsgMapper.getDisasterMsgInfo(pDTO);
+    }
 //    @Override
 //    public String getCctvData(double lat, double lng) {
 //        try {
