@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequestMapping(value = "")
@@ -136,4 +135,13 @@ public class MainController {
 //
 //        return "/index";
 //    }
+
+    @GetMapping(value = "/wordCloud")
+    public String wordCloud() {
+
+        log.info(this.getClass().getName() + ".wordCloud Start!");
+        log.info(this.getClass().getName() + ".wordCloud End!");
+
+        return "/index";
+    }
 }
