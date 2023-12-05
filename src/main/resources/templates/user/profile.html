@@ -31,6 +31,7 @@
     <link href="/css/main.css" rel="stylesheet">
     <link href="/css/font.css" rel="stylesheet"/> <!-- 폰트 css 추가 -->
 
+    <link rel="stylesheet" href="/css/styles.css"/>
     <!-- =======================================================
     * Template Name: Logis
     * Updated: Sep 18 2023 with Bootstrap v5.3.2
@@ -72,6 +73,36 @@
         }
 
     </script>
+    <style>
+        .quote {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f6fc;
+        }
+        .form{
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .find-btn {
+            text-align: center;
+        }
+        .btn {
+            border: none;
+            background: rgba(14, 29, 52, 0.8);
+            color: white;
+            margin-top: 10px;
+        }
+        .btn:hover{
+            background: rgba(34, 49, 72, 0.8);
+            color: white;
+        }
+
+    </style>
 
 </head>
 
@@ -85,11 +116,11 @@
 
     <!-- ======= Breadcrumbs ======= -->
     <div class="breadcrumbs">
-        <div class="page-header d-flex align-items-center" style="background-image: url('assets/img/page-header.jpg');">
+        <div class="page-header d-flex align-items-center" style="background-image: url('/img/page-header.jpg');">
             <div class="container position-relative">
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-6 text-center">
-                        <h2>My Page</h2>
+                        <h2>[[${rDTO.userId}]]님</h2>
                     </div>
                 </div>
             </div>
@@ -98,26 +129,26 @@
             <div class="container">
                 <ol>
                     <li><a href="/index">Home</a></li>
-                    <li>My Page</li>
+                    <li>마이페이지</li>
                 </ol>
             </div>
         </nav>
     </div><!-- End Breadcrumbs -->
 
     <!-- ======= Get a Quote Section ======= -->
-    <section id="get-a-quote" class="get-a-quote">
+    <section id="get-a-quote" class="quote">
         <div class="container" data-aos="fade-up">
 
             <div class="row g-0">
 
                 <div class="col-lg-7" style="margin: auto">
-                    <form id="f" class="php-email-form">
+                    <form id="f" class="form">
                         <h2 style="text-align: center; margin-bottom: 13%">마이페이지</h2>
 
                         <div class="row gy-4">
 
                             <div class="col-md-6" style="margin-left: 11%; width: 110px; height: 110px; background-color: lightsteelblue;
-                            border-radius: 10px; margin-right: 14%; background-image: url('/img/cat-2083492_1280.jpg'); background-size: cover;"></div>
+                            border-radius: 10px; margin-right: 20%; background-image: url('/img/cat-2083492_1280.jpg'); background-size: cover;"></div>
                             <!--프로필 사진-->
 
                             <div class="col-md-6" style="margin-left: 10%;"> <!--아이디-->
@@ -141,17 +172,11 @@
                             </div>
 
 
-                            <div class="col-md-12 text-center" style="width: 20%; margin-left: 30%; margin-top: 10%;">
+                            <div class="find-btn">
                                 <a href="/profile/profileModify">
-                                    <button type="button" id="btnModify"
-                                            style="width: 100%; height: 40px; border-radius: 5px;">정보 수정
-                                    </button>
+                                    <button type="button" class="btn" id="btnModify">정보 수정</button>
                                 </a>
-                            </div>
-
-                            <div class="col-md-12 text-center" style="width: 20%; margin-top: 10%;">
-                                <button type="button" id="btnDelete"
-                                        style="width: 100%; height: 40px; border-radius: 5px;">회원 탈퇴
+                                <button class="btn" id="btnDelete">회원 탈퇴
                                 </button>
                             </div>
 

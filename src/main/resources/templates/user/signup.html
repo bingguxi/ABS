@@ -251,6 +251,73 @@
         }
     </script>
 
+    <style>
+        .quote {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f6fc;
+        }
+        .form{
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .find-btn {
+            text-align: center;
+        }
+        .btn {
+            border: none;
+            background: rgba(14, 29, 52, 0.8);
+            color: white;
+            margin-top: 10px;
+        }
+
+        .btn:hover{
+            background: rgba(34, 49, 72, 0.8);
+            color: white;
+        }
+        .bt {
+            width: 20%;
+            border: none;
+            background: rgba(14, 29, 52, 0.8);
+            color: white;
+            border-radius: 8px;
+        }
+        .bt:hover{
+            background: rgba(34, 49, 72, 0.8);
+            color: white;
+        }
+
+
+        @media screen and (max-width: 1200px){
+            .form-control {
+                display: block;
+                width: 100%;
+            }
+            .col-md-7{
+                width: 60%;
+                margin-left: 3%;
+            }
+            .bt {
+                height: 38px;
+                width: 30%;
+            }
+        }
+        @media screen and (max-width: 600px){
+            .bt{
+                font-size: 12px;
+                height: 38px;
+                width: 30%;
+
+            }
+
+        }
+    </style>
+
 </head>
 
 <body>
@@ -276,20 +343,20 @@
             <div class="container">
                 <ol>
                     <li><a href="/index">Home</a></li>
-                    <li>Sign Up</li>
+                    <li>회원가입</li>
                 </ol>
             </div>
         </nav>
     </div><!-- End Breadcrumbs -->
 
     <!-- ======= Get a Quote Section ======= -->
-    <section id="get-a-quote" class="get-a-quote">
+    <section id="get-a-quote" class="quote">
         <div class="container" data-aos="fade-up">
 
             <div class="row g-0">
 
                 <div class="col-lg-7" style="margin: auto">
-                    <form id="f" class="php-email-form">
+                    <form id="f" class="form">
                         <h2 style="text-align: center; margin-bottom: 5%">회원가입</h2>
 
                         <div class="row gy-4">
@@ -298,7 +365,7 @@
                                 <input type="text" name="userId" class="form-control" placeholder="아이디">
                             </div>
 
-                            <button type="button" id="btnUserId" style="width: 20%; border: none;">중복확인</button>
+                            <button type="button" id="btnUserId" class="bt">중복확인</button>
 
                             <div class="col-md-7" style="margin-left: 10%;"> <!--비밀번호-->
                                 <input type="password" name="password" class="form-control" placeholder="비밀번호">
@@ -316,7 +383,7 @@
                                 <input type="email" name="email" class="form-control" placeholder="이메일">
                             </div>
 
-                            <button type="button" id="btnEmail" style="width: 20%; border: none;">인증번호 발송</button>
+                            <button type="button" id="btnEmail" class="bt">인증번호 발송</button>
 
                             <div class="col-md-7" style="margin-left: 10%;"> <!--이메일 인증번호-->
                                 <input type="text" name="authNumber" class="form-control" placeholder="이메일 인증번호">
@@ -326,14 +393,14 @@
                                 <input type="text" name="addr1" class="form-control" placeholder="주소">
                             </div>
 
-                            <button type="button" id="btnAddr" style="width: 20%; border: none;">우편번호 찾기</button>
+                            <button type="button" id="btnAddr" class="bt">우편번호 찾기</button>
 
                             <div class="col-md-7" style="margin-left: 10%;"> <!--상세주소-->
                                 <input type="text" name="addr2" class="form-control" placeholder="상세주소">
                             </div>
 
-                            <div class="col-md-12 text-center">
-                                <button type="button" id="btnSignUp" style="width: 30%; height: 40px; border-radius: 10px; border: none; background-color: lightsteelblue;">회원가입</button>
+                            <div class="find-btn">
+                                <button type="button" id="btnSignUp" class="btn">회원가입</button>
                             </div>
 
                         </div>
