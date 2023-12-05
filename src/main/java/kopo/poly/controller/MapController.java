@@ -1,6 +1,5 @@
 package kopo.poly.controller;
 
-import com.google.gson.Gson;
 import kopo.poly.dto.ShelterDTO;
 import kopo.poly.service.IShelterService;
 import lombok.RequiredArgsConstructor;
@@ -49,9 +48,9 @@ public class MapController {
         log.info(this.getClass().getName() + ".insertShelter 시작!");
         log.info(this.getClass().getName() + ".insertShelter 끝!");
 
-       shelterService.insertShelter();
+        shelterService.insertShelter();
 
-       return "끝났당";
+        return "끝났당";
     }
 
     @GetMapping(value = "shelter")
@@ -65,6 +64,8 @@ public class MapController {
 
         //model.addAttribute("rDTO", rDTO);
         model.addAttribute("rList", rList);
+
+//        log.info("rList : " + rList);
 
         log.info(this.getClass().getName() + ".shelter 끝!");
 
