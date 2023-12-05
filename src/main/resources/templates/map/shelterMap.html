@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -15,8 +14,8 @@
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&amp;family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;display=swap"
           rel="stylesheet">
 
     <!-- Vendor CSS Files -->
@@ -29,36 +28,15 @@
 
     <!-- Template Main CSS File -->
     <link href="/css/main.css" rel="stylesheet">
-    <link href="/css/font.css" rel="stylesheet"/> <!-- 폰트 css 추가 -->
+    <link href="/css/font.css" rel="stylesheet"> <!-- 폰트 css 추가 -->
 
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
 
-    <!-- 구글맵 API -->
-    <script async
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCX6ev0SYMBZmLFpIzURRWZGjYIm2Qeo0o&callback=initMap&libraries=maps,marker&v=beta">
-    </script>
+    <!-- 카카오 맵 API -->
+    <!-- services와 clusterer, drawing 라이브러리 불러오기 -->
+    <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=07567cd65e7cb3614b410e53e82ae48b&libraries=services,clusterer,drawing"></script>
 
-    <script>
-        function initMap() {
-            console.log('Maps JavaScript API loaded.');
-
-            const advancedMarkers = document.querySelectorAll("#marker-click-event-example gmp-advanced-marker");
-            for (const advancedMarker of advancedMarkers) {
-                console.log(advancedMarker)
-                customElements.whenDefined(advancedMarker.localName).then(async () => {
-                    advancedMarker.addEventListener('gmp-click', async () => {
-                        const {InfoWindow} = await google.maps.importLibrary("maps");
-                        const infoWindow = new InfoWindow({
-                            content: advancedMarker.title
-                        });
-                        infoWindow.open({
-                            anchor: advancedMarker
-                        });
-                    });
-                });
-            }
-        }
-    </script>
 
     <!-- =======================================================
     * Template Name: Logis
@@ -69,7 +47,7 @@
     ======================================================== -->
 
 </head>
-
+<!--<body data-aos-easing="ease-in-out" data-aos-duration="1000" data-aos-delay="0">-->
 <body>
 
 <!-- ======= Header ======= -->
@@ -103,67 +81,159 @@
     <section id="contact" class="contact">
         <div class="container" data-aos="fade-up">
 
-            <div id="mapwrap">
-                <!-- 지도가 표시될 div -->
+            <div id="map" style="width: 80%; height: 500px;"></div>
 
-                <gmp-map id="marker-click-event-example" center="36,127" zoom="7" map-id="DEMO_MAP_ID" style="height: 700px;">
-                    <gmp-advanced-marker th:each="dto,iterStat : ${rList}"
-                                         th:attr="position=${dto.xcord + ',' + dto.ycord}"
-                                         th:title="${dto.getVtAcmdfcltyNm}"
-                                         th:id="${'marker-' + iterStat.count}"></gmp-advanced-marker>
-                </gmp-map>
+            <script th:inline="javascript">
 
-                <!--          <gmp-advanced-marker th:attr="position=${dto.xcord + ',' + dto.ycord}, title=${dto.vt_acmdfclty_nm}"></gmp-advanced-marker>-->
-                <!--        <gmp-advanced-marker position="37.4220656,-122.0840897" title="Mountain View, CA"></gmp-advanced-marker>-->
-                <!--        <gmp-advanced-marker position="47.648994,-122.3503845" title="Seattle, WA"></gmp-advanced-marker>-->
+                /*
+                지도 생성하기
+                 */
+                var mapContainer = document.getElementById('map'); // 지도를 표시할 div
+                var mapOption = {
+                    center: new kakao.maps.LatLng(36.5927, 127.5533), // 지도의 중심좌표. 충주로 함!
+                    level: 13 // 지도의 확대 레벨. 3에서 13으로 수정함!
+                };
 
+                var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
-                <!--<script th:inline="javascript">
-                  var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-                          mapOption = {
-                            center: new kakao.maps.LatLng(36.5927, 127.5533), // 지도의 중심좌표. 충주로 함!
-                            level: 13 // 지도의 확대 레벨. 3에서 13으로 수정함!
-                          };
+                // 대피소 마커 이미지의 이미지 주소입니다
+                var imageSrc = "/img/shelter.png";
+                var imageSize = new kakao.maps.Size(40, 43);
+                var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
-                  var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+                console.log("마커 이미지 생성 완")
 
-                  // 컨트롤러에서 전달한 JSON 형태의 데이터를 파싱하여 사용합니다
-                  // var positions = [[${positions}]];
-                  console.log([[${positions}]]);
-                  // let positions = JSON.parse(positions.replace(/&quot;/g, '"'))
-                  let positions = JSON.parse([[${positions}]].replace(/&quot;/g, '"'))
-                  console.log(positions);
-                  console.log("typeof positions : " + typeof positions);
+                // InfoWindow를 단일 개체로 생성합니다
+                var infowindow = new kakao.maps.InfoWindow({
+                    removable: true
+                });
 
-                  for (var i = 0; i < positions.length; i++) {
+                console.log("인포윈도우 생성 완")
 
-                    var line = JSON.stringify(positions[i]).split(",");
-                    console.log("line : " + line);
+                /*
+                마커 클러스터러 생성하기
+                */
+                // 마커 클러스터러를 생성합니다
+                var clusterer = new kakao.maps.MarkerClusterer({
+                    map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+                    averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+                    minLevel: 10, // 클러스터 할 최소 지도 레벨
+                    disableClickZoom: true // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정
+                });
 
-                    var title = line[0].replace("title: ", "").replace(/\{/g, "").slice(1);
-                    console.log("title : " + title);
+                console.log("마커 클러스터러 생성 완")
 
-                    var latlng = new kakao.maps.LatLng(line[1].replace("lat: ", ""), line[2].replace("lon: ", "").slice(0, -2));
-                    console.log("latlng : " + latlng);
+                /*
+                대피소 마커 생성하기
+                 */
+                // 컨트롤러에서 전달한 JSON 형태의 데이터를 파싱하여 사용합니다
+                var rList = /*[[${rList}]]*/ [];
+                // console.log(rList); // 얘 로그 짱 많이 찍혀서 페이지 로딩 시간 길어짐. 신중하게 주석 풀기!!!
 
-                    // 마커 이미지의 이미지 주소입니다
-                    var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-                    var imageSize = new kakao.maps.Size(24, 35);
-                    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+                rList.forEach(function (dto) {
+                    var position = new kakao.maps.LatLng(parseFloat(dto.xcord), parseFloat(dto.ycord));
 
                     // 마커를 생성합니다
                     var marker = new kakao.maps.Marker({
-                      map: map, // 마커를 표시할 지도
-                      position: latlng, // 마커를 표시할 위치
-                      title: title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-                      image: markerImage // 마커 이미지
+                        position: position, // 마커를 표시할 위치
+                        image: markerImage, // 마커 이미지
+                        clickable: true // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
                     });
-                  }
 
-                </script>-->
+                    // 클러스터러에 마커를 추가합니다
+                    clusterer.addMarker(marker);
+
+                    // 마커에 클릭 이벤트를 추가합니다
+                    kakao.maps.event.addListener(marker, 'click', function () {
+
+                        map.setCenter(position);
+
+                        // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
+                        // 인포윈도우 내용을 업데이트하고 지도에 표시합니다
+                        var iwContent = '<div style="padding:5px; font-size: 10pt;">' + dto.vtAcmdfcltyNm + '</div>';
+                        infowindow.setContent(iwContent);
+                        infowindow.open(map, marker);
+
+                    });
+
+                    // 마커에 마우스오버 이벤트를 등록합니다
+                    /*kakao.maps.event.addListener(marker, 'mouseover', function() {
+
+                        // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
+                        // 인포윈도우 내용을 업데이트하고 지도에 표시합니다
+                        var iwContent = '<div style="padding:5px; font-size: 10pt;">' + dto.vtAcmdfcltyNm + '</div>';
+                        infowindow.setContent(iwContent);
+                        infowindow.open(map, marker);
+
+                    });*/
+
+                    // 마커에 마우스아웃 이벤트를 등록합니다
+                    /*kakao.maps.event.addListener(marker, 'mouseout', function() {
+                        // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
+                        infowindow.close();
+                    });*/
 
 
-            </div>
+                    /*
+                    마커 클러스터러 클릭 이벤트 추가하기
+                    */
+                    // 마커 클러스터러에 클릭이벤트를 등록합니다
+                    // 마커 클러스터러를 생성할 때 disableClickZoom을 true로 설정하지 않은 경우
+                    // 이벤트 헨들러로 cluster 객체가 넘어오지 않을 수도 있습니다
+                    kakao.maps.event.addListener(clusterer, 'clusterclick', function (cluster) {
+
+                        // 지도를 클릭된 클러스터의 마커의 위치를 기준으로 확대합니다
+                        map.setLevel(9, {anchor: cluster.getCenter()});
+                    });
+
+                });
+
+
+            </script>
+
+            <!--<script th:inline="javascript">
+              var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                      mapOption = {
+                        center: new kakao.maps.LatLng(36.5927, 127.5533), // 지도의 중심좌표. 충주로 함!
+                        level: 13 // 지도의 확대 레벨. 3에서 13으로 수정함!
+                      };
+
+              var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+              // 컨트롤러에서 전달한 JSON 형태의 데이터를 파싱하여 사용합니다
+              // var positions = ;
+              console.log();
+              // let positions = JSON.parse(positions.replace(/&quot;/g, '"'))
+              let positions = JSON.parse(.replace(/&quot;/g, '"'))
+              console.log(positions);
+              console.log("typeof positions : " + typeof positions);
+
+              for (var i = 0; i < positions.length; i++) {
+
+                var line = JSON.stringify(positions[i]).split(",");
+                console.log("line : " + line);
+
+                var title = line[0].replace("title: ", "").replace(/\{/g, "").slice(1);
+                console.log("title : " + title);
+
+                var latlng = new kakao.maps.LatLng(line[1].replace("lat: ", ""), line[2].replace("lon: ", "").slice(0, -2));
+                console.log("latlng : " + latlng);
+
+                // 마커 이미지의 이미지 주소입니다
+                var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+                var imageSize = new kakao.maps.Size(24, 35);
+                var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+                // 마커를 생성합니다
+                var marker = new kakao.maps.Marker({
+                  map: map, // 마커를 표시할 지도
+                  position: latlng, // 마커를 표시할 위치
+                  title: title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                  image: markerImage // 마커 이미지
+                });
+              }
+
+            </script>-->
 
         </div>
     </section><!-- End Contact Section -->
@@ -228,7 +298,7 @@
 
     <div class="container mt-4">
         <div class="copyright">
-            &copy; Copyright <strong><span>Logis</span></strong>. All Rights Reserved
+            © Copyright <strong><span>Logis</span></strong>. All Rights Reserved
         </div>
         <div class="credits">
             <!-- All the links in the footer should remain intact. -->
@@ -244,7 +314,6 @@
 
 <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-<div id="preloader"></div>
 
 <!-- Vendor JS Files -->
 <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -257,6 +326,6 @@
 <!-- Template Main JS File -->
 <script src="/js/main.js"></script>
 
-</body>
 
+</body>
 </html>

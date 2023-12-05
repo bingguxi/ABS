@@ -1,20 +1,15 @@
 package kopo.poly.controller;
 
-import kopo.poly.dto.CctvResultDTO;
 import kopo.poly.dto.DisasterMsgResultDTO;
-import kopo.poly.dto.NoticeDTO;
-import kopo.poly.service.ICctvService;
 import kopo.poly.service.IDisasterMsgService;
 import kopo.poly.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,25 +21,7 @@ import java.util.Optional;
 @Controller
 public class DisasterMsgController {
 
-    //    @Autowired
     private final IDisasterMsgService disasterMsgService;
-
-//    @GetMapping("/findCctv")
-//    public String findCctv(Model model) {
-//
-//        log.info(this.getClass().getName() + ".findCctv Start!");
-//
-//        double lat = 36.58629; // 고정값 (임의)
-//        double lng = 128.186793; // 고정값 (임의)
-//
-//        String cctvData = cctvService.getCctvData(lat, lng);
-//
-//        model.addAttribute("cctvData", cctvData);
-//
-//        log.info(this.getClass().getName() + ".findCctv End!");
-//
-//        return "cctvResult";
-//    }
 
     /**
      * 재난문자 API JSON 형태로 파싱한 후
@@ -59,7 +36,7 @@ public class DisasterMsgController {
 
         List<DisasterMsgResultDTO> rList = disasterMsgService.getDisasterMsg();
 
-        log.info("rList : ", rList);
+        log.info("rList : " + rList);
 
         for (DisasterMsgResultDTO rDTO : rList) {
             log.info("-------------------------------");
@@ -68,7 +45,7 @@ public class DisasterMsgController {
             log.info("지점명 : " + rDTO.getLocationName());
             log.info("발생번호 : " + rDTO.getMd101Sn());
             log.info("내용 : " + rDTO.getMsg());
-            log.info("발생위치 ? : " + rDTO.getSendPlatform());
+            log.info("발생위치 : " + rDTO.getSendPlatform());
         }
 
         log.info(this.getClass().getName() + ".getDisasterMsg End!!");
@@ -77,7 +54,7 @@ public class DisasterMsgController {
     }
 
     @GetMapping("disasterMsgInfo")
-    public String disasterMsgInfo(HttpSession session, HttpServletRequest request, ModelMap model) throws Exception {
+    public String disasterMsgInfo(HttpServletRequest request, ModelMap model) throws Exception {
 
         log.info(this.getClass().getName() + ".disasterMsgInfo Start!");
 
@@ -91,6 +68,7 @@ public class DisasterMsgController {
          */
         log.info("md101Sn : " + md101Sn);
         log.info("msg : " + msg);
+
         /*
          * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
          */
