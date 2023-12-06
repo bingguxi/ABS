@@ -12,9 +12,7 @@ public class SnowDTO {
     public String stnKo; // 지점명
     public String lon; // 경도
     public String lat; //  위도
-
     public String sd; // 적설값
-
     public String dt; // 날짜
 
 }
