@@ -10,6 +10,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -53,62 +54,48 @@ public class DisasterMsgController {
         return rList;
     }
 
-    @GetMapping("disasterMsgInfo")
-    public String disasterMsgInfo(HttpServletRequest request, ModelMap model) throws Exception {
+    /* 재난 문자 리스트 페이지 */
+    @GetMapping("getDisasterMsgList")
+    public String getDisasterMsgList(HttpSession session, HttpServletRequest request, ModelMap model,
+                                     @RequestParam(defaultValue = "1") int page) throws Exception {
 
-        log.info(this.getClass().getName() + ".disasterMsgInfo Start!");
-
-        String md101Sn = CmmUtil.nvl(request.getParameter("md101Sn"));
-        String msg = CmmUtil.nvl(request.getParameter("msg"));
-
-        /*
-         * ####################################################################################
-         * 반드시, 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함 반드시 작성할 것
-         * ####################################################################################
-         */
-        log.info("md101Sn : " + md101Sn);
-        log.info("msg : " + msg);
-
-        /*
-         * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
-         */
-        DisasterMsgResultDTO pDTO = new DisasterMsgResultDTO();
-        pDTO.setMd101Sn(md101Sn);
-        pDTO.setMsg(msg);
-
-        // 공지사항 상세정보 가져오기
-        // Java 8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
-        DisasterMsgResultDTO rDTO = Optional.ofNullable(disasterMsgService.getDisasterMsgInfo(pDTO, true))
-                .orElseGet(DisasterMsgResultDTO::new);
-
-        // 조회된 리스트 결과값 넣어주기
-        model.addAttribute("rDTO", rDTO);
+        log.info(this.getClass().getName() + ".getDisasterMsgList Start!");
 
         // 공지사항 리스트 조회하기
         // Java 8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
         List<DisasterMsgResultDTO> rList = Optional.ofNullable(disasterMsgService.getDisasterMsgList())
                 .orElseGet(ArrayList::new);
 
-//        log.info("rList : ", rList);
-//
-//        for (DisasterMsgResultDTO rDTO : rList) {
-//            log.info("-------------------------------");
-//            log.info("생성일시 : " + rDTO.getCreateDate());
-//            log.info("지점번호 : " + rDTO.getLocationId());
-//            log.info("지점명 : " + rDTO.getLocationName());
-//            log.info("발생번호 : " + rDTO.getMd101Sn());
-//            log.info("내용 : " + rDTO.getMsg());
-//            log.info("발생위치 ? : " + rDTO.getSendPlatform());
-//        }
+        /**페이징 시작 부분*/
+
+        // 페이지당 보여줄 아이템 개수 정의
+        int itemsPerPage = 10;
+
+        // 페이지네이션을 위해 전체 아이템 개수 구하기
+        int totalItems = rList.size();
+
+        // 전체 페이지 개수 계산
+        int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
+
+        // 현재 페이지에 해당하는 아이템들만 선택하여 rList에 할당
+        int fromIndex = (page - 1) * itemsPerPage;
+        int toIndex = Math.min(fromIndex + itemsPerPage, totalItems);
+        rList = rList.subList(fromIndex, toIndex);
 
         // 조회된 리스트 결과값 넣어주기
         model.addAttribute("rList", rList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
+        log.info(this.getClass().getName() + ".페이지 번호 : " + page);
+
+        /**페이징 끝부분*/
 
         // 들어온 값 확인
         log.info("rList : " + rList );
 
-        log.info(this.getClass().getName() + ".disasterMsgInfo End!");
+        log.info(this.getClass().getName() + ".getDisasterMsgList End!");
 
-        return "/disasterMsg/disasterMsgInfo";
+        return "disasterMsg/disasterMsgList";
     }
 }

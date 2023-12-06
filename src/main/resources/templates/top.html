@@ -1,3 +1,9 @@
+<style>
+    ul li {
+        list-style: none;
+    }
+</style>
+
 <header id="header" class="header d-flex align-items-center fixed-top" style="padding: 98px 0 15px 0; height: 120px;">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
@@ -14,11 +20,55 @@
         <nav id="navbar" class="navbar" style="padding-bottom: 7%;">
             <ul>
                 <li><a href="/index" class="active">Home</a></li>
-                <li><a href="/map/shelterMap">실시간 지도</a></li>
+                <li class="dropdown">
+                <a href="/map/shelterMap">
+                    <span>실시간 지도</span>
+                    <i class="bi dropdown-indicator bi-chevron-down">
+                    </i>
+                </a>
+                <ul class="dropdown">
+                    <li><a href="/map/earthquake">지진</a></li>
+                    <li><a href="/map/typhoon">태풍</a></li>
+                    <li><a href="/map/fire">산불</a></li>
+                    <li><a href="/map/dust">황사</a></li>
+                    <li><a href="/map/snow">적설</a></li>
+                </ul>
+                </li>
+                <li><a href="/map/sherlter">비상 대피소</a></li>
                 <li><a href="/guide/dust">행동요령</a></li>
                 <li><a href="/community/communityList">커뮤니티</a></li>
                 <li><a href="/notice/noticeList">공지사항</a></li>
-                <li><a href="/profile">마이페이지</a></li>
+                <li><a href="/profile" id="myPage">마이페이지</a></li>
+
+                <script th:inline="javascript">
+                    var isLoggedIn = [[${session['SS_USER_ID'] != null}]];
+                    var isNaverUser = [[${session['SS_USER_ID'] != null && session['SS_USER_ID'].startsWith('naver_')}]];
+
+                    // 로그인 상태에 따라 버튼 숨기기/표시
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var myPageButton = document.getElementById('myPage');
+                        if (isLoggedIn) {
+                            myPageButton.style.display = 'block';
+                        } else {
+                            myPageButton.style.display = 'none';
+                        }
+                    });
+
+                    // 페이지 로드 시 실행되는 코드
+                    document.addEventListener('DOMContentLoaded', function () {
+                        // 마이페이지 버튼 요소 찾기
+                        var myPageButton = document.getElementById('myPage');
+
+                        // 특정 아이디 패턴에 해당하는 경우 숨기기
+                        if (isNaverUser || !isLoggedIn) {
+                            myPageButton.style.display = 'none';
+                        } else {
+                            myPageButton.style.display = 'block';
+                        }
+                    });
+                </script>
+
+
                 <!--<li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
                   <ul>
                     <li><a href="#">Drop Down 1</a></li>
@@ -39,7 +89,10 @@
                 <li th:if="${session['SS_USER_ID'] != null}"><a class="get-a-quote" id="btnLogout">로그아웃</a></li>
                 <li th:unless="${session['SS_USER_ID'] != null}"><a class="get-a-quote" th:href="@{/login}">로그인</a></li>
 
+
                 <script type="text/javascript">
+
+                    // 로그아웃 로직
                     document.getElementById("btnLogout").addEventListener("click", function (event) {
                         if (confirm("로그아웃 하시겠습니까?")) {
 

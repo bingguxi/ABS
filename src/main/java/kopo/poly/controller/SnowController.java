@@ -1,5 +1,6 @@
 package kopo.poly.controller;
 
+import kopo.poly.dto.FireDTO;
 import kopo.poly.dto.SnowDTO;
 import kopo.poly.service.ISnowService;
 import lombok.RequiredArgsConstructor;
@@ -7,10 +8,7 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,36 +17,50 @@ import java.util.Optional;
 @Slf4j
 @RequestMapping(value = "/snow")
 @RequiredArgsConstructor
-@RestController
+@Controller
 public class SnowController {
 
     private final ISnowService snowService;
 
-    @ResponseBody
-    @GetMapping(value = "snowInfo")
-    public List<SnowDTO> snowInfo() throws Exception{
+    @GetMapping(value = "getSnowList")
+    public String getSnowList(ModelMap model, @RequestParam(defaultValue = "1") int page) throws Exception {
 
-        log.info(this.getClass().getName() + ".snowInfo Start!!");
+        log.info(this.getClass().getName() + ".getSnowList 컨트롤러 시작!");
 
-        List<SnowDTO> rList = snowService.getSnowInfo();
+        // 저장된 산불 정보 조회하기
+        List<SnowDTO> rList = Optional.ofNullable(snowService.getSnowList()).orElseGet(ArrayList::new);
 
+        /**페이징 시작 부분*/
 
-        log.info("rList : ", rList);
+        // 페이지당 보여줄 아이템 개수 정의
+        int itemsPerPage = 10;
 
-        for (SnowDTO rDTO : rList) {
-            log.info("-------------------------------");
-            log.info("날짜 : " + rDTO.getDt());
-            log.info("국내 지점번호 : " + rDTO.getStnId());
-            log.info("지점명 : " + rDTO.getStnKo());
-            log.info("경도 : " + rDTO.getLon());
-            log.info("위도 : " + rDTO.getLat());
-            log.info("적설값 : " + rDTO.getSd());
-        }
+        // 페이지네이션을 위해 전체 아이템 개수 구하기
+        int totalItems = rList.size();
 
-        log.info(this.getClass().getName() + ".snowInfo End!!");
+        // 전체 페이지 개수 계산
+        int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
 
-        return rList;
+        // 현재 페이지에 해당하는 아이템들만 선택하여 rList에 할당
+        int fromIndex = (page - 1) * itemsPerPage;
+        int toIndex = Math.min(fromIndex + itemsPerPage, totalItems);
+        rList = rList.subList(fromIndex, toIndex);
 
+        // 조회된 리스트 결과값 넣어주기
+        model.addAttribute("rList", rList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
+        log.info(this.getClass().getName() + ".페이지 번호 : " + page);
+
+        /**페이징 끝부분*/
+
+        // 들어온 값 확인
+        log.info("rList : " + rList );
+
+        log.info(this.getClass().getName() + ".getSnowList 컨트롤러 끝!");
+
+        return "/snow/snowList";
     }
 
 }

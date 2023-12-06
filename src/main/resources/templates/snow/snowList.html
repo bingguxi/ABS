@@ -186,8 +186,8 @@
       <div class="container position-relative">
         <div class="row d-flex justify-content-center">
           <div class="col-lg-6 text-center">
-            <h2>FIRE</h2>
-            <p>실시간 산불 정보를 모아서 확인해보세요 !</p>
+            <h2>SNOW</h2>
+            <p>실시간 적설 정보를 모아서 확인해보세요 !</p>
           </div>
         </div>
       </div>
@@ -196,7 +196,7 @@
       <div class="container">
         <ol>
           <li><a href="index.html">Home</a></li>
-          <li>산불</li>
+          <li>적설</li>
         </ol>
       </div>
     </nav>
@@ -205,18 +205,22 @@
   <section class="COMMUNITY">
     <div class="community-table">
       <div class="table-header">
+        <div>지점번호</div>
+        <div>지점명(한글)</div>
+        <div>위도</div>
+        <div>경도</div>
+        <div>적설값(cm)</div>
         <div>수집시간</div>
-        <div>지역</div>
-        <div>등급</div>
-        <div>지수</div>
       </div>
 
       <div class="table-row" th:each="dto:${rList}">
         <div class="table-row">
-          <div>[[${dto.collectTime}]]</div>
-          <div>[[${dto.city}]]</div>
-          <div>[[${dto.grade}]]</div>
-          <div>[[${dto.score}]]</div>
+          <div>[[${dto.stnId}]]</div>
+          <div>[[${dto.stnKo}]]</div>
+          <div>[[${dto.lat}]]</div>
+          <div>[[${dto.lon}]]</div>
+          <div>[[${dto.sd}]]</div>
+          <div>[[${dto.dt}]]</div>
         </div>
       </div>
     </div>
@@ -225,17 +229,17 @@
       <div class="mx-auto">
         <ul class="pagination pagination-primary" id="pagination">
           <li class="page-item">
-            <a class="page-link" th:href="@{/fire/getFireList?page=1}">&laquo;</a>
+            <a class="page-link" th:href="@{/snow/getSnowList?page=1}">&laquo;</a>
           </li>
           <!-- 이전 페이지로 이동하는 링크 -->
           <li class="page-item" th:if="${currentPage > 1}">
-            <a class="page-link" th:href="@{/fire/getFireList(page=${currentPage - 1})}">&lt;</a>
+            <a class="page-link" th:href="@{/snow/getSnowList(page=${currentPage - 1})}">&lt;</a>
           </li>
           <!-- 현재 페이지 주변에 페이지 번호 링크 표시 -->
           <th:block th:if="${currentPage + 4 <= totalPages}">
             <li class="page-item" th:each="pageNumber : ${#numbers.sequence(currentPage, currentPage + 4)}"
                 th:class="${pageNumber == currentPage ? 'active' : ''}">
-              <a class="page-link" th:href="@{/fire/getFireList(page=${pageNumber})}"
+              <a class="page-link" th:href="@{/snow/getSnowList(page=${pageNumber})}"
                  th:text="${pageNumber}"></a>
             </li>
 
@@ -243,17 +247,17 @@
           <th:block th:if="${currentPage + 4 > totalPages}">
             <li class="page-item" th:each="pageNumber : ${#numbers.sequence(currentPage, totalPages)}"
                 th:class="${pageNumber == currentPage ? 'active' : ''}">
-              <a class="page-link" th:href="@{/fire/getFireList(page=${pageNumber})}"
+              <a class="page-link" th:href="@{/snow/getSnowList(page=${pageNumber})}"
                  th:text="${pageNumber}"></a>
             </li>
           </th:block>
 
           <!-- 다음 페이지로 이동하는 링크 -->
           <li class="page-item" th:if="${currentPage < totalPages}">
-            <a class="page-link" th:href="@{/fire/getFireList(page=${currentPage + 1})}">&gt;</a>
+            <a class="page-link" th:href="@{/snow/getSnowList(page=${currentPage + 1})}">&gt;</a>
           </li>
           <li class="page-item">
-            <a class="page-link" th:href="@{/fire/getFireList(page=${totalPages})}">&raquo;</a>
+            <a class="page-link" th:href="@{/snow/getSnowList(page=${totalPages})}">&raquo;</a>
           </li>
         </ul>
       </div>

@@ -23,19 +23,20 @@
 
     <!-- 수집된 지진 과거 정보 리스트 조회하기 -->
     <select id="getEarthquakeList" parameterType="EarthquakeResultDTO" resultType="EarthquakeResultDTO">
-        SELECT DISTINCT E.EARTHQUAKE_SEQ, E.MAG_CODE,  E.CNT_DIV, E.AR_DIV, E.EQ_AR_CD_NM, E.EQ_PT,
+        SELECT DISTINCT E.EARTHQUAKE_SEQ, E.MSG_CODE,  E.CNT_DIV, E.AR_DIV, E.EQ_AR_CD_NM, E.EQ_PT,
                         E.NK_DIV, E.TM_ISSUE, E.EQ_DATE, E.MAG_ML, E.MAG_DIFF, E.EQ_DT, E.EQ_LT, E.EQ_LN, E.MAJOR_AXIS,
                         E.MINOR_AXIS, E.DEPTH_DIFF, E.JD_LOC, E.JD_LOC_A, E.RE_FER
 --                         DATE_FORMAT(N.REG_DT, '%Y/%m/%d %H:%i:%s') AS REG_DT
         FROM EARTHQUAKE E
-        ORDER BY E.EARTHQUAKE_SEQ DESC;
+        ORDER BY E.EARTHQUAKE_SEQ ASC;
     </select>
 
     <!-- 수집된 실시간 지진 정보 DB에서 조회하기 -->
     <select id="getEarthquakeLiveList" parameterType="EarthquakeLiveDTO" resultType="EarthquakeLiveDTO">
-        SELECT EARTHQUAKE_LIVE_SEQ, CNT, FC_TP, IMG, IN_T, LAT, LOC, LON, MT, REM, STN_ID, TM_EQK,TM_FC,
-               TM_SEQ, DEP
+        SELECT DISTINCT EARTHQUAKE_LIVE_SEQ, CNT, FC_TP, IMG, IN_T, LAT, LOC, LON, MT, REM, STN_ID,
+                        TM_EQK,TM_FC,TM_SEQ, DEP
         FROM EARTHQUAKE_LIVE
+        ORDER BY TM_SEQ DESC;
     </select>
 
 </mapper>

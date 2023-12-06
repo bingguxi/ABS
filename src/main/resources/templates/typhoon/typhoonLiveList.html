@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>[Template] Sample Inner Page</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="/img/favicon.png" rel="icon">
+    <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+          rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="/vendor/aos/aos.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/font.css" rel="stylesheet"/>
+
+    <!--커뮤니티, 공지사항 CSS File-->
+    <link rel="stylesheet" href="/css/table_kea.css"/>
+    <!--    <link rel="stylesheet" href="/css/styles.css">-->
+
+    <style>
+
+        /*커뮤니티 리스트 css*/
+        .community-table {
+            max-width: 1300px;
+            margin: 20px auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0e1d34;
+            color: white;
+            padding: 10px;
+            text-align: center;
+
+        }
+
+        .table-header div {
+            flex: 1; /* 자동으로 너비를 나누어 갖게 함 */
+        }
+
+        .table-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        .table-row div {
+            flex: 1; /* 자동으로 너비를 나누어 갖게 함 */
+        }
+
+        .table-row:hover {
+            background-color: #f9f9f9;
+        }
+
+        .write-button {
+            display: block;
+            margin: 20px auto;
+            padding: 8px 15px; /* 크기 조절 */
+            background-color: #0e1d34;
+            width: 20vw; /* 가로 크기를 화면 너비의 20%로 설정 */
+            min-width: 100px; /* 최소 가로 크기 지정 */
+            max-width: 200px; /* 최대 가로 크기 지정 */
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .write-button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .page-link {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 0 5px;
+            background-color: #0e1d34;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .page-link:hover {
+            background-color: #091621;
+            transform: scale(1.05);
+        }
+        .btn {
+            border: none;
+            background: #0e1d34;
+            /*background: linear-gradient(0deg, rgba(6, 14, 131, 1) 0%, rgba(12, 25, 180, 1) 100%);*/
+            color: white;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: rgb(0, 3, 255);
+            background: linear-gradient(0deg, rgba(0, 3, 255, 1) 0%, rgba(2, 125, 251, 1) 100%);
+        }
+
+        .find-btn {
+            margin-top: 1px;
+            text-align: center;
+        }
+
+        /*.contents_box {*/
+        /*    position: relative;*/
+        /*    max-width: 1440px;*/
+        /*    margin: 0 auto;*/
+        /*    min-height: 500px;*/
+        /*    padding: 1px 10px 0 10px;*/
+        /*}*/
+
+    </style>
+
+    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        // 상세보기 이동
+        // function doDetail(seq) {
+        //   location.href = "/community/communityInfo?nSeq=" + seq;
+        // }
+
+        /*]]>*/
+    </script>
+
+    <!-- =======================================================
+    * Template Name: Logis
+    * Updated: Sep 18 2023 with Bootstrap v5.3.2
+    * Template URL: https://bootstrapmade.com/logis-bootstrap-logistics-website-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<th:block th:replace="top"></th:block>
+<!-- End Header -->
+
+<main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs">
+        <div class="page-header d-flex align-items-center" style="background-image: url('img/page-header.jpg');">
+            <div class="container position-relative">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-6 text-center">
+                        <h2>TYPHOON</h2>
+                        <p>국내 실시간 태풍 정보를 모아서 확인해보세요 !</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <div class="container">
+                <ol>
+                    <li><a href="index.html">Home</a></li>
+                    <li>태풍</li>
+                </ol>
+            </div>
+        </nav>
+    </div><!-- End Breadcrumbs -->
+
+    <section class="COMMUNITY">
+        <div class="community-table">
+            <div class="table-header">
+                <div>0(분석),1(예측)</div>
+                <div>태풍번호</div>
+                <div>발표번호</div>
+                <div>태풍 분석시각 (UTC)</div>
+                <div>태풍 예측시각 (UTC)</div>
+                <div>위도</div>
+                <div>경도</div>
+                <div>태풍진행방향 (16방위기호)</div>
+                <div>태풍진향속도 (km/h)</div>
+                <div>태풍중심기압 (hpa)</div>
+                <div>태풍최대풍속 (m/s)</div>
+                <div>15m/s 반경 (km)</div>
+                <div>25m/s 반경 (km)</div>
+                <div>위치</div>
+            </div>
+
+            <div class="table-row" th:each="dto:${rList}">
+                <div class="table-row">
+                    <div name="nSeq" id="nSeq">[[${dto.ft}]]</div>
+                    <div>[[${dto.typ}]]</div>
+                    <div>[[${dto.seq}]]</div>
+                    <div>[[${dto.typTm}]]</div>
+                    <div>[[${dto.ftTm}]]</div>
+                    <div>[[${dto.lat}]]</div>
+                    <div>[[${dto.lon}]]</div>
+                    <div>[[${dto.dir}]]</div>
+                    <div>[[${dto.sp}]]</div>
+                    <div>[[${dto.ps}]]</div>
+                    <div>[[${dto.ws}]]</div>
+                    <div>[[${dto.rad15}]]</div>
+                    <div>[[${dto.rad25}]]</div>
+                    <div>[[${dto.loc}}]]</div>
+                </div>
+            </div>
+        </div>
+        <!-- 페이지네이션 영역-->
+        <div style="display: flex">
+            <div class="mx-auto">
+                <ul class="pagination pagination-primary" id="pagination">
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/typhoon/getTyphoonLiveList?page=1}">&laquo;</a>
+                    </li>
+                    <!-- 이전 페이지로 이동하는 링크 -->
+                    <li class="page-item" th:if="${currentPage > 1}">
+                        <a class="page-link" th:href="@{/typhoon/getTyphoonLiveList(page=${currentPage - 1})}">&lt;</a>
+                    </li>
+                    <!-- 현재 페이지 주변에 페이지 번호 링크 표시 -->
+                    <th:block th:if="${currentPage + 4 <= totalPages}">
+                        <li class="page-item" th:each="pageNumber : ${#numbers.sequence(currentPage, currentPage + 4)}"
+                            th:class="${pageNumber == currentPage ? 'active' : ''}">
+                            <a class="page-link" th:href="@{/typhoon/getTyphoonLiveList(page=${pageNumber})}"
+                               th:text="${pageNumber}"></a>
+                        </li>
+
+                    </th:block>
+                    <th:block th:if="${currentPage + 4 > totalPages}">
+                        <li class="page-item" th:each="pageNumber : ${#numbers.sequence(currentPage, totalPages)}"
+                            th:class="${pageNumber == currentPage ? 'active' : ''}">
+                            <a class="page-link" th:href="@{/typhoon/getTyphoonLiveList(page=${pageNumber})}"
+                               th:text="${pageNumber}"></a>
+                        </li>
+                    </th:block>
+
+                    <!-- 다음 페이지로 이동하는 링크 -->
+                    <li class="page-item" th:if="${currentPage < totalPages}">
+                        <a class="page-link" th:href="@{/typhoon/getTyphoonLiveList(page=${currentPage + 1})}">&gt;</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/typhoon/getTyphoonLiveList(page=${totalPages})}">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--        <div class="find-btn">-->
+        <!--            <button class="btn" id="btnWrite">글쓰기</button>-->
+        <!--        </div>-->
+    </section>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-5 col-md-12 footer-info">
+                <a href="index.html" class="logo d-flex align-items-center">
+                    <span>Logis</span>
+                </a>
+                <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies
+                    darta donna mare fermentum iaculis eu non diam phasellus.</p>
+                <div class="social-links d-flex mt-4">
+                    <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                    <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-6 footer-links">
+                <h4>Useful Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Terms of service</a></li>
+                    <li><a href="#">Privacy policy</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-2 col-6 footer-links">
+                <h4>Our Services</h4>
+                <ul>
+                    <li><a href="#">Web Design</a></li>
+                    <li><a href="#">Web Development</a></li>
+                    <li><a href="#">Product Management</a></li>
+                    <li><a href="#">Marketing</a></li>
+                    <li><a href="#">Graphic Design</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+                <h4>Contact Us</h4>
+                <p>
+                    A108 Adam Street <br>
+                    New York, NY 535022<br>
+                    United States <br><br>
+                    <strong>Phone:</strong> +1 5589 55488 55<br>
+                    <strong>Email:</strong> info@example.com<br>
+                </p>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="copyright">
+            &copy; Copyright <strong><span>Logis</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/logis-bootstrap-logistics-website-template/ -->
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+    </div>
+
+</footer><!-- End Footer -->
+<!-- End Footer -->
+
+<a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<div id="preloader"></div>
+
+<!-- Vendor JS Files -->
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/vendor/purecounter/purecounter_vanilla.js"></script>
+<script src="/vendor/glightbox/js/glightbox.min.js"></script>
+<script src="/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="/vendor/aos/aos.js"></script>
+<script src="/vendor/php-email-form/validate.js"></script>
+
+<!-- Template Main JS File -->
+<script src="/js/main.js"></script>
+
+</body>
+
+</html>

@@ -12,6 +12,7 @@ import java.util.List;
 public class EarthquakeDTO {
 
     /* 지진 API URL에 필요한 파라미터 값을 위한 DTO인데 기간을 지정하는 방식으로 하고 있어서 추후에 수정할수도 있음 */
+    /* 아마 추후에 정리하면서 삭제할 가능성이 농후함 없어도 잘 돌아감 */
 
     private String frDate;
     private String laDate;
