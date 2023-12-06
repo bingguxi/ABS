@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>[재난탈출넘버원] 실시간 태풍 지도</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="/img/favicon.png" rel="icon">
+    <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="/css/table_kea.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+          rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="/vendor/aos/aos.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/font.css" rel="stylesheet"/>
+    <style>
+
+        .contents_box {
+            position: relative;
+            width: 65%;
+            margin: 0 auto;
+            min-height: 500px;
+            padding: 1px 10px 0 10px;
+        }
+
+        .detail p strong {
+            color: #003668;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 0;
+        }
+
+        ul, li {
+            list-style-type: none;
+        }
+
+        h3 {
+            display: block;
+            font-weight: bold;
+        }
+
+        .youtube iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        @media screen and (min-width: 1200px) {
+            .table {
+                height: auto;
+                width: 40%;
+                float: left;
+            }
+        }
+
+        @media screen and (min-width: 1200px) {
+            .table {
+                width: 31%;
+            }
+        }
+
+    </style>
+    <style>
+
+        /*커뮤니티 리스트 css*/
+        .community-table {
+            max-width: 1300px;
+            margin: 0;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: scroll;
+            height: 500px;
+            width: 40%;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0e1d34;
+            color: white;
+            padding: 10px;
+            text-align: center;
+
+        }
+
+        .table-header div {
+            flex: 1; /* 자동으로 너비를 나누어 갖게 함 */
+        }
+
+        .table-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        .table-row div {
+            flex: 1; /* 자동으로 너비를 나누어 갖게 함 */
+        }
+
+        .table-row:hover {
+            background-color: #f9f9f9;
+        }
+
+        .write-button {
+            display: block;
+            margin: 20px auto;
+            padding: 8px 15px; /* 크기 조절 */
+            background-color: #0e1d34;
+            width: 20vw; /* 가로 크기를 화면 너비의 20%로 설정 */
+            min-width: 100px; /* 최소 가로 크기 지정 */
+            max-width: 200px; /* 최대 가로 크기 지정 */
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .write-button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .page-link {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 0 5px;
+            background-color: #0e1d34;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .page-link:hover {
+            background-color: #091621;
+            transform: scale(1.05);
+        }
+
+        .btn {
+            border: none;
+            background: #0e1d34;
+            /*background: linear-gradient(0deg, rgba(6, 14, 131, 1) 0%, rgba(12, 25, 180, 1) 100%);*/
+            color: white;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: rgb(0, 3, 255);
+            background: linear-gradient(0deg, rgba(0, 3, 255, 1) 0%, rgba(2, 125, 251, 1) 100%);
+        }
+
+        .find-btn {
+            margin-top: 1px;
+            text-align: center;
+        }
+
+        /*.contents_box {*/
+        /*    position: relative;*/
+        /*    max-width: 1440px;*/
+        /*    margin: 0 auto;*/
+        /*    min-height: 500px;*/
+        /*    padding: 1px 10px 0 10px;*/
+        /*}*/
+
+    </style>
+
+    <!-- 카카오 맵 API -->
+    <!-- services와 clusterer, drawing 라이브러리 불러오기 -->
+    <!--<script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=07567cd65e7cb3614b410e53e82ae48b&libraries=services,clusterer,drawing"></script>
+-->
+
+    <!-- =======================================================
+    * Template Name: Logis
+    * Updated: Sep 18 2023 with Bootstrap v5.3.2
+    * Template URL: https://bootstrapmade.com/logis-bootstrap-logistics-website-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body data-aos-easing="ease-in-out" data-aos-duration="1000" data-aos-delay="0">
+
+<!-- ======= Header ======= -->
+<th:block th:replace="top"></th:block>
+<!-- End Header -->
+
+<main id="main" style="margin-bottom: 5%;">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs">
+        <div class="page-header d-flex align-items-center" style="background-image: url('img/page-header.jpg');">
+            <div class="container position-relative">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-6 text-center">
+                        <h2>실시간 태풍 지도</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <div class="container">
+                <ol>
+                    <li><a href="/index">Home</a></li>
+                    <li>실시간 지도 / 태풍</li>
+                </ol>
+            </div>
+        </nav>
+    </div><!-- End Breadcrumbs -->
+
+
+    <div class="contents_box" style="margin-top: 3%;">
+
+<!--        <th:block th:replace="mapNavbar"></th:block>-->
+
+
+        <div style="display: flex; width: 100%;">
+
+            <div id="map" style="width: 60%; height: 500px;"></div>
+
+            <div class="community-table">
+                <div class="table-header">
+                    <div>태풍번호</div>
+                    <div>분석시각 (UTC)</div>
+                    <div>진행방향</div>
+                    <div>진향속도 (km/h)</div>
+                    <div>최대풍속 (m/s)</div>
+                    <div>위치</div>
+                </div>
+
+                <div class="table-row" th:each="dto:${rList}">
+                    <div class="table-row">
+                        <div>[[${dto.typ}]]</div>
+                        <div>[[${dto.typTm}]]</div>
+                        <div>[[${dto.dir}]]</div>
+                        <div>[[${dto.sp}]]</div>
+                        <div>[[${dto.ps}]]</div>
+                        <div>[[${dto.loc}}]]</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=07567cd65e7cb3614b410e53e82ae48b&libraries=services,clusterer,drawing"></script>
+
+    <script th:inline="javascript">
+
+        /*
+        지도 생성하기
+         */
+        var mapContainer = document.getElementById('map'); // 지도를 표시할 div
+        var mapOption = {
+            center: new kakao.maps.LatLng(36.2527, 127.5533), // 지도의 중심좌표. 충주로 함!
+            level: 13 // 지도의 확대 레벨. 숫자 높을수록 멀어짐!
+        };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+
+        // 컨트롤러에서 전달한 JSON 형태의 데이터를 파싱하여 사용합니다
+        var rList = /*[[${rList}]]*/[];
+        console.log(rList); // 얘 로그 짱 많이 찍혀서 페이지 로딩 시간 길어짐. 신중하게 주석 풀기!!!
+
+        if (rList.length === 0) {
+
+            // 커스텀 오버레이에 표시할 내용입니다
+            // HTML 문자열 또는 Dom Element 입니다
+            var content = '<div style="font-size: 25pt; background-color: rgba(255, 255, 255, 0.7); border-radius: 10px;">현재 수집된 태풍 정보가 없습니다.</div>';
+
+            // 커스텀 오버레이가 표시될 위치입니다
+            var position = new kakao.maps.LatLng(36.2527, 127.485);
+
+            // 커스텀 오버레이를 생성합니다
+            var customOverlay = new kakao.maps.CustomOverlay({
+                position: position,
+                content: content
+            });
+
+            // 커스텀 오버레이를 지도에 표시합니다
+            customOverlay.setMap(map);
+
+        } else {
+
+            rList.forEach(function (dto) {
+
+                // console.log("dto.lat : ", dto.lat)
+                // console.log("dto.lon : ", dto.lon)
+
+                // 지도에 표시할 원을 생성합니다
+                var circle = new kakao.maps.Circle({
+                    center: new kakao.maps.LatLng(dto.lat, dto.lon),  // 원의 중심좌표 입니다
+                    radius: 50000, // 미터 단위의 원의 반지름입니다
+                    strokeWeight: 2, // 선의 두께입니다
+                    strokeColor: '#75B8FA', // 선의 색깔입니다
+                    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                    strokeStyle: 'dashed', // 선의 스타일 입니다
+                    fillColor: '#CFE7FF', // 채우기 색깔입니다
+                    fillOpacity: 0.3  // 채우기 불투명도 입니다
+                });
+
+                // 지도에 원을 표시합니다
+                circle.setMap(map);
+
+                console.log("원 표시 완료!")
+
+
+                // 원에 마우스오버 이벤트가 발생했을 때 변경할 채우기 옵션입니다
+                var mouseoverOption = {
+                    fillColor: '#EFFFED', // 채우기 색깔입니다
+                    fillOpacity: 0.8 // 채우기 불투명도 입니다
+                };
+
+                // 원에 마우스아웃 이벤트가 발생했을 때 변경할 채우기 옵션입니다
+                var mouseoutOption = {
+                    fillColor: '#CFE7FF', // 채우기 색깔입니다
+                    fillOpacity: 0.7 // 채우기 불투명도 입니다
+                };
+
+                // 원에 마우스오버 이벤트를 등록합니다
+                kakao.maps.event.addListener(circle, 'mouseover', function () {
+
+                    // 원의 채우기 옵션을 변경합니다
+                    circle.setOptions(mouseoverOption);
+
+                });
+
+                kakao.maps.event.addListener(circle, 'mouseout', function () {
+
+                    // 원의 채우기 옵션을 변경합니다
+                    circle.setOptions(mouseoutOption);
+
+                });
+
+
+                // 원에 마우스다운 이벤트를 등록합니다
+                kakao.maps.event.addListener(circle, 'mousedown', function (event) {
+                    console.log(event);
+                    /* var resultDiv = document.getElementById('result');
+
+                     // HTML 코드를 문자열로 만듭니다
+                     var htmlCode = '<div class="community-table">';
+                     htmlCode += '<div class="table-header">';
+                     htmlCode += '<div>관측소 지역</div>';
+                     htmlCode += '<div>PM10 평균</div>';
+                     htmlCode += '</div>';
+
+                     // 여기에 반복문을 사용하여 데이터를 동적으로 추가하는 코드를 넣어주세요
+                     rList.forEach(function (dto) {
+                         htmlCode += '<div class="table-row">';
+                         htmlCode += '<div>' + dto.stnKo + '</div>';
+                         htmlCode += '<div>' + dto.mean + '</div>';
+                         htmlCode += '</div>';
+                     });
+
+                     htmlCode += '</div>';
+
+                     // 결과를 할당합니다
+                     resultDiv.innerHTML = htmlCode;*/
+                });
+
+            })
+
+        }
+
+
+        // CCTV 마커 이미지의 이미지 주소입니다
+        var imageSrc = "/img/security-camera.png";
+        var imageSize = new kakao.maps.Size(35, 35);
+        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+        console.log("마커 이미지 생성 완")
+
+        // InfoWindow를 단일 개체로 생성합니다
+        var infowindow = new kakao.maps.InfoWindow({
+            removable: true
+        });
+
+        console.log("인포윈도우 생성 완")
+
+        /*
+        CCTV 마커 생성하기
+         */
+        // 컨트롤러에서 전달한 JSON 형태의 데이터를 파싱하여 사용합니다
+        var cList = /*[[${cList}]]*/[];
+        // console.log(rList); // 얘 로그 짱 많이 찍혀서 페이지 로딩 시간 길어짐. 신중하게 주석 풀기!!!
+
+        // 지도 확대 축소를 제어할 수 있는 줌 컨트롤을 생성합니다
+        var zoomControl = new kakao.maps.ZoomControl();
+        map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+        // 지도가 확대 또는 축소되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
+        kakao.maps.event.addListener(map, 'zoom_changed', function () {
+
+            // 지도의 현재 레벨을 얻어옵니다
+            var level = map.getLevel();
+
+            if (level > 1 && level < 7) {
+
+                cList.forEach(function (dto) {
+                    var position = new kakao.maps.LatLng(parseFloat(dto.coordY), parseFloat(dto.coordX));
+
+                    // console.log("마커 하나의 position : " + position)
+
+                    // 마커를 생성합니다
+                    var marker = new kakao.maps.Marker({
+                        map: map, // 마커를 표시할 지도
+                        position: position, // 마커를 표시할 위치
+                        image: markerImage, // 마커 이미지
+                        clickable: true // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+                    });
+
+                    console.log("마커 생성 완")
+
+                    // 마커에 클릭 이벤트를 추가합니다
+                    kakao.maps.event.addListener(marker, 'click', function () {
+                        map.setCenter(position);
+
+                        // 마커에 클릭 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
+                        // 인포윈도우 내용을 업데이트하고 지도에 표시합니다
+                        var iwContent =
+                            '<div style="padding: 5px; font-size: 10pt;">' + dto.cctvName + '<br/>' +
+                            '<a href="/map/cctv/video?cctvName=' + encodeURIComponent(dto.cctvName) + '" target="_blank">영상보기</a></div>';
+                        infowindow.setContent(iwContent);
+                        infowindow.open(map, marker);
+
+                        console.log("dto.cctvName : " + dto.cctvName + "가 선택되었습니다.");
+                        console.log("dto.cctvUrl : " + dto.cctvUrl);
+                    });
+
+                });
+
+            }
+
+        });
+
+
+    </script>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-5 col-md-12 footer-info">
+                <a href="index.html" class="logo d-flex align-items-center">
+                    <span>Logis</span>
+                </a>
+                <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies
+                    darta donna mare fermentum iaculis eu non diam phasellus.</p>
+                <div class="social-links d-flex mt-4">
+                    <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                    <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-6 footer-links">
+                <h4>Useful Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Terms of service</a></li>
+                    <li><a href="#">Privacy policy</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-2 col-6 footer-links">
+                <h4>Our Services</h4>
+                <ul>
+                    <li><a href="#">Web Design</a></li>
+                    <li><a href="#">Web Development</a></li>
+                    <li><a href="#">Product Management</a></li>
+                    <li><a href="#">Marketing</a></li>
+                    <li><a href="#">Graphic Design</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+                <h4>Contact Us</h4>
+                <p>
+                    A108 Adam Street <br>
+                    New York, NY 535022<br>
+                    United States <br><br>
+                    <strong>Phone:</strong> +1 5589 55488 55<br>
+                    <strong>Email:</strong> info@example.com<br>
+                </p>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="copyright">
+            © Copyright <strong><span>Logis</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/logis-bootstrap-logistics-website-template/ -->
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+    </div>
+
+</footer><!-- End Footer -->
+<!-- End Footer -->
+
+<a href="#" class="scroll-top d-flex align-items-center justify-content-center active"><i
+        class="bi bi-arrow-up-short"></i></a>
+
+
+<!-- Vendor JS Files -->
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/vendor/purecounter/purecounter_vanilla.js"></script>
+<script src="/vendor/glightbox/js/glightbox.min.js"></script>
+<script src="/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="/vendor/aos/aos.js"></script>
+<script src="/vendor/php-email-form/validate.js"></script>
+
+<!-- Template Main JS File -->
+<script src="/js/main.js"></script>
+
+
+</body>
+
+</html>

@@ -1,9 +1,7 @@
 package kopo.poly.controller;
 
-import kopo.poly.dto.CctvResultDTO;
-import kopo.poly.dto.ShelterDTO;
-import kopo.poly.service.ICctvService;
-import kopo.poly.service.IShelterService;
+import kopo.poly.dto.*;
+import kopo.poly.service.*;
 import kopo.poly.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +25,11 @@ public class MapController {
 
     private final IShelterService shelterService;
     private final ICctvService cctvService;
+    private final IDustService dustService;
+    private final ITyphoonService typhoonService;
+    private final IFireService fireService;
+    private final ISnowService snowService;
+    private final IEarthquakeService earthquakeService;
 
    /* @GetMapping(value = "/getCurrentPosition")
     public String getCurrentPosition() {
@@ -82,14 +85,9 @@ public class MapController {
 
         log.info(this.getClass().getName() + ".cctv 시작!");
 
-        //ShelterDTO rDTO = shelterService.getShelter();
+        List<CctvResultDTO> cList = Optional.ofNullable(cctvService.getCctv()).orElseGet(ArrayList::new);
 
-        List<CctvResultDTO> rList = Optional.ofNullable(cctvService.getCctv()).orElseGet(ArrayList::new);
-
-        //model.addAttribute("rDTO", rDTO);
-        model.addAttribute("rList", rList);
-
-//        log.info("rList : " + rList);
+        model.addAttribute("cList", cList);
 
         log.info(this.getClass().getName() + ".cctv 끝!");
 
@@ -120,45 +118,95 @@ public class MapController {
 
 
     @GetMapping(value = "dust")
-    public String dust() {
+    public String dust(ModelMap model) throws Exception {
 
+        log.info(this.getClass().getName() + ".dust 지도 시작!");
 
+        List<DustDTO> rList = dustService.getDustList();
+
+        model.addAttribute("rList", rList);
+
+        List<CctvResultDTO> cList = Optional.ofNullable(cctvService.getCctv()).orElseGet(ArrayList::new);
+
+        model.addAttribute("cList", cList);
+
+        log.info(this.getClass().getName() + ".dust 지도 끝!");
 
         return "/map/dustMap";
 
     }
 
     @GetMapping(value = "typhoon")
-    public String typhoon() {
+    public String typhoon(ModelMap model) throws Exception {
 
+        log.info(this.getClass().getName() + ".typhoon 지도 시작!");
 
+        List<TyphoonLiveDTO> rList = typhoonService.getTyphoonLiveList();
+
+        model.addAttribute("rList", rList);
+
+        List<CctvResultDTO> cList = Optional.ofNullable(cctvService.getCctv()).orElseGet(ArrayList::new);
+
+        model.addAttribute("cList", cList);
+
+        log.info(this.getClass().getName() + ".typhoon 지도 끝!");
 
         return "/map/typhoonMap";
 
     }
 
     @GetMapping(value = "fire")
-    public String fire() {
+    public String fire(ModelMap model) throws Exception {
 
+        log.info(this.getClass().getName() + ".fire 지도 시작!");
 
+        List<FireDTO> rList = fireService.getFireList();
+
+        model.addAttribute("rList", rList);
+
+        List<CctvResultDTO> cList = Optional.ofNullable(cctvService.getCctv()).orElseGet(ArrayList::new);
+
+        model.addAttribute("cList", cList);
+
+        log.info(this.getClass().getName() + ".fire 지도 끝!");
 
         return "/map/fireMap";
 
     }
 
     @GetMapping(value = "snow")
-    public String snonw() {
+    public String snow(ModelMap model) throws Exception {
 
+        log.info(this.getClass().getName() + ".snow 지도 시작!");
 
+        List<SnowDTO> rList = snowService.getSnowList();
+
+        model.addAttribute("rList", rList);
+
+        List<CctvResultDTO> cList = Optional.ofNullable(cctvService.getCctv()).orElseGet(ArrayList::new);
+
+        model.addAttribute("cList", cList);
+
+        log.info(this.getClass().getName() + ".snow 지도 끝!");
 
         return "/map/snowMap";
 
     }
 
     @GetMapping(value = "earthquake")
-    public String earthquake() {
+    public String earthquake(ModelMap model) throws Exception {
 
+        log.info(this.getClass().getName() + ".earthquake 지도 시작!");
 
+        List<EarthquakeLiveDTO> rList = earthquakeService.getEarthquakeLiveList();
+
+        model.addAttribute("rList", rList);
+
+        List<CctvResultDTO> cList = Optional.ofNullable(cctvService.getCctv()).orElseGet(ArrayList::new);
+
+        model.addAttribute("cList", cList);
+
+        log.info(this.getClass().getName() + ".earthquake 지도 끝!");
 
         return "/map/earthquakeMap";
 
@@ -171,7 +219,8 @@ public class MapController {
 
         log.info(this.getClass().getName() + "test 열림!!!");
 
-        return "/map/test";
+//        return "/map/test";
+        return "/map/test2";
     }
 
 }

@@ -2,6 +2,7 @@ package kopo.poly.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import kopo.poly.dto.DisasterMsgResultDTO;
 import kopo.poly.dto.EarthquakeLiveDTO;
 import kopo.poly.dto.EarthquakeResultDTO;
 import kopo.poly.persistance.mapper.IEarthquakeMapper;
@@ -186,7 +187,7 @@ public class EarthquakeService implements IEarthquakeService {
         }
     }
 
-    // 과거 지진 정보 조회하기
+    // 과거 지진 리스트 조회하기
     @Override
     public List<EarthquakeResultDTO> getEarthquakeList() throws Exception {
 
@@ -200,8 +201,8 @@ public class EarthquakeService implements IEarthquakeService {
     @Override
     public List<EarthquakeLiveDTO> getEarthquakeLiveList() throws Exception {
 
-        log.info(this.getClass().getName() + ".getEarthquakeLiveInfo Start!");
-        log.info(this.getClass().getName() + ".getEarthquakeLiveInfo End!");
+        log.info(this.getClass().getName() + ".getEarthquakeLiveList Start!");
+        log.info(this.getClass().getName() + ".getEarthquakeLiveList End!");
 
         return earthquakeMapper.getEarthquakeLiveList();
     }
