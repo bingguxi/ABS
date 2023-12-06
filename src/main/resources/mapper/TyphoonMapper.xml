@@ -22,7 +22,7 @@
         SELECT DISTINCT T.TYP_SEQ, T.TYP_EN, T.YEAR, T.TM_ST, T.TM_ED, T.TYP_PS,
                         T.TYP_WS, T.TYP_NAME, T.EFF
         FROM TYPHOON T
-        ORDER BY T.TYPHOON_SEQ DESC;
+        ORDER BY T.TYP_SEQ DESC;
     </select>
 
     <!-- 수집된 태풍 실시간 정보 조회하기 -->
