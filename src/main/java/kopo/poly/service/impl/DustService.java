@@ -16,11 +16,11 @@ public class DustService implements IDustService {
     private final IDustMapper dustMapper;
 
     @Override
-    public List<DustDTO> getDustInfo() throws Exception {
+    public List<DustDTO> getDustList() throws Exception {
 
-        log.info(this.getClass().getName() + ".getDustInfo Start!");
-        log.info(this.getClass().getName() + ".getDustInfo End!");
+        log.info(this.getClass().getName() + ".getDustList Start!");
+        log.info(this.getClass().getName() + ".getDustList End!");
 
-        return dustMapper.getDustInfo();
+        return dustMapper.getDustList();
     }
 }

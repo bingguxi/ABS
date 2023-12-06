@@ -7,5 +7,5 @@ import java.util.List;
 public interface ISnowService {
 
     // 수집된 적설 내용 조회하기
-    List<SnowDTO> getSnowInfo() throws Exception;
+    List<SnowDTO> getSnowList() throws Exception;
 }

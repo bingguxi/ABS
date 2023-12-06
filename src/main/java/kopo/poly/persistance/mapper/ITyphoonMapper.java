@@ -16,9 +16,9 @@ public interface ITyphoonMapper {
     void deleteTyphoonInfo() throws Exception;
 
     // 수집된 태풍 과거 정보 조회
-    List<TyphoonDTO> getTyphoonInfo() throws Exception;
+    List<TyphoonDTO> getTyphoonList() throws Exception;
 
     // 수집된 태풍 실시간 정보 조회
-    List<TyphoonLiveDTO> getTyphoonLiveInfo() throws Exception;
+    List<TyphoonLiveDTO> getTyphoonLiveList() throws Exception;
 
 }

@@ -4,7 +4,7 @@
 <!-- JAVA와 연결할 Mapper 파일 설정 -->
 <mapper namespace="kopo.poly.persistance.mapper.IDustMapper">
 
-    <select id="getDustInfo" parameterType="DustDTO" resultType="DustDTO">
+    <select id="getDustList" parameterType="DustDTO" resultType="DustDTO">
         SELECT STN_ID, STN_KO, LON, LAT, MEAN
         FROM DUST
     </select>

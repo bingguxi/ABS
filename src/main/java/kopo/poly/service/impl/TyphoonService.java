@@ -164,21 +164,21 @@ public class TyphoonService implements ITyphoonService {
     }
 
     @Override
-    public List<TyphoonDTO> getTyphoonInfo() throws Exception {
+    public List<TyphoonDTO> getTyphoonList() throws Exception {
 
-        log.info(this.getClass().getName() + ".getTyphoonInfo 태풍 과거 정보 조회 시작!");
-        log.info(this.getClass().getName() + ".getTyphoonInfo 태풍 과거 정보 조회 끝!");
+        log.info(this.getClass().getName() + ".getTyphoonList 태풍 과거 정보 조회 시작!");
+        log.info(this.getClass().getName() + ".getTyphoonList 태풍 과거 정보 조회 끝!");
 
-        return typhoonMapper.getTyphoonInfo();
+        return typhoonMapper.getTyphoonList();
     }
 
     @Override
-    public List<TyphoonLiveDTO> getTyphoonLiveInfo() throws Exception {
+    public List<TyphoonLiveDTO> getTyphoonLiveList() throws Exception {
 
-        log.info(this.getClass().getName() + ".getTyphoonLiveInfo 태풍 실시간 정보 조회 시작!");
-        log.info(this.getClass().getName() + ".getTyphoonLiveInfo 태풍 실시간 정보 조회 끝!");
+        log.info(this.getClass().getName() + ".getTyphoonLiveList 태풍 실시간 정보 조회 시작!");
+        log.info(this.getClass().getName() + ".getTyphoonLiveList 태풍 실시간 정보 조회 끝!");
 
-        return typhoonMapper.getTyphoonLiveInfo();
+        return typhoonMapper.getTyphoonLiveList();
     }
 
 }

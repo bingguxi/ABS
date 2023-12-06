@@ -9,6 +9,6 @@ import java.util.List;
 public interface ISnowMapper {
 
     // 수집된 적설 정보 조회
-    List<SnowDTO> getSnowInfo() throws Exception;
+    List<SnowDTO> getSnowList() throws Exception;
 
 }

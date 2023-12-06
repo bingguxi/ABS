@@ -7,6 +7,6 @@ import java.util.List;
 public interface IDustService {
 
     // 수집된 황사 내용 조회
-    List<DustDTO> getDustInfo() throws Exception;
+    List<DustDTO> getDustList() throws Exception;
 
 }

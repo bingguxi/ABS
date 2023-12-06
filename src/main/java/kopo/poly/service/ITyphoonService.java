@@ -18,9 +18,9 @@ public interface ITyphoonService {
     void insertTyphoonInfo(String apiParam, int year) throws Exception;
 
     // 태풍 과거 정보 조회하기
-    List<TyphoonDTO> getTyphoonInfo() throws Exception;
+    List<TyphoonDTO> getTyphoonList() throws Exception;
 
     // 태풍 실시간 정보 조회하기
-    List<TyphoonLiveDTO> getTyphoonLiveInfo() throws Exception;
+    List<TyphoonLiveDTO> getTyphoonLiveList() throws Exception;
 
 }

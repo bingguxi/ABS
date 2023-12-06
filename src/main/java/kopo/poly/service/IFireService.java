@@ -7,6 +7,6 @@ import java.util.List;
 public interface IFireService {
 
     // 수집된 산불 정보 조회하기
-    List<FireDTO> getFireInfo() throws Exception;
+    List<FireDTO> getFireList() throws Exception;
 
 }

@@ -32,7 +32,7 @@
     </select>
 
     <!-- 수집된 실시간 지진 정보 DB에서 조회하기 -->
-    <select id="getEarthquakeLiveInfo" parameterType="EarthquakeLiveDTO" resultType="EarthquakeLiveDTO">
+    <select id="getEarthquakeLiveList" parameterType="EarthquakeLiveDTO" resultType="EarthquakeLiveDTO">
         SELECT EARTHQUAKE_LIVE_SEQ, CNT, FC_TP, IMG, IN_T, LAT, LOC, LON, MT, REM, STN_ID, TM_EQK,TM_FC,
                TM_SEQ, DEP
         FROM EARTHQUAKE_LIVE

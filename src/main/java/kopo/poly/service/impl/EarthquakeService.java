@@ -198,11 +198,11 @@ public class EarthquakeService implements IEarthquakeService {
 
     // 실시간 지진 정보 조회하기
     @Override
-    public List<EarthquakeLiveDTO> getEarthquakeLiveInfo() throws Exception {
+    public List<EarthquakeLiveDTO> getEarthquakeLiveList() throws Exception {
 
         log.info(this.getClass().getName() + ".getEarthquakeLiveInfo Start!");
         log.info(this.getClass().getName() + ".getEarthquakeLiveInfo End!");
 
-        return earthquakeMapper.getEarthquakeLiveInfo();
+        return earthquakeMapper.getEarthquakeLiveList();
     }
 }

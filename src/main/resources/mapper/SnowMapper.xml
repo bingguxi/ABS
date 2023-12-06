@@ -4,7 +4,7 @@
 <!-- JAVA와 연결할 Mapper 파일 설정 -->
 <mapper namespace="kopo.poly.persistance.mapper.ISnowMapper">
 
-    <select id="getSnowInfo" resultType="SnowDTO">
+    <select id="getSnowList" resultType="SnowDTO">
         SELECT STN_ID, STN_KO, LON, LAT, SD, DT
         FROM SNOW
     </select>

@@ -4,7 +4,7 @@
 <mapper namespace="kopo.poly.persistance.mapper.IFireMapper">
 
     <!-- 수집된 산불 정보 조회하기 -->
-    <select id="getFireInfo" parameterType="FireDTO" resultType="FireDTO">
+    <select id="getFireList" parameterType="FireDTO" resultType="FireDTO">
         SELECT CITY,
                GRADE,
                SCORE,

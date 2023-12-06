@@ -19,5 +19,5 @@ public interface IEarthquakeService {
     List<EarthquakeResultDTO> getEarthquakeList() throws Exception;
 
     // 실시간 지진 정보 조회하기
-    List<EarthquakeLiveDTO> getEarthquakeLiveInfo() throws Exception;
+    List<EarthquakeLiveDTO> getEarthquakeLiveList() throws Exception;
 }

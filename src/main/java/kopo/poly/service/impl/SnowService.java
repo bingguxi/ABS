@@ -16,11 +16,11 @@ public class SnowService implements ISnowService {
     private final ISnowMapper snowMapper;
 
     @Override
-    public List<SnowDTO> getSnowInfo() throws Exception {
+    public List<SnowDTO> getSnowList() throws Exception {
 
-        log.info(this.getClass().getName() + ".getSnowInfo Start!");
-        log.info(this.getClass().getName() + ".getSnowInfo End!");
+        log.info(this.getClass().getName() + ".getSnowList Start!");
+        log.info(this.getClass().getName() + ".getSnowList End!");
 
-        return snowMapper.getSnowInfo();
+        return snowMapper.getSnowList();
     }
 }

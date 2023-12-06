@@ -17,6 +17,6 @@ public interface IEarthquakeMapper {
     List<EarthquakeResultDTO> getEarthquakeList() throws Exception;
 
     // 수집된 지진 실시간 정보 조회
-    List<EarthquakeLiveDTO> getEarthquakeLiveInfo() throws Exception;
+    List<EarthquakeLiveDTO> getEarthquakeLiveList() throws Exception;
 
 }

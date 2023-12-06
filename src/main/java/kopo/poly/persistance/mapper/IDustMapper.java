@@ -9,6 +9,6 @@ import java.util.List;
 public interface IDustMapper {
 
     // 수집된 황사 정보 조회
-    List<DustDTO> getDustInfo() throws Exception;
+    List<DustDTO> getDustList() throws Exception;
 
 }

@@ -18,7 +18,7 @@
     </delete>
 
     <!-- 수집된 태풍 과거 정보 조회하기 -->
-    <select id="getTyphoonInfo" parameterType="TyphoonDTO" resultType="TyphoonDTO">
+    <select id="getTyphoonList" parameterType="TyphoonDTO" resultType="TyphoonDTO">
         SELECT DISTINCT T.TYP_SEQ, T.TYP_EN, T.YEAR, T.TM_ST, T.TM_ED, T.TYP_PS,
                         T.TYP_WS, T.TYP_NAME, T.EFF
         FROM TYPHOON T
@@ -26,8 +26,8 @@
     </select>
 
     <!-- 수집된 태풍 실시간 정보 조회하기 -->
-    <select id="getTyphoonLiveInfo" parameterType="TyphoonLiveDTO" resultType="TyphoonLiveDTO">
-        SELECT TYPHOON_LIVE_SEQ, FT, TYP, SEQ, TYP_TM, LAT, LON, DIR, SP, PS, WS, RAD15, RAD25, LOC
+    <select id="getTyphoonLiveList" parameterType="TyphoonLiveDTO" resultType="TyphoonLiveDTO">
+        SELECT FT, TYP, SEQ, TYP_TM, LAT, LON, DIR, SP, PS, WS, RAD15, RAD25, LOC
         FROM TYPHOON_LIVE
     </select>
 

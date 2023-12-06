@@ -17,11 +17,11 @@ public class FireService implements IFireService {
     private final IFireMapper fireMapper;
 
     @Override
-    public List<FireDTO> getFireInfo() throws Exception {
+    public List<FireDTO> getFireList() throws Exception {
 
-        log.info(this.getClass().getName() + ".getFireInfo 서비스 시작!");
-        log.info(this.getClass().getName() + ".getFireInfo 서비스 끝!");
+        log.info(this.getClass().getName() + ".getFireList 서비스 시작!");
+        log.info(this.getClass().getName() + ".getFireList 서비스 끝!");
 
-        return fireMapper.getFireInfo();
+        return fireMapper.getFireList();
     }
 }
