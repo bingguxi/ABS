@@ -14,4 +14,6 @@ public interface IDisasterMsgService {
 
     // 상세보기
     DisasterMsgResultDTO getDisasterMsgInfo(DisasterMsgResultDTO pDTO, boolean type) throws Exception;
+
+    List<DisasterMsgResultDTO> getLast3DisasterMsgList() throws Exception;
 }

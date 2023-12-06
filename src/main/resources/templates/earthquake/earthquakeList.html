@@ -186,8 +186,8 @@
       <div class="container position-relative">
         <div class="row d-flex justify-content-center">
           <div class="col-lg-6 text-center">
-            <h2>FIRE</h2>
-            <p>실시간 산불 정보를 모아서 확인해보세요 !</p>
+            <h2>EARTHQUAKE</h2>
+            <p>국내외 과거 지진 정보를 모아서 확인해보세요 !</p>
           </div>
         </div>
       </div>
@@ -196,7 +196,7 @@
       <div class="container">
         <ol>
           <li><a href="index.html">Home</a></li>
-          <li>산불</li>
+          <li>지진</li>
         </ol>
       </div>
     </nav>
@@ -205,18 +205,36 @@
   <section class="COMMUNITY">
     <div class="community-table">
       <div class="table-header">
-        <div>수집시간</div>
-        <div>지역</div>
-        <div>등급</div>
-        <div>지수</div>
+        <div>순번</div>
+        <div>지역상세</div>
+        <div>발생위치</div>
+        <div>발표시각</div>
+        <div>발생시각</div>
+        <div>규모</div>
+        <div>규모불확도</div>
+        <div>깊이</div>
+        <div>위도</div>
+        <div>경도</div>
+        <div>최대진도</div>
+        <div>지역별진도</div>
+        <div>참고사항</div>
       </div>
 
       <div class="table-row" th:each="dto:${rList}">
         <div class="table-row">
-          <div>[[${dto.collectTime}]]</div>
-          <div>[[${dto.city}]]</div>
-          <div>[[${dto.grade}]]</div>
-          <div>[[${dto.score}]]</div>
+          <div name="nSeq" id="nSeq">[[${dto.earthquakeSeq}]]</div>
+          <div>[[${dto.eqArCdNm}]]</div>
+          <div>[[${dto.eqPt}]]</div>
+          <div>[[${dto.tmIssue}]]</div>
+          <div>[[${dto.eqDate}]]</div>
+          <div>[[${dto.magMl}]]</div>
+          <div>[[${dto.magDiff}]]</div>
+          <div>[[${dto.eqDt}]]</div>
+          <div>[[${dto.eqLt}]]</div>
+          <div>[[${dto.eqLn}]]</div>
+          <div>[[${dto.jdLoc}]]</div>
+          <div>[[${dto.jdLocA}]]</div>
+          <div>[[${dto.reFer}]]</div>
         </div>
       </div>
     </div>
@@ -225,35 +243,35 @@
       <div class="mx-auto">
         <ul class="pagination pagination-primary" id="pagination">
           <li class="page-item">
-            <a class="page-link" th:href="@{/fire/getFireList?page=1}">&laquo;</a>
+            <a class="page-link" th:href="@{/earthquake/getEarthquakeList?page=1}">&laquo;</a>
           </li>
           <!-- 이전 페이지로 이동하는 링크 -->
           <li class="page-item" th:if="${currentPage > 1}">
-            <a class="page-link" th:href="@{/fire/getFireList(page=${currentPage - 1})}">&lt;</a>
+            <a class="page-link" th:href="@{/earthquake/getEarthquakeList(page=${currentPage - 1})}">&lt;</a>
           </li>
           <!-- 현재 페이지 주변에 페이지 번호 링크 표시 -->
           <th:block th:if="${currentPage + 4 <= totalPages}">
-            <li class="page-item" th:each="pageNumber : ${#numbers.sequence(currentPage, currentPage + 4)}"
-                th:class="${pageNumber == currentPage ? 'active' : ''}">
-              <a class="page-link" th:href="@{/fire/getFireList(page=${pageNumber})}"
-                 th:text="${pageNumber}"></a>
-            </li>
+          <li class="page-item" th:each="pageNumber : ${#numbers.sequence(currentPage, currentPage + 4)}"
+              th:class="${pageNumber == currentPage ? 'active' : ''}">
+            <a class="page-link" th:href="@{/earthquake/getEarthquakeList(page=${pageNumber})}"
+               th:text="${pageNumber}"></a>
+          </li>
 
           </th:block>
           <th:block th:if="${currentPage + 4 > totalPages}">
             <li class="page-item" th:each="pageNumber : ${#numbers.sequence(currentPage, totalPages)}"
                 th:class="${pageNumber == currentPage ? 'active' : ''}">
-              <a class="page-link" th:href="@{/fire/getFireList(page=${pageNumber})}"
+              <a class="page-link" th:href="@{/earthquake/getEarthquakeList(page=${pageNumber})}"
                  th:text="${pageNumber}"></a>
             </li>
           </th:block>
 
           <!-- 다음 페이지로 이동하는 링크 -->
           <li class="page-item" th:if="${currentPage < totalPages}">
-            <a class="page-link" th:href="@{/fire/getFireList(page=${currentPage + 1})}">&gt;</a>
+            <a class="page-link" th:href="@{/earthquake/getEarthquakeList(page=${currentPage + 1})}">&gt;</a>
           </li>
           <li class="page-item">
-            <a class="page-link" th:href="@{/fire/getFireList(page=${totalPages})}">&raquo;</a>
+            <a class="page-link" th:href="@{/earthquake/getEarthquakeList(page=${totalPages})}">&raquo;</a>
           </li>
         </ul>
       </div>

@@ -13,7 +13,7 @@ import java.util.List;
 public class EarthquakeResultDTO {
 
     /* 지진 과거 API 데이터를 담을 DTO ( XML ) */
-    private String earthqaukeSeq;
+    private String earthquakeSeq; // 시퀀스
     @JacksonXmlProperty(localName = "msgCode")
     private String msgCode; // 통보문종류명
     @JacksonXmlProperty(localName = "cntDiv")
@@ -53,6 +53,9 @@ public class EarthquakeResultDTO {
     @JacksonXmlProperty(localName = "ReFer")
     private String ReFer;
 
+    /**
+     * 아마 EarthquakeDTO 정리하면서 없앨 가능성이 높음 잘 돌아감 없어도
+     */
     @JacksonXmlProperty(localName = "infoList")
     private List<EarthquakeDTO> infoList;
 }

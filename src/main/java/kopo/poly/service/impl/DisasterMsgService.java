@@ -46,5 +46,18 @@ public class DisasterMsgService implements IDisasterMsgService {
 
         return disasterMsgMapper.getDisasterMsgInfo(pDTO);
     }
+    @Override
+    public List<DisasterMsgResultDTO> getLast3DisasterMsgList() throws Exception {
 
+        log.info(this.getClass().getName() + ".getLast3DisasterMsgList start!");
+
+        List<DisasterMsgResultDTO> rList = Optional.ofNullable(getDisasterMsgList())
+                .orElseGet(ArrayList::new);
+
+        // 'md101Sn' 속성을 기준으로 리스트를 오름차순으로 정렬
+        rList.sort(Comparator.comparing(DisasterMsgResultDTO::getMd101Sn));
+
+        // 리스트 크기가 3보다 작으면 모든 아이템을 가져옵니다.
+        return rList.size() < 3 ? rList : rList.subList(rList.size() - 3, rList.size());
+    }
 }

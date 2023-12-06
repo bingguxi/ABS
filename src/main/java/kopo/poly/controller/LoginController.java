@@ -1,6 +1,8 @@
 package kopo.poly.controller;
 
+import kopo.poly.dto.DisasterMsgResultDTO;
 import kopo.poly.dto.UserInfoDTO;
+import kopo.poly.service.IDisasterMsgService;
 import kopo.poly.service.ILoginService;
 import kopo.poly.util.CmmUtil;
 import kopo.poly.util.EncryptUtil;
@@ -12,9 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,6 +23,8 @@ import java.util.Optional;
 public class LoginController {
 
     private final ILoginService loginService;
+
+    private final IDisasterMsgService disasterMsgService;
 
     @GetMapping("")
     public String login() {
@@ -219,9 +221,20 @@ public class LoginController {
 
 
     @RequestMapping(value="/logout")
-    public String logout(HttpSession session) throws Exception {
+    public String logout(HttpSession session, ModelMap model) throws Exception {
 
         log.info(this.getClass().getName() + ".logout Start!");
+
+        /* 재난문자 리스트 슬라이드 로직 */
+        // 서비스 메서드를 호출하여 데이터를 가져옴
+        List<DisasterMsgResultDTO> last3List = disasterMsgService.getLast3DisasterMsgList();
+
+        // 조회된 리스트 결과값 넣어주기
+        model.addAttribute("rList", last3List);
+
+        // 들어온 값 확인
+        log.info("rList : " + last3List);
+        /* 여기까지 */
 
         // 만약 access_Token이 존재하면, 카카오 로그아웃 메소드 호출하기!
         if (session.getAttribute("access_Token") != null) {
@@ -242,6 +255,4 @@ public class LoginController {
 
         return "/index";
     }
-
-
 }
