@@ -40,6 +40,41 @@
     ======================================================== -->
 
     <style>
+
+        .quote {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f6fc;
+        }
+        .form{
+            max-width: 800px;
+            height: 500px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .find-btn {
+            text-align: center;
+        }
+
+        .btn {
+            border: none;
+            background: rgba(14, 29, 52, 0.8);
+            color: white;
+            margin-top: 10px;
+
+        }
+
+        .btn:hover{
+            background: rgba(34, 49, 72, 0.8);
+            color: white;
+        }
+
+
         @media screen and (max-width: 800px) {
             button {
                 display: block; /* 기본 값은 block으로 설정 */
@@ -113,16 +148,16 @@
     </div><!-- End Breadcrumbs -->
 
     <!-- ======= Get a Quote Section ======= -->
-    <section id="get-a-quote" class="get-a-quote">
+    <section id="get-a-quote" class="quote">
         <div class="container" data-aos="fade-up">
 
             <div class="row g-0">
 
                 <div class="col-lg-7" style="margin: auto">
-                    <form id="f" method="post" class="php-email-form">
+                    <form id="f" method="post" class="form">
                         <h2 style="text-align: center; margin-bottom: 8%">아이디 찾기</h2>
 
-                        <div class="row gy-4">
+                        <div class="row gy-4" style="margin-top: 13%">
 
                             <div class="col-md-7" style="margin-left: auto; margin-right: auto;">
                                 <input type="text" name="userName" class="form-control" placeholder="이름">
@@ -132,17 +167,13 @@
                                 <input type="email" name="email" class="form-control" placeholder="이메일">
                             </div>
 
-                            <div class="col-md-12 text-center">
-                                <button type="button" id="btnFindId"
-                                        style="width: 20%; height: 40px; border-radius: 10px; border: none; background-color: lightsteelblue;">
+                            <div class="find-btn">
+                                <button type="button" id="btnFindId" class="btn">
                                     아이디 찾기
                                 </button>
-                                <!--                            </div>-->
 
-                                <!--                            <div class="col-md-12 text-center">-->
                                 <a href="/login">
-                                    <button type="button" id="btnLogin"
-                                            style="width: 20%; height: 40px; border-radius: 10px; border: none; background-color: lightsteelblue;">
+                                    <button type="button" id="btnLogin" class="btn">
                                         로그인 하기
                                     </button>
                                 </a>

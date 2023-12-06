@@ -201,7 +201,7 @@
 
     <!-- ======= Breadcrumbs ======= -->
     <div class="breadcrumbs">
-        <div class="page-header d-flex align-items-center" style="background-image: url('img/page-header.jpg');">
+        <div class="page-header d-flex align-items-center" style="background-image: url('/img/community.png');">
             <div class="container position-relative">
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-6 text-center">
@@ -224,7 +224,7 @@
     <section class="COMMUNITY">
         <div class="community-table">
             <div class="table-header">
-                <div>순번</div>
+<!--                <div>순번</div>-->
                 <div>제목</div>
                 <div>조회수</div>
                 <div>등록자</div>
@@ -233,7 +233,7 @@
 
             <div class="table-row" th:each="dto:${rList}">
                 <div class="table-row">
-                    <div name="nSeq" id="nSeq">[[${dto.communitySeq}]]</div>
+<!--                    <div name="nSeq" id="nSeq">[[${dto.communitySeq}]]</div>-->
                     <div th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'">[[${dto.title}]]</div>
                     <div>[[${dto.readCnt}]]</div>
                     <div>[[${dto.userId}]]</div>
