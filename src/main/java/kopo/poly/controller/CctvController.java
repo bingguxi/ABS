@@ -39,4 +39,16 @@ public class CctvController {
 
         return rList;
     }
+
+    @GetMapping(value = "insert")
+    public void insert() throws Exception {
+
+        log.info(this.getClass().getName() + "CCTV insert 시작!");
+
+        cctvService.insertCctvInfo();
+
+        log.info(this.getClass().getName() + "CCTV insert 끝!");
+
+    }
+
 }

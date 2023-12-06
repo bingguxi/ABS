@@ -4,6 +4,24 @@
 <!-- JAVA와 연결할 Mapper 파일 설정 -->
 <mapper namespace="kopo.poly.persistance.mapper.ICctvMapper">
 
+    <!--수집된 cctv 정보 DB에 등록-->
+    <insert id="insertCctvInfo" parameterType="CctvResultDTO">
+        INSERT INTO CCTV
+            (CCTV_URL, COORDX, COORDY, CCTV_NAME)
+        VALUES (#{cctvUrl}, #{coordX}, #{coordY}, #{cctvName})
+    </insert>
+
+    <delete id="deleteCctvInfo" parameterType="CctvResultDTO">
+        DELETE
+        FROM CCTV
+    </delete>
+
+    <select id="getCctvURL" parameterType="CctvResultDTO" resultType="CctvResultDTO">
+        SELECT CCTV_URL
+        FROM CCTV
+        WHERE CCTV_NAME = #{cctvName}
+    </select>
+
     <!--수집된 CCTV 정보 조회-->
     <select id="getCctv" parameterType="CctvResultDTO" resultType="CctvResultDTO">
         SELECT CCTV_URL, COORDX, COORDY, CCTV_NAME

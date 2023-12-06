@@ -106,7 +106,7 @@ public class NaverController {
 
                 session.setAttribute("SS_USER_ID", userId);
 
-                msg = "회원가입에 성공했습니다. \\n로그인 성공했습니다 \\n" + userName + "님 환영합니다.";
+                msg = "회원가입 및 로그인 성공! " + userName + "님 환영합니다.";
                 url = "/index";
 
             } else {
@@ -119,7 +119,7 @@ public class NaverController {
 
             session.setAttribute("SS_USER_ID", userId);
 
-            msg = "로그인 성공했습니다 \\n" + userName + "님 환영합니다.";
+            msg = "로그인 성공! " + userName + "님 환영합니다.";
             url = "/index";
 
         }
