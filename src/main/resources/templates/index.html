@@ -66,14 +66,58 @@
             text-decoration: underline; /* 호버 시 밑줄 추가 */
         }
 
-        <!--워드클라우드 css-->
-            #wordCloud {
-                width: 500px;
-                height: 500px;
-                overflow: visible;
-                position: relative;
-                background-color: transparent !important; /* 배경을 투명하게 설정 */
-            }
+        /*워드클라우드 css*/
+        #wordCloud {
+            width: 500px;
+            height: 500px;
+            overflow: visible;
+            position: relative;
+            background-color: transparent !important; /* 배경을 투명하게 설정 */
+        }
+
+
+        /*슬라이드 css*/
+        .outer {
+            width: 50%;
+            height: auto;
+            margin: 0 auto;
+            overflow-x: hidden;
+            position: relative;
+
+        }
+
+        .inner-list {
+            display: flex;
+            transition: .3s ease-out;
+            height: 100%;
+        }
+
+        .inner {
+            box-sizing: border-box;
+            margin: 20px;
+            padding: 15px;
+        }
+
+        .button-list {
+            text-align: center;
+            position: absolute;
+            width: 100%;
+            bottom: 10px;
+        }
+
+        .indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ccc;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .indicator.active {
+            background-color: #333;
+        }
     </style>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -158,7 +202,7 @@
                         }
 
                         slides[slideIndex - 1].style.display = "block";
-                        setTimeout(showSlides, 3000); // 3초마다 슬라이드 변경
+                        setTimeout(showSlides, 5000); // 3초마다 슬라이드 변경
                     }
 
                     // 페이지 로드 시 슬라이드 변경 함수 호출
@@ -167,36 +211,45 @@
                 </script>
 
                 <form action="#" class="form-search d-flex align-items-stretch mb-3" data-aos="fade-up" data-aos-delay="200">
-                    <input type="text" class="form-control" placeholder="ZIP code or CitY">
-                    <button type="submit" class="btn btn-primary">Search</button>
+                    <div style="color: #0a0d13; margin-left: 23%">
+                        지진, 태풍 건수 ( 당일 기준 3일전까지의 데이터 )
+                    </div>
+<!--                    <input type="text" class="form-control" placeholder="ZIP code or CitY">-->
+<!--                    <button type="submit" class="btn btn-primary">Search</button>-->
                 </form>
 
+                <br/>
                 <div class="row gy-4" data-aos="fade-up" data-aos-delay="400">
+
+                    <p data-aos="fade-up" data-aos-delay="100" style="margin-bottom: -5%; float: none;">
+                        <a href="/earthquake/getEarthquakeLiveList" style="float: right;">더보기</a>
+                    </p>
 
                     <div class="col-lg-3 col-6">
                         <div class="stats-item text-center w-100 h-100">
-                            <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1" class="purecounter"></span>
+                            <span th:attr="data-purecounter-start='0', data-purecounter-end=${totalTyCount}, data-purecounter-duration='1'" class="purecounter"></span>
                             <p>올해</p>
                         </div>
                     </div><!-- End Stats Item -->
 
                     <div class="col-lg-3 col-6">
                         <div class="stats-item text-center w-100 h-100">
-                            <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1" class="purecounter"></span>
-                            <p>월별</p>
+                            <span th:attr="data-purecounter-start='0', data-purecounter-end=${totalLyCount}, data-purecounter-duration='1'" class="purecounter"></span>
+                            <p>지난해</p>
                         </div>
                     </div><!-- End Stats Item -->
 
                     <div class="col-lg-3 col-6">
                         <div class="stats-item text-center w-100 h-100">
-                            <span data-purecounter-start="0" data-purecounter-end="1453" data-purecounter-duration="1" class="purecounter"></span>
+                            <span th:attr="data-purecounter-start='0', data-purecounter-end=${elSize}, data-purecounter-duration='1'" class="purecounter"></span>
                             <p>지진</p>
                         </div>
                     </div><!-- End Stats Item -->
 
+
                     <div class="col-lg-3 col-6">
                         <div class="stats-item text-center w-100 h-100">
-                            <span data-purecounter-start="0" data-purecounter-end="32" data-purecounter-duration="1" class="purecounter"></span>
+                            <span th:attr="data-purecounter-start='0', data-purecounter-end=${tlSize}, data-purecounter-duration='1'" class="purecounter"></span>
                             <p>태풍</p>
                         </div>
                     </div><!-- End Stats Item -->
@@ -222,30 +275,33 @@
             <div class="row gy-4">
 
                 <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up">
-                    <div style="max-width: 20%"><img src="/img/지도.png" style="width: 60%; height: 60%"></div>
+                    <div style="max-width: 20%"><img src="/img/산불.png" style="width: 60%; height: 60%"></div>
                     <div>
-                        <h4 class="title">재난 지도</h4>
-                        <p class="description">재난 발생 지역, 재난 발생 인근 CCTV, 인근 대피소</p>
-                        <a href="/map/shelterMap" class="readmore stretched-link"><span>더보기</span><i class="bi bi-arrow-right"></i></a>
+                        <h4 class="title">산불</h4>
+                        <p class="description">산불 정보를 제공해드립니다.</p>
+                        <a href="/fire/getFireList" class="readmore stretched-link"><span>더보기</span><i
+                                class="bi bi-arrow-right"></i></a>
                     </div>
                 </div>
                 <!-- End Service Item -->
 
                 <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="100">
-                    <div style="max-width: 20%"><img src="/img/행동요령.png" style="width: 60%; height: 60%"></div>
+                    <div style="max-width: 20%"><img src="/img/대설.png" style="width: 60%; height: 60%"></div>
                     <div>
-                        <h4 class="title">재난 시 행동요령</h4>
-                        <p class="description">재난 시 해야 할 행동 요령에 대한 정보를 제공해드립니다.</p>
-                        <a href="/guide/dust" class="readmore stretched-link"><span>더보기</span><i class="bi bi-arrow-right"></i></a>
+                        <h4 class="title">적설</h4>
+                        <p class="description">적설 정보를 제공해드립니다.</p>
+                        <a href="/snow/getSnowList" class="readmore stretched-link"><span>더보기</span><i
+                                class="bi bi-arrow-right"></i></a>
                     </div>
                 </div><!-- End Service Item -->
 
                 <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="200">
-                    <div  style="max-width: 20%"><img src="/img/게시판.png" style="width: 60%; height: 60%"></div>
+                    <div style="max-width: 20%"><img src="/img/황사.png" style="width: 60%; height: 60%"></div>
                     <div>
-                        <h4 class="title">커뮤니티</h4>
-                        <p class="description">재난과 관련된 정보를 여러 사람들과 나누어보세요</p>
-                        <a href="/community/communityList" class="readmore stretched-link"><span>더보기</span><i class="bi bi-arrow-right"></i></a>
+                        <h4 class="title">황사</h4>
+                        <p class="description">황사 정보를 제공해드립니다.</p>
+                        <a href="/dust/getDustList" class="readmore stretched-link"><span>더보기</span><i
+                                class="bi bi-arrow-right"></i></a>
                     </div>
                 </div><!-- End Service Item -->
 
@@ -260,35 +316,127 @@
         <div class="container" data-aos="fade-up">
 
             <div class="row gy-4">
-                <div class="col-lg-6 position-relative align-self-start order-lg-last order-first">
-                    <img src="/img/about.jpg" class="img-fluid" alt="">
-                    <a href="https://www.youtube.com/watch?v=LXb3EKWsInQ" class="glightbox play-btn"></a>
+
+                <!--재난 영상 슬라이드 부분 시작-->
+                <div class="outer">
+                    <div class="inner-list">
+                        <div class="inner">
+                            <iframe width="100%" height="100%"
+                                    src="https://www.youtube.com/embed/UGK8JZFAc0w?si=Jw8TbSgnNwKwz80N"
+                                    title="YouTube video player" frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen></iframe>
+                        </div>
+                        <div class="inner">
+                            <iframe width="100%" height="100%"
+                                    src="https://www.youtube.com/embed/pp5dZguIVj8?si=yQm5P-6tr7y8qIRO"
+                                    title="YouTube video player" frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen=""></iframe>
+                        </div>
+                        <div class="inner">
+                            <iframe width="100%" height="100%"
+                                    src="https://www.youtube.com/embed/EzSjNkqe_Mw?si=a6bcHBVv-qmcxHWg"
+                                    title="YouTube video player" frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen></iframe>
+                        </div>
+                        <div class="inner">
+                            <iframe width="100%" height="100%"
+                                    src="https://www.youtube.com/embed/XS6DvHI7ZYU?si=Vustb__78Dm_GP8_"
+                                    title="YouTube video player" frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="button-list">
+                        <div class="indicator" onclick="currentSlide(0)"></div>
+                        <div class="indicator" onclick="currentSlide(1)"></div>
+                        <div class="indicator" onclick="currentSlide(2)"></div>
+                        <div class="indicator" onclick="currentSlide(3)"></div>
+                    </div>
                 </div>
+
+                <script>
+                    const outer = document.querySelector('.outer');
+                    const innerList = document.querySelector('.inner-list');
+                    const inners = document.querySelectorAll('.inner');
+                    const indicators = document.querySelectorAll('.indicator');
+                    let currentIndex = 0;
+
+                    inners.forEach((inner) => {
+                        inner.style.width = `${outer.clientWidth}px`;
+                    });
+
+                    innerList.style.width = `${outer.clientWidth * inners.length}px`;
+
+                    function showSlide(index) {
+                        currentIndex = index;
+                        innerList.style.marginLeft = `-${outer.clientWidth * currentIndex}px`;
+                        updateIndicators();
+                    }
+
+                    function updateIndicators() {
+                        indicators.forEach((indicator, index) => {
+                            if (index === currentIndex) {
+                                indicator.classList.add('active');
+                            } else {
+                                indicator.classList.remove('active');
+                            }
+                        });
+                    }
+
+                    function currentSlide(index) {
+                        showSlide(index);
+                    }
+
+                    indicators.forEach((indicator, index) => {
+                        indicator.addEventListener('click', () => {
+                            currentSlide(index);
+                        });
+                    });
+                </script>
+
+                <!--재난 영상 슬라이드 부분 끝-->
+
+
                 <div class="col-lg-6 content order-last  order-lg-first">
-                    <h3>About Us</h3>
+                    <h3>재난 행동요령</h3>
                     <p>
-                        Dolor iure expedita id fuga asperiores qui sunt consequatur minima. Quidem voluptas deleniti. Sit quia molestiae quia quas qui magnam itaque veritatis dolores. Corrupti totam ut eius incidunt reiciendis veritatis asperiores placeat.
+                        재난 시 행동요령에 대해 자세히 알고 싶다면 링크로 들어가세요
                     </p>
                     <ul>
                         <li data-aos="fade-up" data-aos-delay="100">
-                            <i class="bi bi-diagram-3"></i>
+                            <!--              <i class="bi bi-diagram-3"></i>-->
                             <div>
-                                <h5>Ullamco laboris nisi ut aliquip consequat</h5>
-                                <p>Magni facilis facilis repellendus cum excepturi quaerat praesentium libre trade</p>
+                                <a href="/guide/dust" style="color: black;">
+                                    <h5>황사
+                                    </h5>
+                                    <p>TV, 라디오, 인터넷 등에서 황사가 예보된 때에는 최대한 야외활동을 자제하고 주변의 독거노인 등 건강이 염려되는 분들의 지역 주민들과 함께
+                                        안부를 살펴봅니다.</p>
+                                </a>
                             </div>
                         </li>
+
+
                         <li data-aos="fade-up" data-aos-delay="200">
-                            <i class="bi bi-fullscreen-exit"></i>
+                            <!--              <i class="bi bi-fullscreen-exit"></i>-->
                             <div>
-                                <h5>Magnam soluta odio exercitationem reprehenderi</h5>
-                                <p>Quo totam dolorum at pariatur aut distinctio dolorum laudantium illo direna pasata redi</p>
+                                <a href="/guide/storm" style="color: black;">
+                                    <h5>태풍</h5>
+                                    <p>태풍이 시작된 때에는 이웃과 함께 신속히 안전한 곳으로 대피하고, 외출을 삼가하며
+                                        이웃이나 가족에게 연락하여 안전 여부를 확인하고 위험상황을 알려줍니다.</p>
+                                </a>
                             </div>
                         </li>
                         <li data-aos="fade-up" data-aos-delay="300">
-                            <i class="bi bi-broadcast"></i>
+                            <!--              <i class="bi bi-broadcast"></i>-->
                             <div>
-                                <h5>Voluptatem et qui exercitationem</h5>
-                                <p>Et velit et eos maiores est tempora et quos dolorem autem tempora incidunt maxime veniam</p>
+                                <a href="/guide/snow" style="color: black;">
+                                    <h5>대설</h5>
+                                    <p>자제하고, 외출을 할 경우에는 대중교통을 이용하거나 자동차의 월동 장비를 반드시 구비해야 합니다.
+                                        보온 유지를 위해 외투, 장갑, 모자 등을 착용합니다.</p>
+                                </a>
                             </div>
                         </li>
                     </ul>
@@ -297,83 +445,6 @@
 
         </div>
     </section><!-- End About Us Section -->
-
-    <!-- ======= Services Section ======= -->
-    <section id="service" class="services pt-0">
-        <div class="container" data-aos="fade-up">
-
-            <div class="section-header">
-                <span>Our Services</span>
-                <h2>Our Services</h2>
-
-            </div>
-
-            <div class="row gy-4">
-
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="card">
-                        <div class="card-img">
-                            <img src="/img/storage-service.jpg" alt="" class="img-fluid">
-                        </div>
-                        <h3><a href="service-details.html" class="stretched-link">Storage</a></h3>
-                        <p>Cumque eos in qui numquam. Aut aspernatur perferendis sed atque quia voluptas quisquam repellendus temporibus itaqueofficiis odit</p>
-                    </div>
-                </div><!-- End Card Item -->
-
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="card">
-                        <div class="card-img">
-                            <img src="/img/logistics-service.jpg" alt="" class="img-fluid">
-                        </div>
-                        <h3><a href="service-details.html" class="stretched-link">Logistics</a></h3>
-                        <p>Asperiores provident dolor accusamus pariatur dolore nam id audantium ut et iure incidunt molestiae dolor ipsam ducimus occaecati nisi</p>
-                    </div>
-                </div><!-- End Card Item -->
-
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                    <div class="card">
-                        <div class="card-img">
-                            <img src="/img/cargo-service.jpg" alt="" class="img-fluid">
-                        </div>
-                        <h3><a href="service-details.html" class="stretched-link">Cargo</a></h3>
-                        <p>Dicta quam similique quia architecto eos nisi aut ratione aut ipsum reiciendis sit doloremque oluptatem aut et molestiae ut et nihil</p>
-                    </div>
-                </div><!-- End Card Item -->
-
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
-                    <div class="card">
-                        <div class="card-img">
-                            <img src="/img/trucking-service.jpg" alt="" class="img-fluid">
-                        </div>
-                        <h3><a href="service-details.html" class="stretched-link">Trucking</a></h3>
-                        <p>Dicta quam similique quia architecto eos nisi aut ratione aut ipsum reiciendis sit doloremque oluptatem aut et molestiae ut et nihil</p>
-                    </div>
-                </div><!-- End Card Item -->
-
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
-                    <div class="card">
-                        <div class="card-img">
-                            <img src="/img/packaging-service.jpg" alt="" class="img-fluid">
-                        </div>
-                        <h3><a href="service-details.html" class="stretched-link">Packaging</a></h3>
-                        <p>Illo consequuntur quisquam delectus praesentium modi dignissimos facere vel cum onsequuntur maiores beatae consequatur magni voluptates</p>
-                    </div>
-                </div><!-- End Card Item -->
-
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
-                    <div class="card">
-                        <div class="card-img">
-                            <img src="/img/warehousing-service.jpg" alt="" class="img-fluid">
-                        </div>
-                        <h3><a href="service-details.html" class="stretched-link">Warehousing</a></h3>
-                        <p>Quas assumenda non occaecati molestiae. In aut earum sed natus eatae in vero. Ab modi quisquam aut nostrum unde et qui est non quo nulla</p>
-                    </div>
-                </div><!-- End Card Item -->
-
-            </div>
-
-        </div>
-    </section><!-- End Services Section -->
 
 
 </main><!-- End #main -->

@@ -72,7 +72,16 @@
         }
 
         .table-row div {
-            flex: 1; /* 자동으로 너비를 나누어 갖게 함 */
+            flex: 1;
+            overflow: hidden;
+            white-space: nowrap; /* 줄 바꿈 방지 */
+            text-overflow: ellipsis; /* 너무 긴 텍스트를 생략 부분에 ...으로 표시 */
+        }
+
+        .table-row div:hover {
+            overflow: visible; /* 마우스를 올리면 텍스트가 표시되도록 함 */
+            white-space: normal; /* 마우스를 올리면 텍스트가 줄 바꿈되어 표시됨 */
+            text-overflow: unset; /* 텍스트가 생략되지 않고 전체 표시됨 */
         }
 
         .table-row:hover {
@@ -123,13 +132,14 @@
             background-color: #091621;
             transform: scale(1.05);
         }
-
         .btn {
             border: none;
             background: #0e1d34;
             /*background: linear-gradient(0deg, rgba(6, 14, 131, 1) 0%, rgba(12, 25, 180, 1) 100%);*/
             color: white;
             margin-top: 10px;
+            width: 150px;
+            height: 50px;
         }
 
         .btn:hover {
@@ -148,7 +158,26 @@
         /*    margin: 0 auto;*/
         /*    min-height: 500px;*/
         /*    padding: 1px 10px 0 10px;*/
-        /*}*/
+
+        .community-link {
+            max-width: 1300px;
+            margin: 20px auto;
+            background-color: white;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .link_button {
+            margin: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .community-link {
+                flex-wrap: wrap; /* flex 아이템을 여러 줄로 표시 */
+            }
+        }
 
     </style>
 
@@ -204,6 +233,17 @@
     </div><!-- End Breadcrumbs -->
 
     <section class="COMMUNITY">
+
+        <div class="community-link">
+            <a class="link_button" href="/earthquake/getEarthquakeLiveList"><button type="button" class="btn btn-primary">지진(실시간)</button></a>
+            <a class="link_button" href="/earthquake/getEarthquakeList"><button type="button" class="btn btn-primary">지진</button></a>
+            <a class="link_button" href="/typhoon/getTyphoonLiveList"><button type="button" class="btn btn-primary">태풍(실시간)</button></a>
+            <a class="link_button" href="/typhoon/getTyphoonList"><button type="button" class="btn btn-primary">태풍</button></a>
+            <a class="link_button" href="/fire/getFireList"><button type="button" class="btn btn-primary">산불</button></a>
+            <a class="link_button" href="/dust/getDustList"><button type="button" class="btn btn-primary">황사</button></a>
+            <a class="link_button" href="/snow/getSnowList"><button type="button" class="btn btn-primary">적설</button></a>
+        </div>
+
         <div class="community-table">
             <div class="table-header">
                 <div>지점번호</div>
