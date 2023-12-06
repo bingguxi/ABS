@@ -236,7 +236,8 @@
 <!--                    <div name="nSeq" id="nSeq">[[${dto.communitySeq}]]</div>-->
                     <div th:attr="onclick='doDetail(\'' + ${dto.communitySeq} + '\')'">[[${dto.title}]]</div>
                     <div>[[${dto.readCnt}]]</div>
-                    <div>[[${dto.userId}]]</div>
+                    <div th:if="${dto.userId.startsWith('naver_')}">네이버사용자</div>
+                    <div th:unless="${dto.userId.startsWith('naver_')}">[[${dto.userId}]]</div>
                     <div>[[${dto.regDt}]]</div>
                 </div>
             </div>
