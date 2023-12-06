@@ -29,6 +29,7 @@
     <select id="getTyphoonLiveList" parameterType="TyphoonLiveDTO" resultType="TyphoonLiveDTO">
         SELECT FT, TYP, SEQ, TYP_TM, LAT, LON, DIR, SP, PS, WS, RAD15, RAD25, LOC
         FROM TYPHOON_LIVE
+        ORDER BY SEQ DESC;
     </select>
 
 </mapper>
