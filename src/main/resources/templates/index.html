@@ -51,7 +51,17 @@
         }
 
         .slide {
-            display: none;
+            display: none; /* 기존에는 flow로 설정되어 있었으나, 애니메이션 효과를 주기 위해 none으로 변경 */
+            animation: slideInOut 1s ease-in-out; /* 좌우로 슬라이드되는 애니메이션 추가 */
+        }
+
+        @keyframes slideInOut {
+            0% {
+                transform: translateY(100%); /* 초기 위치를 위쪽으로 이동시킴 */
+            }
+            100% {
+                transform: translateY(0); /* 최종 위치로 이동시킴 */
+            }
         }
 
         .active {
@@ -202,7 +212,7 @@
                         }
 
                         slides[slideIndex - 1].style.display = "block";
-                        setTimeout(showSlides, 5000); // 3초마다 슬라이드 변경
+                        setTimeout(showSlides, 5000); // 5초마다 슬라이드 변경
                     }
 
                     // 페이지 로드 시 슬라이드 변경 함수 호출
